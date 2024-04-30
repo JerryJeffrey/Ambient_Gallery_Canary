@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Ambient Gallery</string>
+    <string name="empty" translatable="false"></string>
+    <string name="day_sun">Sun</string>
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="am" translatable="false">AM</string>
+    <string name="pm" translatable="false">PM</string>
+    <string name="ic_open_source_licences">Open source licences</string>
+    <string name="hint_storage_permission_explanation_1">"We need storage permission to read pictures in "</string>
+    <string name="hint_storage_permission_explanation_2">.</string>
+    <string name="hint_directory_name_occupied_1">Directory path</string>
+    <string name="hint_directory_name_occupied_2">is occupied by a file with the same name. Please check manually in file manager.</string>
+    <string name="hint_failed_to_create_directory_1">"Cannot create directory "</string>
+    <string name="hint_failed_to_create_directory_2">.</string>
+    <string name="hint_cannot_clear_nomedia_1">""</string>
+    <string name="hint_cannot_clear_nomedia_2">contains .nomedia file. Please backup files and delete the folder.</string>
+    <string name="hint_no_available_files_1">"No available photos found in "</string>
+    <string name="hint_no_available_files_2">.</string>
+</resources>
