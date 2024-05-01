@@ -17,11 +17,8 @@ import static com.ambientgallery.components.AppStatus.nightBrightness;
 import static com.ambientgallery.components.AppStatus.switchImageTimeout;
 import static com.ambientgallery.components.AppStatus.textAmbientOpacity;
 import static com.ambientgallery.components.AppStatus.textNormalOpacity;
-import static com.ambientgallery.components.AppStatus.displayWidth;
-import static com.ambientgallery.components.AppStatus.displayHeight;
 import static com.ambientgallery.components.AppStatus.updateTime;
 import static com.ambientgallery.components.AppStatus.upperImgVisible;
-import static com.ambientgallery.utils.AnimateUtil.ongoingAnimators;
 import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
 import static com.ambientgallery.utils.AnimateUtil.viewPosition;
 import static com.ambientgallery.utils.AnimateUtil.viewRotation;
@@ -59,22 +56,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.ambientgallery.R;
+import com.ambientgallery.components.DisplayDimensions;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,19 +85,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private View rootView, bgAmbientView,
             actionButtonContainer,
             statusTimeout, statusRefresh,
-            statusLight, statusProximity;
+            statusLight, statusProximity,
+            topContainer, bottomContainer;
     private TextView textSub, textMain;
     private TextView debug, hint;
     private ImageView bgLower, bgUpper;
-    private ImageButton settingsButton, debugButton, ambientButton;
+    private ImageButton settingsButton, ambientButton;
     private Timer timer;
     private ContentResolver contentResolver;
     private Window window;
+    private WindowManager windowManager;
     private Context context;
     private Sensor lightSensor, proximitySensor;
     private SensorManager sensorManager;
     private boolean bgInit = false;
-    private boolean proximityNear = false, dragStarted=false, dragEnded=false;
+    private boolean proximityNear = false, dragStarted = false, dragEnded = false;
     private float nudgeX, nudgeY, touchStartY;
 
 
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
 
         window = getWindow();
+        windowManager = getWindowManager();
         context = getApplicationContext();
         contentResolver = this.getContentResolver();
 
@@ -121,10 +123,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         actionButtonContainer = findViewById(R.id.main_button_container_actions);
         settingsButton = findViewById(R.id.main_button_settings);
         ambientButton = findViewById(R.id.main_button_ambient);
-        debugButton = findViewById(R.id.main_button_debug);
         bgAmbientView = findViewById(R.id.main_bg_ambient_operator);
         bgLower = findViewById(R.id.main_bg_lower);
         bgUpper = findViewById(R.id.main_bg_upper);
+        topContainer = findViewById(R.id.main_top_container);
+        bottomContainer = findViewById(R.id.main_bottom_container);
 
         statusTimeout = findViewById(R.id.main_status_timeout);
         statusRefresh = findViewById(R.id.main_status_refresh);
@@ -141,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         initializeHiddenButton(statusTimeout);
         initializeHiddenButton(statusRefresh);
 
+        setSafeArea(0,100,0,0);
+
         rootView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -151,37 +156,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     float startPercent = y / dragStartSensitivity;
                     float endPercent = (y - dragStartSensitivity) / dragEndSensitivity;
                     if (endPercent >= 1) {
-                        dragEnded=true;
+                        dragEnded = true;
                         viewRotation(statusRefresh, 5 * (endPercent - 1) + 45,
                                 1, 1, 0);
                         viewOpacity(statusRefresh, endPercent, 1, 1, 0);
                         viewPosition(statusRefresh, 0, dp2px(context, endPercent),
                                 1, 1, 0);
                     } else if (startPercent >= 1) {
-                        dragStarted=true;
-                        dragEnded=false;
+                        dragStarted = true;
+                        dragEnded = false;
                         viewRotation(statusRefresh, 45 * endPercent, 1, 1, 0);
-                        viewOpacity(statusRefresh, endPercent *0.8f, 1, 1, 0);
+                        viewOpacity(statusRefresh, endPercent * 0.8f, 1, 1, 0);
                         viewPosition(statusRefresh, 0, dp2px(context, 12) *
-                                        (endPercent - 1), 1, 1, 0);
+                                (endPercent - 1), 1, 1, 0);
                     } else {
-                        dragStarted=false;
+                        dragStarted = false;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    currentTime=0;
+                    currentTime = 0;
                     viewRotation(statusRefresh, 0, 1, 1, animationDuration_instant);
                     viewOpacity(statusRefresh, 0, 1, 1, animationDuration_instant);
                     viewPosition(statusRefresh, 0, dp2px(context, -12),
                             1, 1, animationDuration_instant);
-                    if (dragStarted && dragEnded){
+                    if (dragStarted && dragEnded) {
                         setImage();
                         switchImageLayer(true);
-                    } else if (!dragStarted && !dragEnded){
+                    } else if (!dragStarted && !dragEnded) {
                         v.performClick();
                     }
-                    dragStarted=false;
-                    dragEnded=false;
+                    dragStarted = false;
+                    dragEnded = false;
             }
             return true;
         });
@@ -209,16 +214,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 hideActionButtons();
             }
         });
-        debugButton.setOnClickListener(v -> {
-            if (actionButtonContainer.getAlpha() == 1) {
-                hideActionButtons();
-                if (debug.getVisibility() == View.GONE) {
-                    debug.setVisibility(View.VISIBLE);
-                    debugButton.setImageResource(R.drawable.baseline_code_off_24);
-                } else {
-                    debug.setVisibility(View.GONE);
-                    debugButton.setImageResource(R.drawable.baseline_code_24);
-                }
+        textMain.setOnClickListener(v -> {
+            hideActionButtons();
+            if (debug.getVisibility() == View.GONE) {
+                debug.setVisibility(View.VISIBLE);
+            } else {
+                debug.setVisibility(View.GONE);
             }
         });
 
@@ -229,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         goImmersive(window);
 
-        getDisplayMetrics(getWindowManager());
+        getDisplayMetrics(windowManager);
         if (ContextCompat.checkSelfPermission(
                 context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -383,6 +385,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     });
 
     private void setImage() {
+        DisplayDimensions dimensions=getDisplayMetrics(getWindowManager());
         if (imagesList != null && imagesList.size() > 0) {
             int newIndex;
             if (imagesList.size() > 1) {
@@ -391,7 +394,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } while (imageListIndex == newIndex);
                 imageListIndex = newIndex;
             }
-            Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex), displayWidth, displayHeight);
+            Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex),
+                    dimensions.width, dimensions.height);
             if (upperImgVisible) {//points lower layer
                 bgLower.setImageBitmap(bitmap);
             } else {//points upper layer
@@ -494,4 +498,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
 
+    private void setSafeArea(int left, int top, int right, int bottom){
+        switch (windowManager.getDefaultDisplay().getRotation()){
+            case Surface.ROTATION_0:
+                setAbsoluteMargin(left, top, right, bottom);
+                break;
+            case Surface.ROTATION_90:
+                setAbsoluteMargin(top, right, bottom, left);
+                break;
+            case Surface.ROTATION_180:
+                setAbsoluteMargin(right, bottom, left, top);
+                break;
+            case Surface.ROTATION_270:
+                setAbsoluteMargin(bottom, left, top, right);
+                break;
+            default:break;
+        }
+    }
+
+    private void setAbsoluteMargin(int marginL, int marginT, int marginR, int margonB) {
+        ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams) topContainer.getLayoutParams(),
+                bottomParams = (ConstraintLayout.LayoutParams) bottomContainer.getLayoutParams();
+        topParams.leftMargin = marginL;
+        topParams.topMargin = marginT;
+        topParams.rightMargin = marginR;
+        bottomParams.leftMargin = marginL;
+        bottomParams.rightMargin = marginR;
+        bottomParams.bottomMargin = margonB;
+        topContainer.setLayoutParams(topParams);
+        bottomContainer.setLayoutParams(bottomParams);
+    }
 }

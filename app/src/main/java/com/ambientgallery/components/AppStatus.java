@@ -22,7 +22,6 @@ public class AppStatus {
     public static int imageListIndex=0;
     public static int dragStartSensitivity =12;
     public static int dragEndSensitivity =96;
-    public static int displayWidth, displayHeight;
     public static String[] fileFormat={".jpg",".jpeg",".png",".bmp",".webp"};
     public static ArrayList<String> fileList = new ArrayList<>();
     public static void updateTime() {

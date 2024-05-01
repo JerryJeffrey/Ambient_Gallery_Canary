@@ -3,11 +3,16 @@ package com.ambientgallery.utils;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
+import android.view.DisplayCutout;
 import android.view.WindowManager;
 import static com.ambientgallery.components.AppStatus.*;
 
+import com.ambientgallery.components.DisplayDimensions;
+
 public class DimensUtil {
+
     public static float dp2px(Context context,float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return dp * scale;
@@ -16,16 +21,18 @@ public class DimensUtil {
         final float scale = context.getResources().getDisplayMetrics().density;
         return px / scale;
     }
-    public static void getDisplayMetrics(WindowManager windowManager) {
+    public static DisplayDimensions getDisplayMetrics(WindowManager windowManager) {
         DisplayMetrics metrics = new DisplayMetrics();
         Display display = windowManager.getDefaultDisplay();
+        DisplayDimensions dimensions=new DisplayDimensions();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             display.getRealMetrics(metrics);
-            displayWidth = metrics.widthPixels;
-            displayHeight = metrics.heightPixels;
+            dimensions.width = metrics.widthPixels;
+            dimensions.height = metrics.heightPixels;
         } else {
-            displayWidth = windowManager.getDefaultDisplay().getWidth();
-            displayHeight = windowManager.getDefaultDisplay().getHeight();
+            dimensions.width = windowManager.getDefaultDisplay().getWidth();
+            dimensions.height = windowManager.getDefaultDisplay().getHeight();
         }
+        return dimensions;
     }
 }

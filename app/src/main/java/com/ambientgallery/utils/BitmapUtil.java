@@ -1,12 +1,9 @@
 package com.ambientgallery.utils;
 
-import static com.ambientgallery.components.AppStatus.displayHeight;
-import static com.ambientgallery.components.AppStatus.displayWidth;
 import static com.ambientgallery.components.AppStatus.inSampleLevel;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 public class BitmapUtil {
     public static Bitmap decodeSampledBitmap(String path, int reqWidth, int reqHeight) {

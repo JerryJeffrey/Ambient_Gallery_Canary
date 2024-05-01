@@ -1,7 +1,5 @@
 package com.ambientgallery.viewables;
 
-import static com.ambientgallery.components.AppStatus.displayHeight;
-import static com.ambientgallery.components.AppStatus.displayWidth;
 import static com.ambientgallery.utils.WindowFeatureUtil.goImmersive;
 import static com.ambientgallery.utils.DimensUtil.*;
 
@@ -18,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ambientgallery.R;
+import com.ambientgallery.components.DisplayDimensions;
 
 public class SettingsActivity extends AppCompatActivity {
     View subSplit,backButton;
@@ -41,20 +40,20 @@ public class SettingsActivity extends AppCompatActivity {
         backButton.setOnClickListener(view -> {
             finish();
         });
-        backButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(SettingsActivity.this, "Back", Toast.LENGTH_SHORT).show();
-                return true;
-            }
+        backButton.setOnLongClickListener(view -> {
+            Toast.makeText(SettingsActivity.this, "Back", Toast.LENGTH_SHORT).show();
+            return true;
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        DisplayDimensions dimensions=getDisplayMetrics(getWindowManager());
         FragmentTransaction transaction=fragmentManager.beginTransaction();
-        if ((float) displayWidth / displayHeight >= 1) {
+        //if is landscape and long edge larger than 640dp
+        if ((float) dimensions.width / dimensions.height >= 1 &&
+                dimensions.width>dp2px(getApplicationContext(),640)) {
             transaction.add(R.id.settings_sub_attach_point,settingsFragment);
             subSplit.setVisibility(View.VISIBLE);
         }else {
