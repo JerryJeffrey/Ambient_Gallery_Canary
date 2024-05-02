@@ -1,24 +1,5 @@
 package com.ambientgallery.viewables;
 
-import static com.ambientgallery.components.AppStatus.ambientTimeout;
-import static com.ambientgallery.components.AppStatus.animationDuration_instant;
-import static com.ambientgallery.components.AppStatus.animationDuration_long;
-import static com.ambientgallery.components.AppStatus.animationDuration_normal;
-import static com.ambientgallery.components.AppStatus.animationDuration_short;
-import static com.ambientgallery.components.AppStatus.bgAmbientOpacity;
-import static com.ambientgallery.components.AppStatus.bgNormalOpacity;
-import static com.ambientgallery.components.AppStatus.currentBrightness;
-import static com.ambientgallery.components.AppStatus.currentTime;
-import static com.ambientgallery.components.AppStatus.dragEndSensitivity;
-import static com.ambientgallery.components.AppStatus.dragStartSensitivity;
-import static com.ambientgallery.components.AppStatus.hideButtonTimeout;
-import static com.ambientgallery.components.AppStatus.imageListIndex;
-import static com.ambientgallery.components.AppStatus.nightBrightness;
-import static com.ambientgallery.components.AppStatus.switchImageTimeout;
-import static com.ambientgallery.components.AppStatus.textAmbientOpacity;
-import static com.ambientgallery.components.AppStatus.textNormalOpacity;
-import static com.ambientgallery.components.AppStatus.updateTime;
-import static com.ambientgallery.components.AppStatus.upperImgVisible;
 import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
 import static com.ambientgallery.utils.AnimateUtil.viewPosition;
 import static com.ambientgallery.utils.AnimateUtil.viewRotation;
@@ -30,6 +11,9 @@ import static com.ambientgallery.utils.DimensUtil.px2dp;
 import static com.ambientgallery.utils.ExeptionUtil.convertExceptionMessage;
 import static com.ambientgallery.utils.FileUtil.getFileNameList;
 import static com.ambientgallery.utils.FileUtil.path;
+import static com.ambientgallery.utils.SharedPrefsUtil.initPrefs;
+import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
+import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 import static com.ambientgallery.utils.TimeUtil.getTimeMessageBundle;
 import static com.ambientgallery.utils.TimeUtil.intToFormattedString;
 import static com.ambientgallery.utils.WindowFeatureUtil.allowCutoutDisplay;
@@ -44,6 +28,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
@@ -82,13 +67,9 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     ArrayList<String> imagesList;
-    private View rootView, bgAmbientView,
-            actionButtonContainer,
-            statusTimeout, statusRefresh,
-            statusLight, statusProximity,
-            topContainer, bottomContainer;
-    private TextView textSub, textMain;
-    private TextView debug, hint;
+    private View rootView, bgAmbientView, actionButtonContainer, statusTimeout, statusRefresh,
+            statusLight, statusProximity, topContainer, bottomContainer, topShader, bottomShader;
+    private TextView textSub, textMain, debug, hint;
     private ImageView bgLower, bgUpper;
     private ImageButton settingsButton, ambientButton;
     private Timer timer;
@@ -98,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Context context;
     private Sensor lightSensor, proximitySensor;
     private SensorManager sensorManager;
-    private boolean bgInit = false;
-    private boolean proximityNear = false, dragStarted = false, dragEnded = false;
-    private float nudgeX, nudgeY, touchStartY;
-
+    private boolean bgInit, proximityNear, dragStarted, dragEnded, upperImgVisible;
+    private float nudgeX, nudgeY, touchStartY, currentBrightness;
+    private int currentTime,imageListIndex;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         bgUpper = findViewById(R.id.main_bg_upper);
         topContainer = findViewById(R.id.main_top_container);
         bottomContainer = findViewById(R.id.main_bottom_container);
+        topShader = findViewById(R.id.main_top_shader);
+        bottomShader = findViewById(R.id.main_bottom_shader);
 
         statusTimeout = findViewById(R.id.main_status_timeout);
         statusRefresh = findViewById(R.id.main_status_refresh);
@@ -141,11 +124,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
+        initPrefs(context, "MainPrefs");
+
+        //permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(
+                context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         initializeHiddenButton(statusTimeout);
         initializeHiddenButton(statusRefresh);
-
-        setSafeArea(0,100,0,0);
-
+        //get shared prefs
+        prefs = context.getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        //apply safe area
+        setSafeArea(prefsInt(prefs, "safeArea_left"), prefsInt(prefs, "safeArea_top"),
+                prefsInt(prefs, "safeArea_right"), prefsInt(prefs, "safeArea_bottom"));
         rootView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -153,8 +153,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_MOVE:
                     float y = px2dp(context, event.getRawY() - touchStartY);
-                    float startPercent = y / dragStartSensitivity;
-                    float endPercent = (y - dragStartSensitivity) / dragEndSensitivity;
+                    float startPercent = y / prefsInt(prefs, "dragStartSensitivity");
+                    float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) /
+                            prefsInt(prefs, "dragEndSensitivity");
                     if (endPercent >= 1) {
                         dragEnded = true;
                         viewRotation(statusRefresh, 5 * (endPercent - 1) + 45,
@@ -175,10 +176,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_UP:
                     currentTime = 0;
-                    viewRotation(statusRefresh, 0, 1, 1, animationDuration_instant);
-                    viewOpacity(statusRefresh, 0, 1, 1, animationDuration_instant);
+                    viewRotation(statusRefresh, 0, 1, 1,
+                            prefsInt(prefs, "animationDuration_instant"));
+                    viewOpacity(statusRefresh, 0, 1, 1,
+                            prefsInt(prefs, "animationDuration_instant"));
                     viewPosition(statusRefresh, 0, dp2px(context, -12),
-                            1, 1, animationDuration_instant);
+                            1, 1, prefsInt(prefs, "animationDuration_instant"));
                     if (dragStarted && dragEnded) {
                         setImage();
                         switchImageLayer(true);
@@ -190,17 +193,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             return true;
         });
-
         rootView.setOnClickListener(v -> {
             currentTime = 0;
-            if (bgAmbientView.getAlpha() < bgNormalOpacity) {
+            if (bgAmbientView.getAlpha() < prefsFloat(prefs, "bgNormalOpacity")) {
                 leaveAmbient();
             }
-            if (bgAmbientView.getAlpha() > bgAmbientOpacity) {
+            if (bgAmbientView.getAlpha() > prefsFloat(prefs, "bgAmbientOpacity")) {
                 showActionButtons();
             }
         });
-
         settingsButton.setOnClickListener(v -> {
             if (actionButtonContainer.getAlpha() == 1) {
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -223,18 +224,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        //permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(
-                context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         //listen to sensor if exist
         if (lightSensor != null) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI);
@@ -288,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onDestroy() {
         super.onDestroy();
 
-        //cancel mHandler to avoid memory leak
+        //cancel handler to avoid memory leak
         timeMessageHandler.removeCallbacksAndMessages(null);
     }
 
@@ -312,12 +301,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         if (type == Sensor.TYPE_LIGHT) {//actions when ambient light sensor reacts
             currentBrightness = value;
-            //when low light
-            if (currentBrightness <= nightBrightness) {
-            }
-            //when enough light
-            else {
-            }
         }
         setSleepStatus();
     }
@@ -357,15 +340,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             nudgeY = dp2px(context, 2 * (Math.abs(hour24 + minute / 60f + second / 3600f - 12) - 12));
 
             //hide buttons
-            if (actionButtonContainer.getAlpha() == 1 && currentTime == hideButtonTimeout) {
+            if (actionButtonContainer.getAlpha() == 1 &&
+                    currentTime == prefsInt(prefs, "hideButtonTimeout")) {
                 hideActionButtons();
             }
-            if (currentTime == ambientTimeout && bgAmbientView.getAlpha() >= bgNormalOpacity) {
+            if (currentTime == prefsInt(prefs, "ambientTimeout") &&
+                    bgAmbientView.getAlpha() >= prefsFloat(prefs, "bgNormalOpacity")) {
                 goAmbient();
             }
 
             //set translation of main text
-            if (bgAmbientView.getAlpha() <= bgAmbientOpacity) {
+            if (bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")) {
                 viewPosition(textMain, nudgeX, nudgeY, 0f, 1f, 0);
             }
 
@@ -373,8 +358,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 //switch background and reset current time
-                if ((bgAmbientView.getAlpha() <= bgAmbientOpacity
-                        && currentTime == switchImageTimeout)) {
+                if ((bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")
+                        && currentTime == prefsInt(prefs, "switchImageTimeout"))) {
                     setImage();
                     switchImageLayer(false);
                     currentTime = 0;
@@ -385,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     });
 
     private void setImage() {
-        DisplayDimensions dimensions=getDisplayMetrics(getWindowManager());
+        DisplayDimensions dimensions = getDisplayMetrics(getWindowManager());
         if (imagesList != null && imagesList.size() > 0) {
             int newIndex;
             if (imagesList.size() > 1) {
@@ -395,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 imageListIndex = newIndex;
             }
             Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex),
-                    dimensions.width, dimensions.height);
+                    dimensions.width, dimensions.height, prefsInt(prefs, "inSampleLevel"));
             if (upperImgVisible) {//points lower layer
                 bgLower.setImageBitmap(bitmap);
             } else {//points upper layer
@@ -409,82 +394,88 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         AnimatorListenerAdapter listener = null;
         if (upperImgVisible) {//at upper
             operateView = bgLower;
-            viewOpacity(bgUpper, 0f, 0f, 1f, animationDuration_long);
+            viewOpacity(bgUpper, 0f, 0f, 1f, prefsInt(prefs, "animationDuration_long"));
             upperImgVisible = false;
         } else {//at lower
             operateView = bgUpper;
-            viewOpacity(bgUpper, 1f, 0f, 1f, animationDuration_long);
+            viewOpacity(bgUpper, 1f, 0f, 1f, prefsInt(prefs, "animationDuration_long"));
             upperImgVisible = true;
         }
         if (active) {
-            viewRotation(statusRefresh, 360, 1, 1, animationDuration_short);
-            viewOpacity(statusRefresh, 1, 1, 1, animationDuration_short);
-            viewPosition(statusRefresh, 0, 0, 1, 1, animationDuration_short);
+            viewRotation(statusRefresh, 360, 1, 1, prefsInt(prefs, "animationDuration_short"));
+            viewOpacity(statusRefresh, 1, 1, 1, prefsInt(prefs, "animationDuration_short"));
+            viewPosition(statusRefresh, 0, 0, 1, 1, prefsInt(prefs, "animationDuration_short"));
             listener = new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     statusRefresh.setRotation(0);
-                    viewOpacity(statusRefresh, 0, 1, 1, animationDuration_instant);
+                    viewOpacity(statusRefresh, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
                     viewPosition(statusRefresh, 0, dp2px(context, -12),
-                            1, 1, animationDuration_instant);
+                            1, 1, prefsInt(prefs, "animationDuration_instant"));
                 }
             };
         }
-        operateView.setScaleX(1.1f);
-        operateView.setScaleY(1.1f);
-        viewScale(operateView, 1f, 1f, 0.5f, 1f, animationDuration_long, listener);
+        operateView.setScaleX(prefsFloat(prefs, "switchImageScale"));
+        operateView.setScaleY(prefsFloat(prefs, "switchImageScale"));
+        viewScale(operateView, 1f, 1f, 0.5f, 1f, prefsInt(prefs, "animationDuration_long"), listener);
     }
 
     private void goAmbient() {
-        viewOpacity(bgAmbientView, bgAmbientOpacity, 1f / 3, 1f, animationDuration_normal);
-        viewOpacity(textMain, textAmbientOpacity, 1f / 3, 1f, animationDuration_normal);
-        viewOpacity(textSub, 0, 1f / 3, 1f, animationDuration_normal);
-        viewPosition(textMain, nudgeX, nudgeY, 1f / 3, 1f, animationDuration_normal);
-        viewPosition(textSub, -nudgeX, nudgeY, 1f / 3, 1f, animationDuration_normal);
+        viewOpacity(bgAmbientView, prefsFloat(prefs, "bgAmbientOpacity"), 1f / 3, 1f,
+                prefsInt(prefs, "animationDuration_normal"));
+        viewOpacity(textMain, prefsFloat(prefs, "textAmbientOpacity"), 1f / 3, 1f,
+                prefsInt(prefs, "animationDuration_normal"));
+        viewOpacity(new View[]{textSub, topShader, bottomShader},
+                0, 1f / 3, 1f, prefsInt(prefs, "animationDuration_normal"));
+        viewPosition(textMain, nudgeX, nudgeY, 1f / 3, 1f, prefsInt(prefs, "animationDuration_normal"));
+        viewPosition(textSub, -nudgeX, nudgeY, 1f / 3, 1f, prefsInt(prefs, "animationDuration_normal"));
         currentTime = 0;
     }
 
     private void leaveAmbient() {
-        viewOpacity(bgAmbientView, bgNormalOpacity, 1, 1, animationDuration_short);
+        viewOpacity(new View[]{bgAmbientView, topShader, bottomShader},
+                prefsFloat(prefs, "bgNormalOpacity"), 1, 1, prefsInt(prefs, "animationDuration_short"));
         viewOpacity(new View[]{textMain, textSub},
-                textNormalOpacity, 1, 1, animationDuration_short, new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                    }
-                });
-        viewPosition(new View[]{textMain, textSub}, 0, 0, 1, 1, animationDuration_short);
+                prefsFloat(prefs, "textNormalOpacity"), 1, 1, prefsInt(prefs, "animationDuration_short"));
+        viewPosition(new View[]{textMain, textSub}, 0, 0, 1, 1, prefsInt(prefs, "animationDuration_short"));
     }
 
     private void showActionButtons() {
-        viewOpacity(actionButtonContainer, 1f, 1, 1f, animationDuration_instant);
-        viewPosition(actionButtonContainer, 0, 0, 1, 1f, animationDuration_instant);
+        viewOpacity(actionButtonContainer, 1f, 1, 1f, prefsInt(prefs, "animationDuration_instant"));
+        viewPosition(actionButtonContainer, 0, 0, 1, 1f, prefsInt(prefs, "animationDuration_instant"));
     }
 
     private void hideActionButtons() {
-        viewOpacity(actionButtonContainer, 0, 1, 1, animationDuration_instant);
+        viewOpacity(actionButtonContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
         viewPosition(actionButtonContainer, 0, dp2px(context, -12),
-                1, 1, animationDuration_instant);
+                1, 1, prefsInt(prefs, "animationDuration_instant"));
     }
 
     private void setSleepStatus() {
-        statusLight.setVisibility(currentBrightness <= nightBrightness ? View.VISIBLE : View.GONE);
+        statusLight.setVisibility(currentBrightness <= prefsInt(prefs, "nightEndBrightness") ? View.VISIBLE : View.GONE);
         statusProximity.setVisibility(proximityNear ? View.VISIBLE : View.GONE);
-        if (currentBrightness <= nightBrightness || proximityNear) {
+        if (currentBrightness <= prefsInt(prefs, "nightStartBrightness") || proximityNear) {
             allowSleeping(window);
-            viewOpacity(statusTimeout, 1, 1, 1, animationDuration_instant);
-            viewPosition(statusTimeout, 0, 0, 1, 1, animationDuration_instant);
-        } else {
+            viewOpacity(statusTimeout, 1, 1, 1, prefsInt(prefs, "animationDuration_instant"));
+            viewPosition(statusTimeout, 0, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
+        }
+        if (!proximityNear && currentBrightness > prefsInt(prefs, "nightEndBrightness")) {
             preventSleeping(window);
-            viewOpacity(statusTimeout, 0, 1, 1, animationDuration_instant);
-            viewPosition(statusTimeout, 0, dp2px(context, -12), 1, 1, animationDuration_instant);
+            viewOpacity(statusTimeout, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
+            viewPosition(statusTimeout, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
         }
     }
 
     private void initializeHiddenButton(View view) {
         view.setTranslationY(dp2px(context, -12));
         view.setAlpha(0);
+    }
+
+    public void updateTime() {//live
+        if (currentTime < prefsInt(prefs, "ambientTimeout") || currentTime < prefsInt(prefs, "switchImageTimeout")) {
+            currentTime += 1;
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -498,8 +489,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
 
-    private void setSafeArea(int left, int top, int right, int bottom){
-        switch (windowManager.getDefaultDisplay().getRotation()){
+    /**
+     * @noinspection SameParameterValue
+     */
+    private void setSafeArea(int left, int top, int right, int bottom) {
+        switch (windowManager.getDefaultDisplay().getRotation()) {
             case Surface.ROTATION_0:
                 setAbsoluteMargin(left, top, right, bottom);
                 break;
@@ -512,12 +506,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case Surface.ROTATION_270:
                 setAbsoluteMargin(bottom, left, top, right);
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
     private void setAbsoluteMargin(int marginL, int marginT, int marginR, int margonB) {
-        ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams) topContainer.getLayoutParams(),
+        ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams)
+                topContainer.getLayoutParams(),
                 bottomParams = (ConstraintLayout.LayoutParams) bottomContainer.getLayoutParams();
         topParams.leftMargin = marginL;
         topParams.topMargin = marginT;

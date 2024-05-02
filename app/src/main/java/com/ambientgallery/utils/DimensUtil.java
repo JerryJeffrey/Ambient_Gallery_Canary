@@ -3,11 +3,8 @@ package com.ambientgallery.utils;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
-import android.view.DisplayCutout;
 import android.view.WindowManager;
-import static com.ambientgallery.components.AppStatus.*;
 
 import com.ambientgallery.components.DisplayDimensions;
 
