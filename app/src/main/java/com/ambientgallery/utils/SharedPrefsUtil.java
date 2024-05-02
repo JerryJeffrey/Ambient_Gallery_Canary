@@ -28,8 +28,8 @@ public class SharedPrefsUtil {
                 addEdit(prefs, editor, "ambientTimeout", 30);
                 addEdit(prefs, editor, "switchImageTimeout", 60);
                 //brightness
-                addEdit(prefs, editor, "nightStartBrightness", 0);
-                addEdit(prefs, editor, "nightEndBrightness", 0);
+                addEdit(prefs, editor, "nightStartBrightness", 0f);
+                addEdit(prefs, editor, "nightEndBrightness", 3f);
                 //animation duration
                 addEdit(prefs, editor, "animationDuration_instant", 400);
                 addEdit(prefs, editor, "animationDuration_short", 800);

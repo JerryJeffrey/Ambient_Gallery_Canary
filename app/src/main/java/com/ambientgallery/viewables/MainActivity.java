@@ -215,14 +215,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 hideActionButtons();
             }
         });
-        textMain.setOnClickListener(v -> {
-            hideActionButtons();
-            if (debug.getVisibility() == View.GONE) {
-                debug.setVisibility(View.VISIBLE);
-            } else {
-                debug.setVisibility(View.GONE);
-            }
-        });
 
         //listen to sensor if exist
         if (lightSensor != null) {
@@ -453,14 +445,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void setSleepStatus() {
-        statusLight.setVisibility(currentBrightness <= prefsInt(prefs, "nightEndBrightness") ? View.VISIBLE : View.GONE);
+        statusLight.setVisibility(currentBrightness <= prefsFloat(prefs, "nightEndBrightness") ? View.VISIBLE : View.GONE);
         statusProximity.setVisibility(proximityNear ? View.VISIBLE : View.GONE);
-        if (currentBrightness <= prefsInt(prefs, "nightStartBrightness") || proximityNear) {
+        if (currentBrightness <= prefsFloat(prefs, "nightStartBrightness") || proximityNear) {
             allowSleeping(window);
             viewOpacity(statusTimeout, 1, 1, 1, prefsInt(prefs, "animationDuration_instant"));
             viewPosition(statusTimeout, 0, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
         }
-        if (!proximityNear && currentBrightness > prefsInt(prefs, "nightEndBrightness")) {
+        if (!proximityNear && currentBrightness > prefsFloat(prefs, "nightEndBrightness")) {
             preventSleeping(window);
             viewOpacity(statusTimeout, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
             viewPosition(statusTimeout, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
