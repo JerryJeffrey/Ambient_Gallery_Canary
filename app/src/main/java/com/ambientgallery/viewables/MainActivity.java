@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Window window;
     private WindowManager windowManager;
     private Context context;
-    private Sensor lightSensor, proximitySensor;
+    private Sensor lightSensor;
     private SensorManager sensorManager;
     private boolean bgInit, proximityNear, dragStarted, dragEnded, upperImgVisible;
     private float nudgeX, nudgeY, touchStartY, currentBrightness;
@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         initPrefs(context, "MainPrefs");
 
@@ -220,9 +219,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (lightSensor != null) {
             sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI);
         }
-        if (proximitySensor != null) {
-            sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
         goImmersive(window);
 
         getDisplayMetrics(windowManager);
@@ -288,16 +284,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         int type = event.sensor.getType();
         float value = event.values[0];
-        if (type == Sensor.TYPE_PROXIMITY) {//actions when proximity sensor reacts
-            proximityNear = value != proximitySensor.getMaximumRange();
-        }
         if (type == Sensor.TYPE_LIGHT) {//actions when ambient light sensor reacts
             currentBrightness = value;
         }
         setSleepStatus();
     }
 
-    private Handler timeMessageHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+    private final Handler timeMessageHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @SuppressLint("SetTextI18n")
         @Override
         public boolean handleMessage(@NonNull Message message) {
