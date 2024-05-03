@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private boolean bgInit, proximityNear, dragStarted, dragEnded, upperImgVisible;
     private float nudgeX, nudgeY, touchStartY, currentBrightness;
-    private int currentTime,imageListIndex;
+    private int currentTime, imageListIndex;
     SharedPreferences prefs;
 
     @Override
@@ -157,18 +157,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             prefsInt(prefs, "dragEndSensitivity");
                     if (endPercent >= 1) {
                         dragEnded = true;
-                        viewRotation(statusRefresh, 5 * (endPercent - 1) + 45,
+                        viewRotation(statusRefresh, 15 * (endPercent - 1) + 45,
                                 1, 1, 0);
                         viewOpacity(statusRefresh, endPercent, 1, 1, 0);
-                        viewPosition(statusRefresh, 0, dp2px(context, endPercent),
+                        viewPosition(statusRefresh, 0, dp2px(context, 8 * (endPercent - 1)),
                                 1, 1, 0);
                     } else if (startPercent >= 1) {
                         dragStarted = true;
                         dragEnded = false;
                         viewRotation(statusRefresh, 45 * endPercent, 1, 1, 0);
                         viewOpacity(statusRefresh, endPercent * 0.8f, 1, 1, 0);
-                        viewPosition(statusRefresh, 0, dp2px(context, 12) *
-                                (endPercent - 1), 1, 1, 0);
+                        viewPosition(statusRefresh, 0, dp2px(context, 12 * (endPercent - 1)),
+                                1, 1, 0);
                     } else {
                         dragStarted = false;
                     }
