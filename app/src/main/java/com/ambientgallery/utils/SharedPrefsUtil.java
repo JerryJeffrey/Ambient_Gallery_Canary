@@ -13,11 +13,6 @@ public class SharedPrefsUtil {
         //noinspection SwitchStatementWithTooFewBranches
         switch (name) {
             case "MainPrefs":
-                //safe area
-                addEdit(prefs, editor, "safeArea_left", 0);
-                addEdit(prefs, editor, "safeArea_top", 0);
-                addEdit(prefs, editor, "safeArea_right", 0);
-                addEdit(prefs, editor, "safeArea_bottom", 0);
                 //opacity
                 addEdit(prefs, editor, "bgAmbientOpacity", 0.5f);
                 addEdit(prefs, editor, "bgNormalOpacity", 1.0f);
@@ -26,7 +21,7 @@ public class SharedPrefsUtil {
                 //timeout
                 addEdit(prefs, editor, "hideButtonTimeout", 5);
                 addEdit(prefs, editor, "ambientTimeout", 30);
-                addEdit(prefs, editor, "switchImageTimeout", 60);
+                addEdit(prefs, editor, "switchImageTimeout", 300);
                 //brightness
                 addEdit(prefs, editor, "nightStartBrightness", 0f);
                 addEdit(prefs, editor, "nightEndBrightness", 3f);

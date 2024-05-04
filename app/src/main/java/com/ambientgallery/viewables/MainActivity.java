@@ -42,10 +42,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.view.DisplayCutout;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,7 +71,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     ArrayList<String> imagesList;
     private View rootView, bgAmbientView, actionButtonContainer, statusTimeout,
-            statusRefreshContainer,statusRefreshIcon, statusLight, statusProximity,
+            statusRefreshContainer, statusRefreshIcon, statusLight, statusProximity,
             topContainer, bottomContainer, topShader, bottomShader;
     private TextView textSub, textMain, debug, hint;
     private ImageView bgLower, bgUpper;
@@ -136,6 +138,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            View decorView = getWindow().getDecorView();
+            WindowInsets windowInsets = decorView.getRootWindowInsets();
+            if (windowInsets != null) {
+                DisplayCutout displayCutout = windowInsets.getDisplayCutout();
+                if (displayCutout != null) {
+                    setContentMargin(
+                            displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
+                            displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
+                }
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -145,9 +163,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         initializeHiddenButton(statusRefreshContainer);
         //get shared prefs
         prefs = context.getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
-        //apply safe area
-        setSafeArea(prefsInt(prefs, "safeArea_left"), prefsInt(prefs, "safeArea_top"),
-                prefsInt(prefs, "safeArea_right"), prefsInt(prefs, "safeArea_bottom"));
         rootView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -156,60 +171,66 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                if (!ongoingAnimators.containsKey(bgUpper.getId()+"opacity")){
-                    //get touch position
-                    float currentY = event.getRawY();
-                    float y = px2dp(context, currentY - touchStartY);
-                    //update start position to minimum value of single touch
-                    if (touchStartY > currentY) touchStartY = currentY;
-                    //calculate drag percentages
-                    float startPercent = y / prefsInt(prefs, "dragStartSensitivity");
-                    float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) /
-                            prefsInt(prefs, "dragEndSensitivity");
-                    //actions when drag percentages changed
-                    if (endPercent >= 1) {
-                        dragEnded = true;
-                        viewRotation(statusRefreshContainer, 15 * (endPercent - 1) + 45,
-                                1, 1, 0);
-                        viewOpacity(statusRefreshContainer, endPercent, 1, 1, 0);
-                        viewOpacity(statusRefreshIcon, endPercent, 1, 1, 0);
-                        viewPosition(statusRefreshContainer, 0,
-                                dp2px(context, 8 * (endPercent - 1)),
-                                1, 1, 0);
-                    } else if (startPercent >= 1) {
-                        dragStarted = true;
-                        dragEnded = false;
-                        viewRotation(statusRefreshContainer, 45 * endPercent,
-                                1, 1, 0);
-                        viewOpacity(statusRefreshContainer, endPercent,
-                                1, 1, 0);
-                        viewOpacity(statusRefreshIcon, 0.5f,
-                                1, 1, 0);
-                        viewPosition(statusRefreshContainer, 0,
-                                dp2px(context, 12 * (endPercent - 1)),
-                                1, 1, 0);
-                    } else {
-                        viewRotation(statusRefreshContainer, 0,
-                                1, 1, 0);
-                        viewOpacity(statusRefreshContainer, 0, 1, 1, 0);
-                        viewPosition(statusRefreshContainer, 0, 0,
-                                1, 1, 0);
+                    if (!ongoingAnimators.containsKey(bgUpper.getId() + "opacity")) {
+                        //get touch position
+                        float currentY = event.getRawY();
+                        float y = px2dp(context, currentY - touchStartY);
+                        //update start position to minimum value of single touch
+                        if (touchStartY > currentY) touchStartY = currentY;
+                        //calculate drag percentages
+                        float startPercent = y / prefsInt(prefs, "dragStartSensitivity");
+                        float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) /
+                                prefsInt(prefs, "dragEndSensitivity");
+                        //actions when drag percentages changed
+                        if (endPercent >= 1) {
+                            dragEnded = true;
+                            viewRotation(statusRefreshContainer, 15 * (endPercent - 1) + 45,
+                                    1, 1, 0);
+                            viewOpacity(statusRefreshContainer, endPercent, 1, 1, 0);
+                            viewOpacity(statusRefreshIcon, endPercent, 1, 1, 0);
+                            viewPosition(statusRefreshContainer, 0,
+                                    dp2px(context, 8 * (endPercent - 1)),
+                                    1, 1, 0);
+                        } else if (startPercent >= 1) {
+                            dragStarted = true;
+                            dragEnded = false;
+                            viewRotation(statusRefreshContainer, 45 * endPercent,
+                                    1, 1, 0);
+                            viewOpacity(statusRefreshContainer, endPercent,
+                                    1, 1, 0);
+                            viewOpacity(statusRefreshIcon, 0.5f,
+                                    1, 1, 0);
+                            viewPosition(statusRefreshContainer, 0,
+                                    dp2px(context, 12 * (endPercent - 1)),
+                                    1, 1, 0);
+                        } else {
+                            viewRotation(statusRefreshContainer, 0,
+                                    1, 1, 0);
+                            viewOpacity(statusRefreshContainer, 0, 1, 1, 0);
+                            viewPosition(statusRefreshContainer, 0, 0,
+                                    1, 1, 0);
+                        }
                     }
-                }
                     break;
                 case MotionEvent.ACTION_UP:
-                    //reset view props
-                    viewRotation(statusRefreshContainer, 0, 1, 1,
-                            prefsInt(prefs, "animationDuration_instant"));
-                    viewOpacity(statusRefreshContainer, 0, 1, 1,
-                            prefsInt(prefs, "animationDuration_instant"));
-                    viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
-                            1, 1, prefsInt(prefs, "animationDuration_instant"));
-                    //decide when to perform click event
-                    if (dragStarted && dragEnded) {
-                        setImage();
-                        switchImageLayer(true);
-                    } else if (!dragStarted && !dragEnded) {
+                    if (dragEnded) {
+                        setImage(true);
+                        //play refresh animation
+                        viewRotation(statusRefreshContainer, 360, 1, 1,
+                                prefsInt(prefs, "animationDuration_long"));
+                        viewOpacity(statusRefreshContainer, 1, 1, 1,
+                                prefsInt(prefs, "animationDuration_short"));
+                        viewPosition(statusRefreshContainer, 0, 0, 1, 1,
+                                prefsInt(prefs, "animationDuration_short"));
+                    } else if (dragStarted) {
+                        //play reset refresh button animation
+                        viewRotation(statusRefreshContainer, 0, 1, 1,
+                                prefsInt(prefs, "animationDuration_instant"));
+                        viewOpacity(statusRefreshContainer, 0, 1, 1,
+                                prefsInt(prefs, "animationDuration_instant"));
+                        viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
+                                1, 1, prefsInt(prefs, "animationDuration_instant"));
+                    } else {
                         v.performClick();
                     }
                     //reset touch event status
@@ -260,8 +281,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 hint.setText(convertExceptionMessage(context, e));
             }
             if (!bgInit) {
-                setImage();
-                switchImageLayer(false);
+                setImage(false);
                 bgInit = true;
             }
         }
@@ -374,16 +394,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //switch background and reset current time
                 if ((bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")
                         && currentTime == prefsInt(prefs, "switchImageTimeout"))) {
-                    setImage();
-                    switchImageLayer(false);
-                    currentTime = 0;
+                    setImage(false);
                 }
             }
             return true;
         }
     });
 
-    private void setImage() {
+    private void setImage(boolean active) {
         DisplayDimensions dimensions = getDisplayMetrics(getWindowManager());
         if (imagesList != null && imagesList.size() > 0) {
             int newIndex;
@@ -393,53 +411,61 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } while (imageListIndex == newIndex);
                 imageListIndex = newIndex;
             }
-            Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex),
-                    dimensions.width, dimensions.height, prefsInt(prefs, "inSampleLevel"));
-            if (upperImgVisible) {//points lower layer
-                bgLower.setImageBitmap(bitmap);
-            } else {//points upper layer
-                bgUpper.setImageBitmap(bitmap);
-            }
+            new Thread(() -> {
+                Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex),
+                        dimensions.width, dimensions.height, prefsInt(prefs, "inSampleLevel"));
+                runOnUiThread(() -> {
+                    if (upperImgVisible) {//points lower layer
+                        bgLower.setImageBitmap(bitmap);
+                    } else {//points upper layer
+                        bgUpper.setImageBitmap(bitmap);
+                    }
+                    switchImageLayer(active);
+                });
+            }).start();
         }
     }
 
     private void switchImageLayer(boolean active) {
         View operateView;
         AnimatorListenerAdapter listener = null;
-        if (upperImgVisible) {//at upper
-            operateView = bgLower;
-            viewOpacity(bgUpper, 0f, 0f, 1f,
-                    prefsInt(prefs, "animationDuration_long"));
-            upperImgVisible = false;
-        } else {//at lower
-            operateView = bgUpper;
-            viewOpacity(bgUpper, 1f, 0f, 1f,
-                    prefsInt(prefs, "animationDuration_long"));
-            upperImgVisible = true;
-        }
+        int switchAnimationDuration = prefsInt(prefs, "animationDuration_long");
         if (active) {
-            viewRotation(statusRefreshContainer, 360, 1, 1,
-                    prefsInt(prefs, "animationDuration_short"));
-            viewOpacity(statusRefreshContainer, 1, 1, 1,
-                    prefsInt(prefs, "animationDuration_short"));
-            viewPosition(statusRefreshContainer, 0, 0, 1, 1,
-                    prefsInt(prefs, "animationDuration_short"));
+//            switchAnimationDuration= prefsInt(prefs, "animationDuration_normal");
             listener = new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    statusRefreshContainer.setRotation(0);
                     viewOpacity(statusRefreshContainer, 0, 1, 1,
-                            prefsInt(prefs, "animationDuration_instant"));
+                            prefsInt(prefs, "animationDuration_instant"),
+                            new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    statusRefreshContainer.setRotation(0);
+                                }
+                            });
                     viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
                             1, 1, prefsInt(prefs, "animationDuration_instant"));
                 }
             };
         }
+        if (upperImgVisible) {//at upper
+            operateView = bgLower;
+            viewOpacity(bgUpper, 0f, 0f, 1f,
+                    switchAnimationDuration);
+            upperImgVisible = false;
+        } else {//at lower
+            operateView = bgUpper;
+            viewOpacity(bgUpper, 1f, 0f, 1f,
+                    switchAnimationDuration);
+            upperImgVisible = true;
+        }
         operateView.setScaleX(prefsFloat(prefs, "switchImageScale"));
         operateView.setScaleY(prefsFloat(prefs, "switchImageScale"));
         viewScale(operateView, 1f, 1f, 0.5f, 1f,
-                prefsInt(prefs, "animationDuration_long"), listener);
+                switchAnimationDuration, listener);
+        currentTime = 0;
     }
 
     private void goAmbient() {
@@ -530,33 +556,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void setSafeArea(int left, int top, int right, int bottom) {
         switch (windowManager.getDefaultDisplay().getRotation()) {
             case Surface.ROTATION_0:
-                setAbsoluteMargin(left, top, right, bottom);
+                setContentMargin(left, top, right, bottom);
                 break;
             case Surface.ROTATION_90:
-                setAbsoluteMargin(top, right, bottom, left);
+                setContentMargin(top, right, bottom, left);
                 break;
             case Surface.ROTATION_180:
-                setAbsoluteMargin(right, bottom, left, top);
+                setContentMargin(right, bottom, left, top);
                 break;
             case Surface.ROTATION_270:
-                setAbsoluteMargin(bottom, left, top, right);
+                setContentMargin(bottom, left, top, right);
                 break;
             default:
                 break;
         }
     }
 
-    private void setAbsoluteMargin(int marginL, int marginT, int marginR, int margonB) {
+    private void setContentMargin(int marginL, int marginT, int marginR, int margonB) {
+        //get margins
         ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams)
                 topContainer.getLayoutParams(),
-                bottomParams = (ConstraintLayout.LayoutParams) bottomContainer.getLayoutParams();
+                bottomParams = (ConstraintLayout.LayoutParams) bottomContainer.getLayoutParams(),
+                refreshParams = (ConstraintLayout.LayoutParams) statusRefreshContainer.getLayoutParams();
+        //set margins
         topParams.leftMargin = marginL;
         topParams.topMargin = marginT;
         topParams.rightMargin = marginR;
         bottomParams.leftMargin = marginL;
         bottomParams.rightMargin = marginR;
         bottomParams.bottomMargin = margonB;
+        refreshParams.leftMargin = marginL;
+        refreshParams.topMargin = marginT;
+        refreshParams.rightMargin = marginR;
+        //apply changes
         topContainer.setLayoutParams(topParams);
         bottomContainer.setLayoutParams(bottomParams);
+        statusRefreshContainer.setLayoutParams(refreshParams);
     }
 }
