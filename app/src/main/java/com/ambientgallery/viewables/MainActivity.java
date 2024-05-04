@@ -52,6 +52,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -256,7 +257,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 hideActionButtons();
             }
-
+        });
+        settingsButton.setOnLongClickListener(v -> {
+            Toast.makeText(MainActivity.this, getText(R.string.button_settings),
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        });
+        ambientButton.setOnLongClickListener(v -> {
+            Toast.makeText(MainActivity.this, getText(R.string.button_ambient_mode),
+                    Toast.LENGTH_SHORT).show();
+            return true;
         });
         ambientButton.setOnClickListener(v -> {
             if (actionButtonContainer.getAlpha() == 1) {

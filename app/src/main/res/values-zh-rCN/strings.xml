@@ -8,7 +8,6 @@
     <string name="day_thu">周四</string>
     <string name="day_fri">周五</string>
     <string name="day_sat">周六</string>
-    <string name="ic_open_source_licences">开源许可</string>
     <string name="hint_storage_permission_explanation_1">我们需要存储权限以访问和显示</string>
     <string name="hint_storage_permission_explanation_2">中的图片。</string>
     <string name="hint_directory_name_occupied_1">目录路径</string>
@@ -19,4 +18,7 @@
     <string name="hint_cannot_clear_nomedia_2">包含.nomedia文件。请备份文件并删除该文件夹。</string>
     <string name="hint_no_available_files_1">在</string>
     <string name="hint_no_available_files_2">中未发现可用的图片。</string>
+    <string name="button_back">返回</string>
+    <string name="button_settings">设置</string>
+    <string name="button_ambient_mode">进入待机模式</string>
 </resources>

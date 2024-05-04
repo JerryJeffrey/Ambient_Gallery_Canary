@@ -41,7 +41,8 @@ public class SettingsActivity extends AppCompatActivity {
             finish();
         });
         backButton.setOnLongClickListener(view -> {
-            Toast.makeText(SettingsActivity.this, "Back", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingsActivity.this, getText(R.string.button_back),
+                    Toast.LENGTH_SHORT).show();
             return true;
         });
     }
