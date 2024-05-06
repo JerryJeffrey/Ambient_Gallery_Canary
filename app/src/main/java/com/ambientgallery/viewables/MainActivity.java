@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Context context;
     private Sensor lightSensor;
     private SensorManager sensorManager;
-    private boolean bgInit, proximityNear, dragStarted, dragEnded, upperImgVisible;
+    private boolean appInit, dragStarted, dragEnded, upperImgVisible;
     private float nudgeX, nudgeY, touchStartY, currentBrightness;
     private int currentTime, imageListIndex;
     SharedPreferences prefs;
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                    if (!ongoingAnimators.containsKey(bgUpper.getId() + "opacity")) {
+                    if (!ongoingAnimators.containsKey(statusRefreshContainer.getId() + "opacity")) {
                         //get touch position
                         float currentY = event.getRawY();
                         float y = px2dp(context, currentY - touchStartY);
@@ -215,7 +215,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_UP:
                     if (dragEnded) {
-                        setImage(true);
+                        setImage(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                viewOpacity(statusRefreshContainer, 0, 1, 1,
+                                        prefsInt(prefs, "animationDuration_instant"),
+                                        new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+                                                statusRefreshContainer.setRotation(0);
+                                            }
+                                        });
+                                viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
+                                        1, 1, prefsInt(prefs, "animationDuration_instant"));
+                            }
+                        });
                         //play refresh animation
                         viewRotation(statusRefreshContainer, 360, 1, 1,
                                 prefsInt(prefs, "animationDuration_long"));
@@ -290,9 +306,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             } catch (IOException e) {
                 hint.setText(convertExceptionMessage(context, e));
             }
-            if (!bgInit) {
-                setImage(false);
-                bgInit = true;
+            if (!appInit) {
+                setImage(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        statusRefreshIcon.setAlpha(.5f);
+                        viewOpacity(statusRefreshContainer,1,1,1,
+                                prefsInt(prefs, "animationDuration_short"));
+                        viewRotation(statusRefreshContainer,45,1,1,
+                                prefsInt(prefs, "animationDuration_short"));
+                        viewPosition(statusRefreshContainer, 0, 0, 1, 1,
+                                prefsInt(prefs, "animationDuration_short"),
+                                new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        viewOpacity(statusRefreshContainer,0,0,0,
+                                                prefsInt(prefs, "animationDuration_instant"));
+                                        viewRotation(statusRefreshContainer,0,0,0,
+                                                prefsInt(prefs, "animationDuration_short"));
+                                        viewPosition(statusRefreshContainer, 0,
+                                                dp2px(context,-12), 0, 0,
+                                                prefsInt(prefs, "animationDuration_instant"));
+                                    }
+                                });
+                    }
+                });
+
+                appInit = true;
             }
         }
 
@@ -404,14 +446,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //switch background and reset current time
                 if ((bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")
                         && currentTime == prefsInt(prefs, "switchImageTimeout"))) {
-                    setImage(false);
+                    setImage(null);
                 }
             }
             return true;
         }
     });
 
-    private void setImage(boolean active) {
+    private void setImage(AnimatorListenerAdapter customListener) {
         DisplayDimensions dimensions = getDisplayMetrics(getWindowManager());
         if (imagesList != null && imagesList.size() > 0) {
             int newIndex;
@@ -430,36 +472,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     } else {//points upper layer
                         bgUpper.setImageBitmap(bitmap);
                     }
-                    switchImageLayer(active);
+                    switchImageLayer(customListener);
                 });
             }).start();
         }
     }
 
-    private void switchImageLayer(boolean active) {
+    private void switchImageLayer(AnimatorListenerAdapter listener) {
         View operateView;
-        AnimatorListenerAdapter listener = null;
         int switchAnimationDuration = prefsInt(prefs, "animationDuration_long");
-        if (active) {
-//            switchAnimationDuration= prefsInt(prefs, "animationDuration_normal");
-            listener = new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    viewOpacity(statusRefreshContainer, 0, 1, 1,
-                            prefsInt(prefs, "animationDuration_instant"),
-                            new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    statusRefreshContainer.setRotation(0);
-                                }
-                            });
-                    viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
-                            1, 1, prefsInt(prefs, "animationDuration_instant"));
-                }
-            };
-        }
         if (upperImgVisible) {//at upper
             operateView = bgLower;
             viewOpacity(bgUpper, 0f, 0f, 1f,
@@ -520,15 +541,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void setSleepStatus() {
         statusLight.setVisibility(currentBrightness <=
                 prefsFloat(prefs, "nightEndBrightness") ? View.VISIBLE : View.GONE);
-        statusProximity.setVisibility(proximityNear ? View.VISIBLE : View.GONE);
-        if (currentBrightness <= prefsFloat(prefs, "nightStartBrightness") || proximityNear) {
+        if (currentBrightness <= prefsFloat(prefs, "nightStartBrightness")) {
             allowSleeping(window);
             viewOpacity(statusTimeout, 1, 1, 1,
                     prefsInt(prefs, "animationDuration_instant"));
             viewPosition(statusTimeout, 0, 0, 1, 1,
                     prefsInt(prefs, "animationDuration_instant"));
         }
-        if (!proximityNear && currentBrightness > prefsFloat(prefs, "nightEndBrightness")) {
+        if (currentBrightness > prefsFloat(prefs, "nightEndBrightness")) {
             preventSleeping(window);
             viewOpacity(statusTimeout, 0, 1, 1,
                     prefsInt(prefs, "animationDuration_instant"));
@@ -586,8 +606,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //get margins
         ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams)
                 topContainer.getLayoutParams(),
-                bottomParams = (ConstraintLayout.LayoutParams) bottomContainer.getLayoutParams(),
-                refreshParams = (ConstraintLayout.LayoutParams) statusRefreshContainer.getLayoutParams();
+                bottomParams = (ConstraintLayout.LayoutParams)
+                        bottomContainer.getLayoutParams(),
+                refreshParams = (ConstraintLayout.LayoutParams)
+                        statusRefreshContainer.getLayoutParams();
         //set margins
         topParams.leftMargin = marginL;
         topParams.topMargin = marginT;
