@@ -147,17 +147,6 @@
                             app:layout_constraintBottom_toBottomOf="@+id/main_status_timeout_icon"
                             app:layout_constraintStart_toStartOf="parent">
 
-                            <ImageButton
-                                android:id="@+id/main_timeout_status_proximity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@color/transparent"
-                                android:src="@drawable/baseline_visibility_off_12"
-                                android:visibility="visible"
-                                app:layout_constraintBottom_toTopOf="@+id/main_timeout_status_light"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-
                             <ImageView
                                 android:id="@+id/main_timeout_status_light"
                                 android:layout_width="wrap_content"
@@ -175,7 +164,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/main_button_container_actions"
+                android:id="@+id/main_action_button_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"

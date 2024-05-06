@@ -44,7 +44,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.view.DisplayCutout;
 import android.view.MotionEvent;
-import android.view.Surface;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -71,8 +71,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     ArrayList<String> imagesList;
-    private View rootView, bgAmbientView, actionButtonContainer, statusTimeout,
-            statusRefreshContainer, statusRefreshIcon, statusLight, statusProximity,
+    private View rootView, bgAmbientView, statusTimeout, actionButtonContainer,
+            statusRefreshContainer, statusRefreshIcon, statusLight,
             topContainer, bottomContainer, topShader, bottomShader;
     private TextView textSub, textMain, debug, hint;
     private ImageView bgLower, bgUpper;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private boolean appInit, dragStarted, dragEnded, upperImgVisible;
     private float nudgeX, nudgeY, touchStartY, currentBrightness;
-    private int currentTime, imageListIndex;
+    private int currentTime, imageListIndex, currentOrientation;
     SharedPreferences prefs;
 
     @Override
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         rootView = findViewById(R.id.main_root_view);
         textSub = findViewById(R.id.main_text_sub);
         textMain = findViewById(R.id.main_text_main);
-        actionButtonContainer = findViewById(R.id.main_button_container_actions);
+        actionButtonContainer = findViewById(R.id.main_action_button_container);
         settingsButton = findViewById(R.id.main_button_settings);
         ambientButton = findViewById(R.id.main_button_ambient);
         bgAmbientView = findViewById(R.id.main_bg_ambient_operator);
@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         statusRefreshContainer = findViewById(R.id.main_status_refresh_container);
         statusRefreshIcon = findViewById(R.id.main_status_refresh_icon);
         statusLight = findViewById(R.id.main_timeout_status_light);
-        statusProximity = findViewById(R.id.main_timeout_status_proximity);
 
         debug = findViewById(R.id.main_debug);
         hint = findViewById(R.id.main_hint);
@@ -137,23 +136,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+        OrientationEventListener orientationEventListener =
+                new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+                    @Override
+                    public void onOrientationChanged(int orientation) {
+                        if (currentOrientation != windowManager.getDefaultDisplay().getRotation()) {
+                            setSafeArea();
+                            currentOrientation = windowManager.getDefaultDisplay().getRotation();
+                        }
+                    }
+                };
+        if (orientationEventListener.canDetectOrientation()) orientationEventListener.enable();
+
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            View decorView = getWindow().getDecorView();
-            WindowInsets windowInsets = decorView.getRootWindowInsets();
-            if (windowInsets != null) {
-                DisplayCutout displayCutout = windowInsets.getDisplayCutout();
-                if (displayCutout != null) {
-                    setContentMargin(
-                            displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
-                            displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
-                }
-            }
-        }
+        currentOrientation = windowManager.getDefaultDisplay().getRotation();
+        setSafeArea();
     }
 
     @Override
@@ -172,7 +173,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                    if (!ongoingAnimators.containsKey(statusRefreshContainer.getId() + "opacity")) {
+                    if (!ongoingAnimators.containsKey(statusRefreshContainer.getId() + "opacity") &&
+                            !ongoingAnimators.containsKey(bgUpper.getId() + "opacity")) {
                         //get touch position
                         float currentY = event.getRawY();
                         float y = px2dp(context, currentY - touchStartY);
@@ -185,24 +187,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         //actions when drag percentages changed
                         if (endPercent >= 1) {
                             dragEnded = true;
-                            viewRotation(statusRefreshContainer, 15 * (endPercent - 1) + 45,
+                            viewRotation(statusRefreshContainer, 15 * (endPercent - 1),
                                     1, 1, 0);
                             viewOpacity(statusRefreshContainer, endPercent, 1, 1, 0);
                             viewOpacity(statusRefreshIcon, endPercent, 1, 1, 0);
                             viewPosition(statusRefreshContainer, 0,
-                                    dp2px(context, 8 * (endPercent - 1)),
+                                    dp2px(context, 8 * (endPercent - 1) + 12),
                                     1, 1, 0);
                         } else if (startPercent >= 1) {
                             dragStarted = true;
                             dragEnded = false;
-                            viewRotation(statusRefreshContainer, 45 * endPercent,
+                            viewRotation(statusRefreshContainer, 45 * (endPercent - 1),
                                     1, 1, 0);
                             viewOpacity(statusRefreshContainer, endPercent,
                                     1, 1, 0);
                             viewOpacity(statusRefreshIcon, 0.5f,
                                     1, 1, 0);
                             viewPosition(statusRefreshContainer, 0,
-                                    dp2px(context, 12 * (endPercent - 1)),
+                                    dp2px(context, 24 * (endPercent - 0.5f)),
                                     1, 1, 0);
                         } else {
                             viewRotation(statusRefreshContainer, 0,
@@ -234,10 +236,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         });
                         //play refresh animation
                         viewRotation(statusRefreshContainer, 360, 1, 1,
-                                prefsInt(prefs, "animationDuration_long"));
+                                prefsInt(prefs, "animationDuration_normal"));
                         viewOpacity(statusRefreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewPosition(statusRefreshContainer, 0, 0, 1, 1,
+                        viewPosition(statusRefreshContainer, 0, dp2px(context, 12), 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
                     } else if (dragStarted) {
                         //play reset refresh button animation
@@ -312,22 +314,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         statusRefreshIcon.setAlpha(.5f);
-                        viewOpacity(statusRefreshContainer,1,1,1,
+                        statusRefreshContainer.setRotation(-45);
+                        viewOpacity(statusRefreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewRotation(statusRefreshContainer,45,1,1,
+                        viewRotation(statusRefreshContainer, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewPosition(statusRefreshContainer, 0, 0, 1, 1,
+                        viewPosition(statusRefreshContainer, 0, dp2px(context, 12), 1, 1,
                                 prefsInt(prefs, "animationDuration_short"),
                                 new AnimatorListenerAdapter() {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        viewOpacity(statusRefreshContainer,0,0,0,
+                                        viewOpacity(statusRefreshContainer, 0, 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
-                                        viewRotation(statusRefreshContainer,0,0,0,
-                                                prefsInt(prefs, "animationDuration_short"));
+                                        viewRotation(statusRefreshContainer, -45, 0, 0,
+                                                prefsInt(prefs, "animationDuration_instant"));
                                         viewPosition(statusRefreshContainer, 0,
-                                                dp2px(context,-12), 0, 0,
+                                                dp2px(context, -12), 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
                                     }
                                 });
@@ -390,6 +393,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         setSleepStatus();
     }
+
 
     private final Handler timeMessageHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
         @SuppressLint("SetTextI18n")
@@ -580,29 +584,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
 
-    /**
-     * @noinspection SameParameterValue
-     */
-    private void setSafeArea(int left, int top, int right, int bottom) {
-        switch (windowManager.getDefaultDisplay().getRotation()) {
-            case Surface.ROTATION_0:
-                setContentMargin(left, top, right, bottom);
-                break;
-            case Surface.ROTATION_90:
-                setContentMargin(top, right, bottom, left);
-                break;
-            case Surface.ROTATION_180:
-                setContentMargin(right, bottom, left, top);
-                break;
-            case Surface.ROTATION_270:
-                setContentMargin(bottom, left, top, right);
-                break;
-            default:
-                break;
+    private void setSafeArea() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            View decorView = getWindow().getDecorView();
+            WindowInsets windowInsets = decorView.getRootWindowInsets();
+            if (windowInsets != null) {
+                DisplayCutout displayCutout = windowInsets.getDisplayCutout();
+                if (displayCutout != null) {
+                    setContentMargin(
+                            displayCutout.getSafeInsetLeft(), displayCutout.getSafeInsetTop(),
+                            displayCutout.getSafeInsetRight(), displayCutout.getSafeInsetBottom());
+                }
+            }
         }
     }
 
-    private void setContentMargin(int marginL, int marginT, int marginR, int margonB) {
+    private void setContentMargin(int left, int top, int right, int bottom) {
         //get margins
         ConstraintLayout.LayoutParams topParams = (ConstraintLayout.LayoutParams)
                 topContainer.getLayoutParams(),
@@ -611,15 +608,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 refreshParams = (ConstraintLayout.LayoutParams)
                         statusRefreshContainer.getLayoutParams();
         //set margins
-        topParams.leftMargin = marginL;
-        topParams.topMargin = marginT;
-        topParams.rightMargin = marginR;
-        bottomParams.leftMargin = marginL;
-        bottomParams.rightMargin = marginR;
-        bottomParams.bottomMargin = margonB;
-        refreshParams.leftMargin = marginL;
-        refreshParams.topMargin = marginT;
-        refreshParams.rightMargin = marginR;
+        topParams.leftMargin = left;
+        topParams.topMargin = top;
+        topParams.rightMargin = right;
+        bottomParams.leftMargin = left;
+        bottomParams.rightMargin = right;
+        bottomParams.bottomMargin = bottom;
+        refreshParams.leftMargin = left;
+        refreshParams.topMargin = top;
+        refreshParams.rightMargin = right;
         //apply changes
         topContainer.setLayoutParams(topParams);
         bottomContainer.setLayoutParams(bottomParams);
