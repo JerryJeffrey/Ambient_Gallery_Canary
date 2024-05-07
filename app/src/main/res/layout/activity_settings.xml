@@ -108,6 +108,7 @@
                                     android:layout_height="0dp"
                                     android:gravity="bottom"
                                     android:text="@string/app_name"
+                                    android:textColor="@color/white"
                                     app:autoSizeTextType="uniform"
                                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -124,24 +125,16 @@
                                     app:layout_constraintTop_toBottomOf="@id/settings_about_appname">
 
                                     <TextView
-                                        android:id="@+id/settings_about_desc1"
+                                        android:id="@+id/settings_about_desc"
                                         android:layout_width="0dp"
-                                        android:layout_height="0dp"
-                                        android:text="TextView"
-                                        app:layout_constraintBottom_toTopOf="@+id/settings_about_desc2"
+                                        android:layout_height="wrap_content"
+                                        android:text="https://github.com/JerryJeffrey/Ambient_Gallery_Canary"
+                                        android:textColor="@color/gray_10"
+                                        app:autoSizeTextType="uniform"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent" />
 
-                                    <TextView
-                                        android:id="@+id/settings_about_desc2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="0dp"
-                                        android:text="TextView2"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/settings_about_desc1" />
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>

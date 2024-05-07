@@ -23,4 +23,16 @@
     <string name="hint_cannot_clear_nomedia_2">contains .nomedia file. Please backup files and delete the folder.</string>
     <string name="hint_no_available_files_1">"No available photos found in "</string>
     <string name="hint_no_available_files_2">.</string>
+    <string name="menu_sensitivity">Operating Sensitivity</string>
+    <string name="desc_sensitivity">Sensitivity of pull down refreshing etc.</string>
+    <string name="menu_performance">Performance and stability</string>
+    <string name="desc_performance">Image quality</string>
+    <string name="menu_appearance_normal">Appearance (normal)</string>
+    <string name="desc_appearance_normal">Appearance when app is active</string>
+    <string name="menu_appearance_ambient">Appearance (ambient)</string>
+    <string name="desc_appearance_ambient">Appearance when app is idle</string>
+    <string name="menu_timeout">Timeout</string>
+    <string name="desc_timeout">When to go ambient, switch image, etc.</string>
+    <string name="menu_night">Night behavior</string>
+    <string name="desc_night">When to stop from keeping on</string>
 </resources>

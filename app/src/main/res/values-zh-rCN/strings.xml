@@ -21,4 +21,16 @@
     <string name="button_back">返回</string>
     <string name="button_settings">设置</string>
     <string name="button_ambient_mode">进入待机模式</string>
+    <string name="menu_sensitivity">操作灵敏度</string>
+    <string name="desc_sensitivity">下拉刷新等操作的灵敏度</string>
+    <string name="menu_performance">性能与稳定性</string>
+    <string name="desc_performance">图片质量</string>
+    <string name="desc_appearance_normal">应用活跃时的样式</string>
+    <string name="menu_appearance_normal">外观 (常规)</string>
+    <string name="menu_appearance_ambient">外观 (待机)</string>
+    <string name="desc_appearance_ambient">应用闲置时的样式</string>
+    <string name="menu_timeout">时长</string>
+    <string name="desc_timeout">何时待机、切换图片等</string>
+    <string name="menu_night">夜间行为</string>
+    <string name="desc_night">何时不再保持屏幕开启</string>
 </resources>

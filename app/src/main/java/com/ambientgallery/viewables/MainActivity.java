@@ -71,8 +71,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     ArrayList<String> imagesList;
-    private View rootView, bgAmbientView, statusTimeout, actionButtonContainer,
-            statusRefreshContainer, statusRefreshIcon, statusLight,
+    private View rootView, bgContainer,
+            refreshContainer, refreshIcon, statusNight, alwaysOnContainer,
             topContainer, bottomContainer, topShader, bottomShader;
     private TextView textSub, textMain, debug, hint;
     private ImageView bgLower, bgUpper;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor lightSensor;
     private SensorManager sensorManager;
     private boolean appInit, dragStarted, dragEnded, upperImgVisible;
-    private float nudgeX, nudgeY, touchStartY, currentBrightness;
+    private float nudgeX, nudgeY, touchStartY;
     private int currentTime, imageListIndex, currentOrientation;
     SharedPreferences prefs;
 
@@ -106,21 +106,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         rootView = findViewById(R.id.main_root_view);
         textSub = findViewById(R.id.main_text_sub);
         textMain = findViewById(R.id.main_text_main);
-        actionButtonContainer = findViewById(R.id.main_action_button_container);
         settingsButton = findViewById(R.id.main_button_settings);
         ambientButton = findViewById(R.id.main_button_ambient);
-        bgAmbientView = findViewById(R.id.main_bg_ambient_operator);
+        bgContainer = findViewById(R.id.main_bg_container);
         bgLower = findViewById(R.id.main_bg_lower);
         bgUpper = findViewById(R.id.main_bg_upper);
         topContainer = findViewById(R.id.main_top_container);
         bottomContainer = findViewById(R.id.main_bottom_container);
+        alwaysOnContainer = findViewById(R.id.main_always_on_container);
         topShader = findViewById(R.id.main_top_shader);
         bottomShader = findViewById(R.id.main_bottom_shader);
+        statusNight = findViewById(R.id.main_status_night);
 
-        statusTimeout = findViewById(R.id.main_status_timeout);
-        statusRefreshContainer = findViewById(R.id.main_status_refresh_container);
-        statusRefreshIcon = findViewById(R.id.main_status_refresh_icon);
-        statusLight = findViewById(R.id.main_timeout_status_light);
+        refreshContainer = findViewById(R.id.main_status_refresh_container);
+        refreshIcon = findViewById(R.id.main_refresh_icon);
 
         debug = findViewById(R.id.main_debug);
         hint = findViewById(R.id.main_hint);
@@ -136,6 +135,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        currentOrientation = windowManager.getDefaultDisplay().getRotation();
+        setSafeArea();
         OrientationEventListener orientationEventListener =
                 new OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
                     @Override
@@ -147,22 +154,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     }
                 };
         if (orientationEventListener.canDetectOrientation()) orientationEventListener.enable();
-
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        currentOrientation = windowManager.getDefaultDisplay().getRotation();
-        setSafeArea();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //initialize hidden status views
-        initializeHiddenButton(statusTimeout);
-        initializeHiddenButton(statusRefreshContainer);
         //get shared prefs
         prefs = context.getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         rootView.setOnTouchListener((v, event) -> {
@@ -173,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                    if (!ongoingAnimators.containsKey(statusRefreshContainer.getId() + "opacity") &&
+                    if (!ongoingAnimators.containsKey(refreshContainer.getId() + "opacity") &&
                             !ongoingAnimators.containsKey(bgUpper.getId() + "opacity")) {
                         //get touch position
                         float currentY = event.getRawY();
@@ -187,30 +183,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         //actions when drag percentages changed
                         if (endPercent >= 1) {
                             dragEnded = true;
-                            viewRotation(statusRefreshContainer, 15 * (endPercent - 1),
+                            viewRotation(refreshContainer, 15 * (endPercent - 1),
                                     1, 1, 0);
-                            viewOpacity(statusRefreshContainer, endPercent, 1, 1, 0);
-                            viewOpacity(statusRefreshIcon, endPercent, 1, 1, 0);
-                            viewPosition(statusRefreshContainer, 0,
+                            viewOpacity(refreshContainer, endPercent, 1, 1, 0);
+                            viewOpacity(refreshIcon, endPercent, 1, 1, 0);
+                            viewPosition(refreshContainer, 0,
                                     dp2px(context, 8 * (endPercent - 1) + 12),
                                     1, 1, 0);
                         } else if (startPercent >= 1) {
                             dragStarted = true;
                             dragEnded = false;
-                            viewRotation(statusRefreshContainer, 45 * (endPercent - 1),
+                            viewRotation(refreshContainer, 45 * (endPercent - 1),
                                     1, 1, 0);
-                            viewOpacity(statusRefreshContainer, endPercent,
+                            viewOpacity(refreshContainer, endPercent,
                                     1, 1, 0);
-                            viewOpacity(statusRefreshIcon, 0.5f,
+                            viewOpacity(refreshIcon, 0.5f,
                                     1, 1, 0);
-                            viewPosition(statusRefreshContainer, 0,
+                            viewPosition(refreshContainer, 0,
                                     dp2px(context, 24 * (endPercent - 0.5f)),
                                     1, 1, 0);
                         } else {
-                            viewRotation(statusRefreshContainer, 0,
+                            viewRotation(refreshContainer, 0,
                                     1, 1, 0);
-                            viewOpacity(statusRefreshContainer, 0, 1, 1, 0);
-                            viewPosition(statusRefreshContainer, 0, 0,
+                            viewOpacity(refreshContainer, 0, 1, 1, 0);
+                            viewPosition(refreshContainer, 0, 0,
                                     1, 1, 0);
                         }
                     }
@@ -221,33 +217,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
-                                viewOpacity(statusRefreshContainer, 0, 1, 1,
+                                viewOpacity(refreshContainer, 0, 1, 1,
                                         prefsInt(prefs, "animationDuration_instant"),
                                         new AnimatorListenerAdapter() {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 super.onAnimationEnd(animation);
-                                                statusRefreshContainer.setRotation(0);
+                                                refreshContainer.setRotation(0);
                                             }
                                         });
-                                viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
+                                viewPosition(refreshContainer, 0, dp2px(context, -12),
                                         1, 1, prefsInt(prefs, "animationDuration_instant"));
                             }
                         });
                         //play refresh animation
-                        viewRotation(statusRefreshContainer, 360, 1, 1,
+                        viewRotation(refreshContainer, 360, 1, 1,
                                 prefsInt(prefs, "animationDuration_normal"));
-                        viewOpacity(statusRefreshContainer, 1, 1, 1,
+                        viewOpacity(refreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewPosition(statusRefreshContainer, 0, dp2px(context, 12), 1, 1,
+                        viewPosition(refreshContainer, 0, dp2px(context, 12), 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
                     } else if (dragStarted) {
                         //play reset refresh button animation
-                        viewRotation(statusRefreshContainer, 0, 1, 1,
+                        viewRotation(refreshContainer, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_instant"));
-                        viewOpacity(statusRefreshContainer, 0, 1, 1,
+                        viewOpacity(refreshContainer, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_instant"));
-                        viewPosition(statusRefreshContainer, 0, dp2px(context, -12),
+                        viewPosition(refreshContainer, 0, dp2px(context, -12),
                                 1, 1, prefsInt(prefs, "animationDuration_instant"));
                     } else {
                         v.performClick();
@@ -261,33 +257,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
         rootView.setOnClickListener(v -> {
             currentTime = 0;
-            if (bgAmbientView.getAlpha() < prefsFloat(prefs, "bgNormalOpacity")) {
+            if (bgContainer.getAlpha() < prefsFloat(prefs, "bgNormalOpacity")) {
                 //actions when clicked in ambient mode
                 leaveAmbient();
             }
-            if (bgAmbientView.getAlpha() > prefsFloat(prefs, "bgAmbientOpacity")) {
+            if (bgContainer.getAlpha() > prefsFloat(prefs, "bgAmbientOpacity")) {
                 //actions when clicked in normal display mode
                 showActionButtons();
             }
         });
         settingsButton.setOnClickListener(v -> {
-            if (actionButtonContainer.getAlpha() == 1) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            if (topContainer.getAlpha() == 1) {
+                currentTime = 0;
                 hideActionButtons();
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
         settingsButton.setOnLongClickListener(v -> {
             Toast.makeText(MainActivity.this, getText(R.string.button_settings),
                     Toast.LENGTH_SHORT).show();
+            currentTime = 0;
             return true;
         });
         ambientButton.setOnLongClickListener(v -> {
             Toast.makeText(MainActivity.this, getText(R.string.button_ambient_mode),
                     Toast.LENGTH_SHORT).show();
+            currentTime = 0;
             return true;
         });
         ambientButton.setOnClickListener(v -> {
-            if (actionButtonContainer.getAlpha() == 1) {
+            if (topContainer.getAlpha() == 1) {
                 goAmbient();
                 hideActionButtons();
             }
@@ -313,30 +312,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        statusRefreshIcon.setAlpha(.5f);
-                        statusRefreshContainer.setRotation(-45);
-                        viewOpacity(statusRefreshContainer, 1, 1, 1,
+                        refreshIcon.setAlpha(.5f);
+                        refreshContainer.setRotation(-45);
+                        viewOpacity(refreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewRotation(statusRefreshContainer, 0, 1, 1,
+                        viewRotation(refreshContainer, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewPosition(statusRefreshContainer, 0, dp2px(context, 12), 1, 1,
+                        viewPosition(refreshContainer, 0, dp2px(context, 12), 1, 1,
                                 prefsInt(prefs, "animationDuration_short"),
                                 new AnimatorListenerAdapter() {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        viewOpacity(statusRefreshContainer, 0, 0, 0,
+                                        viewOpacity(refreshContainer, 0, 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
-                                        viewRotation(statusRefreshContainer, -45, 0, 0,
+                                        viewRotation(refreshContainer, -45, 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
-                                        viewPosition(statusRefreshContainer, 0,
+                                        viewPosition(refreshContainer, 0,
                                                 dp2px(context, -12), 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
                                     }
                                 });
                     }
                 });
-
+                refreshContainer.setTranslationY(dp2px(context, -12));
+                refreshContainer.setAlpha(0);
+                statusNight.setTranslationX(dp2px(context, -6));
+                statusNight.setAlpha(0);
+                textMain.setAlpha(prefsFloat(prefs, "textNormalOpacity"));
+                textSub.setAlpha(prefsFloat(prefs, "textNormalOpacity"));
+                bgContainer.setAlpha(prefsFloat(prefs, "bgNormalOpacity"));
                 appInit = true;
             }
         }
@@ -389,9 +394,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int type = event.sensor.getType();
         float value = event.values[0];
         if (type == Sensor.TYPE_LIGHT) {//actions when ambient light sensor reacts
-            currentBrightness = value;
+            if (value <= prefsFloat(prefs, "nightStartBrightness")) {
+                allowSleeping(window);
+                viewPosition(statusNight, 0, 0, 1, 1,
+                        prefsInt(prefs, "animationDuration_instant"));
+                viewOpacity(statusNight, 1, 1, 1,
+                        prefsInt(prefs, "animationDuration_instant"));
+            }
+            if (value > prefsFloat(prefs, "nightEndBrightness")) {
+                preventSleeping(window);
+                viewPosition(statusNight, dp2px(context, -6), 0, 1, 1,
+                        prefsInt(prefs, "animationDuration_instant"));
+                viewOpacity(statusNight, 0, 1, 1,
+                        prefsInt(prefs, "animationDuration_instant"));
+            }
         }
-        setSleepStatus();
     }
 
 
@@ -430,25 +447,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             nudgeY = dp2px(context, 2 * (Math.abs(hour24 + minute / 60f + second / 3600f - 12) - 12));
 
             //hide buttons
-            if (actionButtonContainer.getAlpha() == 1 &&
+            if (topContainer.getAlpha() == 1 &&
                     currentTime == prefsInt(prefs, "hideButtonTimeout")) {
                 hideActionButtons();
             }
             if (currentTime == prefsInt(prefs, "ambientTimeout") &&
-                    bgAmbientView.getAlpha() >= prefsFloat(prefs, "bgNormalOpacity")) {
+                    bgContainer.getAlpha() >= prefsFloat(prefs, "bgNormalOpacity")) {
                 goAmbient();
             }
 
             //set translation of main text
-            if (bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")) {
-                viewPosition(textMain, nudgeX, nudgeY, 0f, 1f, 0);
+            if (bgContainer.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")) {
+                viewPosition(alwaysOnContainer, nudgeX, nudgeY, 0f, 1f, 0);
             }
 
             if (ContextCompat.checkSelfPermission(
                     context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 //switch background and reset current time
-                if ((bgAmbientView.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")
+                if ((bgContainer.getAlpha() <= prefsFloat(prefs, "bgAmbientOpacity")
                         && currentTime == prefsInt(prefs, "switchImageTimeout"))) {
                     setImage(null);
                 }
@@ -504,13 +521,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void goAmbient() {
-        viewOpacity(bgAmbientView, prefsFloat(prefs, "bgAmbientOpacity"), 1f / 3, 1f,
+        viewOpacity(bgContainer, prefsFloat(prefs, "bgAmbientOpacity"), 1f / 3, 1f,
                 prefsInt(prefs, "animationDuration_normal"));
-        viewOpacity(textMain, prefsFloat(prefs, "textAmbientOpacity"), 1f / 3, 1f,
-                prefsInt(prefs, "animationDuration_normal"));
+        viewOpacity(alwaysOnContainer, prefsFloat(prefs, "textAmbientOpacity"),
+                1f / 3, 1f, prefsInt(prefs, "animationDuration_normal"));
         viewOpacity(new View[]{textSub, topShader, bottomShader},
                 0, 1f / 3, 1f, prefsInt(prefs, "animationDuration_normal"));
-        viewPosition(textMain, nudgeX, nudgeY, 1f / 3, 1f,
+        viewPosition(alwaysOnContainer, nudgeX, nudgeY, 1f / 3, 1f,
                 prefsInt(prefs, "animationDuration_normal"));
         viewPosition(textSub, -nudgeX, nudgeY, 1f / 3, 1f,
                 prefsInt(prefs, "animationDuration_normal"));
@@ -518,52 +535,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void leaveAmbient() {
-        viewOpacity(new View[]{bgAmbientView, topShader, bottomShader},
+        viewOpacity(new View[]{bgContainer, topShader, bottomShader},
                 prefsFloat(prefs, "bgNormalOpacity"), 1, 1,
                 prefsInt(prefs, "animationDuration_short"));
-        viewOpacity(new View[]{textMain, textSub},
+        viewOpacity(new View[]{alwaysOnContainer, textSub},
                 prefsFloat(prefs, "textNormalOpacity"), 1, 1,
                 prefsInt(prefs, "animationDuration_short"));
-        viewPosition(new View[]{textMain, textSub}, 0, 0, 1, 1,
+        viewPosition(new View[]{alwaysOnContainer, textSub}, 0, 0, 1, 1,
                 prefsInt(prefs, "animationDuration_short"));
     }
 
     private void showActionButtons() {
-        viewOpacity(actionButtonContainer, 1f, 1, 1f,
+        viewOpacity(topContainer, 1f, 1, 1f,
                 prefsInt(prefs, "animationDuration_instant"));
-        viewPosition(actionButtonContainer, 0, 0, 1, 1f,
+        viewPosition(topContainer, 0, 0, 1, 1f,
                 prefsInt(prefs, "animationDuration_instant"));
     }
 
     private void hideActionButtons() {
-        viewOpacity(actionButtonContainer, 0, 1, 1,
+        viewOpacity(topContainer, 0, 1, 1,
                 prefsInt(prefs, "animationDuration_instant"));
-        viewPosition(actionButtonContainer, 0, dp2px(context, -12),
+        viewPosition(topContainer, 0, dp2px(context, -12),
                 1, 1, prefsInt(prefs, "animationDuration_instant"));
-    }
-
-    private void setSleepStatus() {
-        statusLight.setVisibility(currentBrightness <=
-                prefsFloat(prefs, "nightEndBrightness") ? View.VISIBLE : View.GONE);
-        if (currentBrightness <= prefsFloat(prefs, "nightStartBrightness")) {
-            allowSleeping(window);
-            viewOpacity(statusTimeout, 1, 1, 1,
-                    prefsInt(prefs, "animationDuration_instant"));
-            viewPosition(statusTimeout, 0, 0, 1, 1,
-                    prefsInt(prefs, "animationDuration_instant"));
-        }
-        if (currentBrightness > prefsFloat(prefs, "nightEndBrightness")) {
-            preventSleeping(window);
-            viewOpacity(statusTimeout, 0, 1, 1,
-                    prefsInt(prefs, "animationDuration_instant"));
-            viewPosition(statusTimeout, 0, dp2px(context, -12), 1, 1,
-                    prefsInt(prefs, "animationDuration_instant"));
-        }
-    }
-
-    private void initializeHiddenButton(View view) {
-        view.setTranslationY(dp2px(context, -12));
-        view.setAlpha(0);
     }
 
     public void updateTime() {//live
@@ -606,7 +599,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 bottomParams = (ConstraintLayout.LayoutParams)
                         bottomContainer.getLayoutParams(),
                 refreshParams = (ConstraintLayout.LayoutParams)
-                        statusRefreshContainer.getLayoutParams();
+                        refreshContainer.getLayoutParams();
         //set margins
         topParams.leftMargin = left;
         topParams.topMargin = top;
@@ -620,6 +613,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //apply changes
         topContainer.setLayoutParams(topParams);
         bottomContainer.setLayoutParams(bottomParams);
-        statusRefreshContainer.setLayoutParams(refreshParams);
+        refreshContainer.setLayoutParams(refreshParams);
     }
 }

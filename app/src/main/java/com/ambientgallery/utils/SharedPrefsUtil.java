@@ -22,7 +22,7 @@ public class SharedPrefsUtil {
                 addEdit(prefs, editor, "hideButtonTimeout", 5);
                 addEdit(prefs, editor, "ambientTimeout", 30);
                 addEdit(prefs, editor, "switchImageTimeout", 300);
-                //brightness
+                //night brightness
                 addEdit(prefs, editor, "nightStartBrightness", 0f);
                 addEdit(prefs, editor, "nightEndBrightness", 3f);
                 //animation duration
