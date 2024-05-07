@@ -39,7 +39,7 @@ public class SettingsDetailActivity extends AppCompatActivity {
         mainSplit = findViewById(settings_detail_main_attach_point);
         subSplit = findViewById(settings_detail_subsplit);
         card = findViewById(settings_detail_card_attach_point);
-        backButton = findViewById(settings_detail_button_back);
+        backButton = findViewById(settings_detail_button_back_icon);
         getDisplayMetrics(windowManager);
         fragmentManager = getSupportFragmentManager();
 

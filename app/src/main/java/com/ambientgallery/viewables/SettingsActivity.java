@@ -55,8 +55,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
         aboutDescription.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW,
                 Uri.parse((String) aboutDescription.getText()))));
-
-        Log.i("asd",aboutDescription.getTextColors()+"");
     }
 
 

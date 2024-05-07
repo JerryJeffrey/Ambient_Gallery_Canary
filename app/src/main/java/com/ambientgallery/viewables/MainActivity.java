@@ -56,6 +56,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private boolean appInit, dragStarted, dragEnded, upperImgVisible;
     private float nudgeX, nudgeY, touchStartY;
     private int currentTime, imageListIndex, currentOrientation;
+    public String currentPath;
     SharedPreferences prefs;
 
     @Override
@@ -270,7 +272,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if (topContainer.getAlpha() == 1) {
                 currentTime = 0;
                 hideActionButtons();
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                Intent intent=new Intent(MainActivity.this, SettingsActivity.class);
+                intent.putExtra("currentPath",currentPath);
+                startActivity(intent);
             }
         });
         settingsButton.setOnLongClickListener(v -> {
@@ -485,7 +489,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 imageListIndex = newIndex;
             }
             new Thread(() -> {
-                Bitmap bitmap = decodeSampledBitmap(path + imagesList.get(imageListIndex),
+                currentPath=path + imagesList.get(imageListIndex);
+                Bitmap bitmap = decodeSampledBitmap(currentPath,
                         dimensions.width, dimensions.height, prefsInt(prefs, "inSampleLevel"));
                 runOnUiThread(() -> {
                     if (upperImgVisible) {//points lower layer
