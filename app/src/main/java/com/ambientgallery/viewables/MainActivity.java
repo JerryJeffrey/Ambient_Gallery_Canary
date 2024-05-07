@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         bottomShader = findViewById(R.id.main_bottom_shader);
         statusNight = findViewById(R.id.main_status_night);
 
-        refreshContainer = findViewById(R.id.main_status_refresh_container);
+        refreshContainer = findViewById(R.id.main_refresh_container);
         refreshIcon = findViewById(R.id.main_refresh_icon);
 
         debug = findViewById(R.id.main_debug);
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         //actions when drag percentages changed
                         if (endPercent >= 1) {
                             dragEnded = true;
-                            viewRotation(refreshContainer, 15 * (endPercent - 1),
+                            viewRotation(refreshIcon, 15 * (endPercent - 1),
                                     1, 1, 0);
                             viewOpacity(refreshContainer, endPercent, 1, 1, 0);
                             viewOpacity(refreshIcon, endPercent, 1, 1, 0);
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         } else if (startPercent >= 1) {
                             dragStarted = true;
                             dragEnded = false;
-                            viewRotation(refreshContainer, 45 * (endPercent - 1),
+                            viewRotation(refreshIcon, 45 * (endPercent - 1),
                                     1, 1, 0);
                             viewOpacity(refreshContainer, endPercent,
                                     1, 1, 0);
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                     dp2px(context, 24 * (endPercent - 0.5f)),
                                     1, 1, 0);
                         } else {
-                            viewRotation(refreshContainer, 0,
+                            viewRotation(refreshIcon, 0,
                                     1, 1, 0);
                             viewOpacity(refreshContainer, 0, 1, 1, 0);
                             viewPosition(refreshContainer, 0, 0,
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
                                                 super.onAnimationEnd(animation);
-                                                refreshContainer.setRotation(0);
+                                                refreshIcon.setRotation(0);
                                             }
                                         });
                                 viewPosition(refreshContainer, 0, dp2px(context, -12),
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             }
                         });
                         //play refresh animation
-                        viewRotation(refreshContainer, 360, 1, 1,
+                        viewRotation(refreshIcon, 360, 1, 1,
                                 prefsInt(prefs, "animationDuration_normal"));
                         viewOpacity(refreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 prefsInt(prefs, "animationDuration_short"));
                     } else if (dragStarted) {
                         //play reset refresh button animation
-                        viewRotation(refreshContainer, 0, 1, 1,
+                        viewRotation(refreshIcon, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_instant"));
                         viewOpacity(refreshContainer, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_instant"));
@@ -313,10 +313,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         refreshIcon.setAlpha(.5f);
-                        refreshContainer.setRotation(-45);
+                        refreshIcon.setRotation(-45);
                         viewOpacity(refreshContainer, 1, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
-                        viewRotation(refreshContainer, 0, 1, 1,
+                        viewRotation(refreshIcon, 0, 1, 1,
                                 prefsInt(prefs, "animationDuration_short"));
                         viewPosition(refreshContainer, 0, dp2px(context, 12), 1, 1,
                                 prefsInt(prefs, "animationDuration_short"),
@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                         super.onAnimationEnd(animation);
                                         viewOpacity(refreshContainer, 0, 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
-                                        viewRotation(refreshContainer, -45, 0, 0,
+                                        viewRotation(refreshIcon, -45, 0, 0,
                                                 prefsInt(prefs, "animationDuration_instant"));
                                         viewPosition(refreshContainer, 0,
                                                 dp2px(context, -12), 0, 0,
