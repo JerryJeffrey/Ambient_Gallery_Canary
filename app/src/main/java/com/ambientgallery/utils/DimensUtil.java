@@ -3,6 +3,7 @@ package com.ambientgallery.utils;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -31,5 +32,23 @@ public class DimensUtil {
             dimensions.height = windowManager.getDefaultDisplay().getHeight();
         }
         return dimensions;
+    }
+    public static float getFillScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
+        float widthScale = (float) screenWidth / imageWidth,
+                heightScale = (float) screenHeight / imageHeight;
+        return Math.max(widthScale, heightScale);
+    }
+
+    public static float getHalfScreenScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
+        int halfWidth, halfHeight;
+        if (screenWidth > screenHeight) {//horizontal
+            halfWidth = screenWidth / 2;
+            halfHeight = screenHeight;
+        } else {//vertical
+            halfWidth = screenWidth;
+            halfHeight = screenHeight / 2;
+        }
+        return getFillScale(screenWidth, screenHeight, imageWidth, imageHeight) /
+                getFillScale(halfWidth, halfHeight, imageWidth, imageHeight);
     }
 }
