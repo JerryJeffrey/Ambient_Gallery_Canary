@@ -27,10 +27,8 @@
     <string name="desc_sensitivity">Sensitivity of pull down refreshing etc.</string>
     <string name="menu_performance">Performance and stability</string>
     <string name="desc_performance">Image quality</string>
-    <string name="menu_appearance_normal">Appearance (normal)</string>
-    <string name="desc_appearance_normal">Appearance when app is active</string>
-    <string name="menu_appearance_ambient">Appearance (ambient)</string>
-    <string name="desc_appearance_ambient">Appearance when app is idle</string>
+    <string name="menu_appearance">Appearance</string>
+    <string name="desc_appearance">Appearance of main interface</string>
     <string name="menu_timeout">Timeout</string>
     <string name="desc_timeout">When to go ambient, switch image, etc.</string>
     <string name="menu_night">Night behavior</string>

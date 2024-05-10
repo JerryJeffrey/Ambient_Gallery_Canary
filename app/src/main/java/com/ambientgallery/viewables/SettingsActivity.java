@@ -26,7 +26,6 @@ import com.ambientgallery.components.DisplayDimensions;
 
 public class SettingsActivity extends AppCompatActivity {
     View subSplit, backButton;
-    TextView aboutDescription;
     Window window;
     WindowManager windowManager;
     Fragment settingsFragment;
@@ -40,7 +39,6 @@ public class SettingsActivity extends AppCompatActivity {
         windowManager = getWindowManager();
         subSplit = findViewById(R.id.settings_subsplit);
         backButton = findViewById(R.id.settings_button_back);
-        aboutDescription = findViewById(R.id.settings_about_desc);
         getDisplayMetrics(windowManager);
         settingsFragment = new SettingsFragment();
         fragmentManager = getSupportFragmentManager();
@@ -53,8 +51,6 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return true;
         });
-        aboutDescription.setOnClickListener(v -> startActivity(new Intent(Intent.ACTION_VIEW,
-                Uri.parse((String) aboutDescription.getText()))));
     }
 
 

@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.ambientgallery.R;
 
 public class SettingsFragment extends Fragment {
-    public View appearanceNormal, appearanceAmbient, performance, sensitivity, timeout, nightMode;
+    public View appearance, performance, sensitivity, timeout, nightMode;
 
     @Nullable
     @Override
@@ -26,8 +26,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        appearanceNormal = view.findViewById(R.id.settings_frag_appearance_normal);
-        appearanceAmbient = view.findViewById(R.id.settings_frag_appearance_ambient);
+        appearance = view.findViewById(R.id.settings_frag_appearance);
         performance = view.findViewById(R.id.settings_frag_performance);
         sensitivity = view.findViewById(R.id.settings_frag_sensitivity);
         timeout = view.findViewById(R.id.settings_frag_timeout);
@@ -44,8 +43,7 @@ public class SettingsFragment extends Fragment {
                 startActivity(intent);
             }
         };
-        appearanceNormal.setOnClickListener(onClickListener);
-        appearanceAmbient.setOnClickListener(onClickListener);
+        appearance.setOnClickListener(onClickListener);
         performance.setOnClickListener(onClickListener);
         sensitivity.setOnClickListener(onClickListener);
         timeout.setOnClickListener(onClickListener);

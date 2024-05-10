@@ -44,80 +44,72 @@ public class SharedPrefsUtil {
         editor.apply();
     }
 
-    public static boolean prefsBoolean(SharedPreferences prefs,String key) {
+    public static boolean prefsBoolean(SharedPreferences prefs, String key) {
         if (!prefs.contains(key)) throw new RuntimeException();
         return prefs.getBoolean(key, false);
     }
 
-    public static int prefsInt(SharedPreferences prefs,String key) {
+    public static int prefsInt(SharedPreferences prefs, String key) {
         if (!prefs.contains(key)) throw new RuntimeException();
         return prefs.getInt(key, 0);
     }
 
-    public static float prefsFloat(SharedPreferences prefs,String key) {
+    public static float prefsFloat(SharedPreferences prefs, String key) {
         if (!prefs.contains(key)) throw new RuntimeException();
         return prefs.getFloat(key, 0f);
     }
 
-    public static String prefsString(SharedPreferences prefs,String key) {
+    public static String prefsString(SharedPreferences prefs, String key) {
         if (!prefs.contains(key)) throw new RuntimeException();
         return prefs.getString(key, "");
     }
 
-    public static void setPrefs(Context context, String name, String key, boolean value) {
-        SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    public static void setPrefs(SharedPreferences prefs, String key, boolean value) {
         SharedPreferences.Editor editor = prefs.edit();
-        addEdit(prefs, editor, key, value);
+        editor.putBoolean(key, value);
         editor.apply();
     }
 
-    public static void setPrefs(Context context, String name, String key, int value) {
-        SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    public static void setPrefs(SharedPreferences prefs, String key, int value) {
         SharedPreferences.Editor editor = prefs.edit();
-        addEdit(prefs, editor, key, value);
+        editor.putInt(key, value);
         editor.apply();
     }
 
-    public static void setPrefs(Context context, String name, String key, float value) {
-        SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    public static void setPrefs(SharedPreferences prefs, String key, float value) {
         SharedPreferences.Editor editor = prefs.edit();
-        addEdit(prefs, editor, key, value);
+        editor.putFloat(key, value);
         editor.apply();
     }
 
-    public static void setPrefs(Context context, String name, String key, String value) {
-        SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+    public static void setPrefs(SharedPreferences prefs, String key, String value) {
         SharedPreferences.Editor editor = prefs.edit();
-        addEdit(prefs, editor, key, value);
+        editor.putString(key, value);
         editor.apply();
     }
 
-    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor,
-                                String key, boolean value) {
+    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor, String key, boolean value) {
         checkPrefs(prefs, key, PREFS_BOOLEAN);
         if (!prefs.contains(key)) {
             editor.putBoolean(key, value);
         }
     }
 
-    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor,
-                                String key, int value) {
+    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor, String key, int value) {
         checkPrefs(prefs, key, PREFS_INT);
         if (!prefs.contains(key)) {
             editor.putInt(key, value);
         }
     }
 
-    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor,
-                                String key, float value) {
+    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor, String key, float value) {
         checkPrefs(prefs, key, PREFS_FLOAT);
         if (!prefs.contains(key)) {
             editor.putFloat(key, value);
         }
     }
 
-    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor,
-                                String key, String value) {
+    private static void addEdit(SharedPreferences prefs, SharedPreferences.Editor editor, String key, String value) {
         checkPrefs(prefs, key, PREFS_STRING);
         if (!prefs.contains(key)) {
             editor.putString(key, value);

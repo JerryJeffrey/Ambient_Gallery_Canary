@@ -54,13 +54,9 @@ public class SettingsDetailActivity extends AppCompatActivity {
         int viewId = intent.getIntExtra("viewId", 0);
         if (viewId == 0) {
             Toast.makeText(this, "Submenu not found", Toast.LENGTH_SHORT).show();
-            finish();
-        } else if (viewId == R.id.settings_frag_appearance_normal) {
-            targetMainFragment = new SettingsAppearanceNormalMainFragment();
-            targetCardFragment = new SettingsAppearanceNormalCardFragment();
-        } else if (viewId == settings_frag_appearance_ambient) {
-            targetMainFragment = new SettingsAppearanceAmbientMainFragment();
-            targetCardFragment = new SettingsAppearanceAmbientCardFragment();
+        } else if (viewId == R.id.settings_frag_appearance) {
+            targetMainFragment = new SettingsAppearanceMainFragment();
+            targetCardFragment = new SettingsAppearanceCardFragment();
         } else if (viewId == settings_frag_performance) {
             targetMainFragment = new SettingsPerformanceMainFragment();
             targetCardFragment = new SettingsPerformanceCardFragment();

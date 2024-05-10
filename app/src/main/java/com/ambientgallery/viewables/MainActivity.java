@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
         rootView.setOnClickListener(v -> {
             currentTime = 0;
-            if (bgContainer.getAlpha() < prefsFloat(prefs, "bgNormalOpacity")) {
+            if (bgContainer.getAlpha() <= prefsFloat(prefs, "bgNormalOpacity")) {
                 //actions when clicked in ambient mode
                 leaveAmbient();
             }
@@ -309,7 +309,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             } catch (IOException e) {
                 hint.setText(convertExceptionMessage(context, e));
             }
-            if (!appInit) {
+            if (appInit){
+                leaveAmbient();
+            } else  {
                 setImage(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {

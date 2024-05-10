@@ -18,12 +18,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settings_frag_appearance_normal"
+            android:id="@+id/settings_frag_appearance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/settings_frag_appearance_normal_icon"
+                android:id="@+id/settings_frag_appearance_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="24dp"
@@ -33,88 +33,36 @@
                 app:srcCompat="@drawable/baseline_style_24" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_frag_appearance_normal_text_container"
+                android:id="@+id/settings_frag_appearance_text_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/settings_frag_appearance_normal_icon"
+                app:layout_constraintStart_toEndOf="@+id/settings_frag_appearance_icon"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/settings_frag_appearance_normal_title"
+                    android:id="@+id/settings_frag_appearance_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/menu_appearance_normal"
+                    android:text="@string/menu_appearance"
                     android:textColor="@color/white"
                     android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_frag_appearance_normal_description"
+                    app:layout_constraintBottom_toTopOf="@+id/settings_frag_appearance_description"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/settings_frag_appearance_normal_description"
+                    android:id="@+id/settings_frag_appearance_description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/desc_appearance_normal"
-                    android:textColor="@color/gray_8"
+                    android:text="@string/desc_appearance"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_frag_appearance_normal_title" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settings_frag_appearance_ambient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/settings_frag_appearance_ambient_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="24dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_style_24" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_frag_appearance_ambient_text_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/settings_frag_appearance_ambient_icon"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/settings_frag_appearance_ambient_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/menu_appearance_ambient"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_frag_appearance_ambient_description"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/settings_frag_appearance_ambient_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/desc_appearance_ambient"
-                    android:textColor="@color/gray_8"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_frag_appearance_ambient_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_frag_appearance_title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -160,7 +108,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_performance"
-                    android:textColor="@color/gray_8"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -211,7 +158,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_sensitivity"
-                    android:textColor="@color/gray_8"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -262,7 +208,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_timeout"
-                    android:textColor="@color/gray_8"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -313,7 +258,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/desc_night"
-                    android:textColor="@color/gray_8"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
