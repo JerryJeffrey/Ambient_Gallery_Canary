@@ -22,7 +22,7 @@ import com.ambientgallery.R;
 import com.google.android.material.tabs.TabLayout;
 
 public class SettingsAppearanceMainFragment extends Fragment {
-    TextView bgValue, textValue;
+    TextView bgValue, textValue, textMinDesc, textMaxDesc, bgMinDesc, bgMaxDesc;
     SeekBar textSeek, bgSeek;
     TabLayout tabBar;
     SharedPreferences prefs;
@@ -45,6 +45,10 @@ public class SettingsAppearanceMainFragment extends Fragment {
             bgSeek = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_seekbar);
             textValue = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_value);
             bgValue = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_value);
+            textMinDesc = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_desc_min);
+            textMaxDesc = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_desc_max);
+            bgMinDesc = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_desc_min);
+            bgMaxDesc = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_desc_max);
             currentTab = tabBar.getSelectedTabPosition();
             tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -184,12 +188,20 @@ public class SettingsAppearanceMainFragment extends Fragment {
                 setPercentage(bgValue, prefsFloat(prefs, "bgNormalOpacity"));
                 bgSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1, (int) (prefsFloat(prefs, "bgNormalOpacity") * 100)));
                 textSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "textAmbientOpacity"), 1, (int) (prefsFloat(prefs, "textNormalOpacity") * 100)));
+                textMinDesc.setText((int) (prefsFloat(prefs, "textAmbientOpacity") * 100) + " / Opacity of ambient mode");
+                textMaxDesc.setText("100");
+                bgMinDesc.setText((int) (prefsFloat(prefs, "bgAmbientOpacity") * 100) + " / Opacity of ambient mode");
+                bgMaxDesc.setText("100");
                 break;
             case 1://ambient
                 setPercentage(textValue, prefsFloat(prefs, "textAmbientOpacity"));
                 setPercentage(bgValue, prefsFloat(prefs, "bgAmbientOpacity"));
                 bgSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "bgNormalOpacity"), (int) (prefsFloat(prefs, "bgAmbientOpacity") * 100)));
                 textSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "textNormalOpacity"), (int) (prefsFloat(prefs, "textAmbientOpacity") * 100)));
+                textMinDesc.setText("0");
+                textMaxDesc.setText("Opacity of normal mode / " + (int) (prefsFloat(prefs, "textNormalOpacity") * 100));
+                bgMinDesc.setText("0");
+                bgMaxDesc.setText("Opacity of normal mode / " + (int) (prefsFloat(prefs, "bgNormalOpacity") * 100));
                 break;
             default:
                 break;
