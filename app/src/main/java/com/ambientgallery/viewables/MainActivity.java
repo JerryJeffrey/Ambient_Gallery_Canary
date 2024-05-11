@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         viewPosition(refreshContainer, 0, 0, 1, 1, prefsInt(prefs, "animationDuration_short"));
                     } else if (dragStarted) {
                         //play reset refresh button animation
-                        viewRotation(refreshIcon, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
+                        viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, "animationDuration_instant"));
                         viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
                         viewPosition(refreshContainer, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
                     } else {

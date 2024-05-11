@@ -33,7 +33,7 @@ public class DimensUtil {
         }
         return dimensions;
     }
-    public static float getFillScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
+    private static float getFillScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
         float widthScale = (float) screenWidth / imageWidth,
                 heightScale = (float) screenHeight / imageHeight;
         return Math.max(widthScale, heightScale);
