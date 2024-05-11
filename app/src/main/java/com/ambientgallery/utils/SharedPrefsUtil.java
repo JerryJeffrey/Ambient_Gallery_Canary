@@ -66,24 +66,28 @@ public class SharedPrefsUtil {
 
     public static void setPrefs(SharedPreferences prefs, String key, boolean value) {
         SharedPreferences.Editor editor = prefs.edit();
+        checkPrefs(prefs,key,PREFS_BOOLEAN);
         editor.putBoolean(key, value);
         editor.apply();
     }
 
     public static void setPrefs(SharedPreferences prefs, String key, int value) {
         SharedPreferences.Editor editor = prefs.edit();
+        checkPrefs(prefs,key,PREFS_INT);
         editor.putInt(key, value);
         editor.apply();
     }
 
     public static void setPrefs(SharedPreferences prefs, String key, float value) {
         SharedPreferences.Editor editor = prefs.edit();
+        checkPrefs(prefs,key,PREFS_FLOAT);
         editor.putFloat(key, value);
         editor.apply();
     }
 
     public static void setPrefs(SharedPreferences prefs, String key, String value) {
         SharedPreferences.Editor editor = prefs.edit();
+        checkPrefs(prefs,key,PREFS_STRING);
         editor.putString(key, value);
         editor.apply();
     }

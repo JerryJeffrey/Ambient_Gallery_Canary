@@ -21,7 +21,7 @@
             android:id="@+id/main_bg_lower"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="1"
+            android:background="@color/black"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
             android:id="@+id/main_bg_upper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0"
+            android:background="@color/black"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,14 +65,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settings_appearance_ambient_card_bottom_shader"
+            android:id="@+id/main_bottom_shader"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/bg_bottom_gradient"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/settings_appearance_ambient_card_bottom_container">
+            app:layout_constraintTop_toTopOf="@+id/main_bottom_container">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,12 +145,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#8000"
-            app:layout_constraintBottom_toTopOf="@+id/settings_appearance_ambient_card_bottom_container"
+            app:layout_constraintBottom_toTopOf="@+id/main_bottom_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settings_appearance_ambient_card_bottom_container"
+            android:id="@+id/main_bottom_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -158,7 +158,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/main_always_on_container"
+                android:id="@+id/main_text_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -171,11 +171,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/settings_appearance_ambient_card_text_main"
+                    app:layout_constraintStart_toEndOf="@+id/main_text_main"
                     app:srcCompat="@drawable/baseline_bedtime_24" />
 
                 <TextView
-                    android:id="@+id/settings_appearance_ambient_card_text_main"
+                    android:id="@+id/main_text_main"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"

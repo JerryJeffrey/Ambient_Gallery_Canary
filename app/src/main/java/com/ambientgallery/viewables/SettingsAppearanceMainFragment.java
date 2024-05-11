@@ -26,7 +26,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
     SeekBar textSeek, bgSeek;
     TabLayout tabBar;
     SharedPreferences prefs;
-    int currentTab = 0;
+    int currentTab;
 
     @Nullable
     @Override
@@ -45,7 +45,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
             bgSeek = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_seekbar);
             textValue = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_value);
             bgValue = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_value);
-
+            currentTab = tabBar.getSelectedTabPosition();
             tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
@@ -119,7 +119,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                                 setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
                                 break;
                             case 1://ambient bg
-                                Log.i("asd",progress+","+calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
+                                Log.i("asd", progress + "," + calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
                                 setPrefs(prefs, "bgAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
                                 break;
                             default:
@@ -148,6 +148,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         refreshSeekAndText(false);
+        setCardDisplayMode(currentTab);
     }
 
     private void setCardDisplayMode(int tabId) {
