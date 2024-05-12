@@ -13,6 +13,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -122,6 +123,8 @@ public class SettingsSensitivityCardFragment extends Fragment {
             endIndicatorValue = activity.findViewById(R.id.settings_sensitivity_card_end_indicator_value);
             refreshContainer.setTranslationY(dp2px(context, -12));
             refreshContainer.setAlpha(0);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             rootView.setOnTouchListener(onTouchListener);
         }
     }
