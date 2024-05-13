@@ -42,13 +42,10 @@ public class SettingsActivity extends AppCompatActivity {
         getDisplayMetrics(windowManager);
         settingsFragment = new SettingsFragment();
         fragmentManager = getSupportFragmentManager();
-
-        backButton.setOnClickListener(view -> {
-            finish();
-        });
+        //actions on back button
+        backButton.setOnClickListener(view -> finish());
         backButton.setOnLongClickListener(view -> {
-            Toast.makeText(SettingsActivity.this, getText(R.string.button_back),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingsActivity.this, getText(R.string.button_back), Toast.LENGTH_SHORT).show();
             return true;
         });
     }
@@ -60,8 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         DisplayDimensions dimensions = getDisplayMetrics(getWindowManager());
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         //if is landscape and long edge larger than 640dp
-        if ((float) dimensions.width / dimensions.height >= 1 &&
-                dimensions.width >= dp2px(getApplicationContext(), 640)) {
+        if ((float) dimensions.width / dimensions.height >= 1 && dimensions.width >= dp2px(getApplicationContext(), 640)) {
             transaction.add(R.id.settings_sub_attach_point, settingsFragment);
             subSplit.setVisibility(View.VISIBLE);
         } else {

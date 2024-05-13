@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.ambientgallery.R;
 import com.google.android.material.tabs.TabLayout;
 
-public class SettingsAppearanceMainFragment extends Fragment {
+public class SettingsBrightnessMainFragment extends Fragment {
     TextView bgValue, textValue, textMinDesc, textMaxDesc, bgMinDesc, bgMaxDesc;
     SeekBar textSeek, bgSeek;
     TabLayout tabBar;
@@ -33,23 +33,24 @@ public class SettingsAppearanceMainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getActivity() != null)
             prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
-        return inflater.inflate(R.layout.fragment_settings_appearance_main, container, false);
+        return inflater.inflate(R.layout.fragment_settings_brightness_main, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
-            tabBar = getActivity().findViewById(R.id.settings_appearance_main_tab_container);
-            textSeek = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_seekbar);
-            bgSeek = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_seekbar);
-            textValue = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_value);
-            bgValue = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_value);
-            textMinDesc = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_desc_min);
-            textMaxDesc = getActivity().findViewById(R.id.settings_appearance_main_text_opacity_desc_max);
-            bgMinDesc = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_desc_min);
-            bgMaxDesc = getActivity().findViewById(R.id.settings_appearance_main_bg_opacity_desc_max);
+            tabBar = getActivity().findViewById(R.id.settings_brightness_main_tab_container);
+            textSeek = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_seekbar);
+            bgSeek = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_seekbar);
+            textValue = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_value);
+            bgValue = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_value);
+            textMinDesc = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_desc_min);
+            textMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_desc_max);
+            bgMinDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_desc_min);
+            bgMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_desc_max);
             currentTab = tabBar.getSelectedTabPosition();
+
             tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
@@ -74,7 +75,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                     if (fromUser) {
                         int actualProgress = -1, currentView = -1;
                         Bundle resultBundle = new Bundle();
-                        if (seekBar.getId() == R.id.settings_appearance_main_bg_opacity_seekbar) {//refers to 0
+                        if (seekBar.getId() == R.id.settings_brightness_main_bg_opacity_seekbar) {//refers to 0
                             switch (currentTab) {
                                 case 0://normal bg
                                     actualProgress = calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress);
@@ -87,7 +88,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                             }
                             currentView = 0;
                             setPercentage(bgValue, actualProgress);
-                        } else if (seekBar.getId() == R.id.settings_appearance_main_text_opacity_seekbar) {//refers to 2
+                        } else if (seekBar.getId() == R.id.settings_brightness_main_text_opacity_seekbar) {//refers to 2
                             switch (currentTab) {
                                 case 0://normal text
                                     actualProgress = calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress);
@@ -103,6 +104,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                         }
                         if (currentView < 0) throw new RuntimeException();
                         if (actualProgress < 0) throw new RuntimeException();
+                        //give info to card
                         resultBundle.putInt("currentView", currentView);
                         resultBundle.putFloat("percentage", actualProgress / 100f);
                         getParentFragmentManager().setFragmentResult("viewOpacity", resultBundle);
@@ -117,7 +119,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     int actualProgress = -1;
                     int progress = seekBar.getProgress();
-                    if (seekBar.getId() == R.id.settings_appearance_main_bg_opacity_seekbar) {
+                    if (seekBar.getId() == R.id.settings_brightness_main_bg_opacity_seekbar) {
                         switch (currentTab) {
                             case 0://normal bg
                                 setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
@@ -129,7 +131,7 @@ public class SettingsAppearanceMainFragment extends Fragment {
                             default:
                                 break;
                         }
-                    } else if (seekBar.getId() == R.id.settings_appearance_main_text_opacity_seekbar) {
+                    } else if (seekBar.getId() == R.id.settings_brightness_main_text_opacity_seekbar) {
                         switch (currentTab) {
                             case 0://normal text
                                 setPrefs(prefs, "textNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress) / 100f);

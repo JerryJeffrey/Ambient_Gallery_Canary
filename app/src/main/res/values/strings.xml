@@ -27,10 +27,10 @@
     <string name="desc_sensitivity">Sensitivity of pull down refreshing etc.</string>
     <string name="menu_performance">Performance and stability</string>
     <string name="desc_performance">Image quality</string>
-    <string name="menu_appearance">Appearance</string>
-    <string name="desc_appearance">Appearance of main interface</string>
     <string name="menu_timeout">Timeout</string>
     <string name="desc_timeout">When to go ambient, switch image, etc.</string>
     <string name="menu_night">Night behavior</string>
     <string name="desc_night">When to stop from keeping on</string>
+    <string name="menu_brightness">Brightness</string>
+    <string name="desc_brightness">Brightness of main interface components</string>
 </resources>

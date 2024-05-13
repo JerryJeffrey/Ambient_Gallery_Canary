@@ -31,17 +31,14 @@ public class SettingsFragment extends Fragment {
         sensitivity = view.findViewById(R.id.settings_frag_sensitivity);
         timeout = view.findViewById(R.id.settings_frag_timeout);
         nightMode = view.findViewById(R.id.settings_frag_night);
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SettingsDetailActivity.class);
-                if (getActivity() != null) {
-                    intent.putExtra("currentPath",
-                            getActivity().getIntent().getStringExtra("currentPath"));
-                }
-                intent.putExtra("viewId", v.getId());
-                startActivity(intent);
+        View.OnClickListener onClickListener = v -> {
+            Intent intent = new Intent(getContext(), SettingsDetailActivity.class);
+            if (getActivity() != null) {
+                intent.putExtra("currentPath",
+                        getActivity().getIntent().getStringExtra("currentPath"));
             }
+            intent.putExtra("viewId", v.getId());
+            startActivity(intent);
         };
         appearance.setOnClickListener(onClickListener);
         performance.setOnClickListener(onClickListener);

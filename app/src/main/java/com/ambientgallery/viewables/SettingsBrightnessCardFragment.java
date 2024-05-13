@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.ambientgallery.R;
 
@@ -25,7 +22,7 @@ import static com.ambientgallery.utils.DimensUtil.getHalfScreenScale;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
-public class SettingsAppearanceCardFragment extends Fragment {
+public class SettingsBrightnessCardFragment extends Fragment {
     ImageView imageView;
     View topShader, bottomShader, mainText;
     SharedPreferences prefs;
@@ -63,7 +60,7 @@ public class SettingsAppearanceCardFragment extends Fragment {
                     }
                 });
         return inflater.inflate
-                (R.layout.fragment_settings_appearance_card, container, false);
+                (R.layout.fragment_settings_brightness_card, container, false);
     }
 
     @Override
@@ -71,13 +68,13 @@ public class SettingsAppearanceCardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
             imageView = getActivity().findViewById
-                    (R.id.settings_appearance_card_image);
+                    (R.id.settings_brightness_card_image);
             topShader = getActivity().findViewById
-                    (R.id.settings_appearance_ambient_card_top_shader);
+                    (R.id.settings_brightness_ambient_card_top_shader);
             bottomShader = getActivity().findViewById
-                    (R.id.settings_appearance_ambient_card_bottom_shader);
+                    (R.id.settings_brightness_ambient_card_bottom_shader);
             mainText = getActivity().findViewById
-                    (R.id.settings_appearance_ambient_card_text_main);
+                    (R.id.settings_brightness_ambient_card_text_main);
             imageView.setAlpha(prefsFloat(prefs, "bgNormalOpacity"));
             path = getActivity().getIntent().getStringExtra("currentPath");
             new Thread(() -> {

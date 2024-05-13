@@ -25,10 +25,10 @@
     <string name="desc_sensitivity">下拉刷新等操作的灵敏度</string>
     <string name="menu_performance">性能与稳定性</string>
     <string name="desc_performance">图片质量</string>
-    <string name="desc_appearance">应用主界面的样式</string>
-    <string name="menu_appearance">外观</string>
     <string name="menu_timeout">时长</string>
     <string name="desc_timeout">何时待机、切换图片等</string>
     <string name="menu_night">夜间行为</string>
     <string name="desc_night">何时不再保持屏幕开启</string>
+    <string name="menu_brightness">亮度</string>
+    <string name="desc_brightness">主界面各组件的亮度</string>
 </resources>

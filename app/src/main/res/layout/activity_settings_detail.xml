@@ -53,7 +53,7 @@
                     android:id="@+id/settings_detail_shader_tl"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/round_shader_r24_tl_48"
+                    android:background="@drawable/round_shader_r24_tl_24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,7 @@
                     android:id="@+id/settings_detail_shader_tr"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/round_shader_r24_tr_48"
+                    android:background="@drawable/round_shader_r24_tr_24"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +69,7 @@
                     android:id="@+id/settings_detail_shader_bl"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/round_shader_r24_bl_48"
+                    android:background="@drawable/round_shader_r24_bl_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -77,7 +77,7 @@
                     android:id="@+id/settings_detail_shader_br"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="@drawable/round_shader_r24_br_48"
+                    android:background="@drawable/round_shader_r24_br_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
