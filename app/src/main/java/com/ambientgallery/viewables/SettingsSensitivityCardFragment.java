@@ -8,8 +8,6 @@ import static com.ambientgallery.utils.DimensUtil.dp2px;
 import static com.ambientgallery.utils.DimensUtil.px2dp;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
