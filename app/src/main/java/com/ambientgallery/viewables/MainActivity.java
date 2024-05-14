@@ -130,8 +130,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        }
+
+        //solve nested view flashing
+        refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
     }
 
@@ -430,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             new Thread(() -> {
                 currentPath = path + imagesList.get(imageListIndex);
-                Bitmap bitmap = decodeSampledBitmap(currentPath, dimensions.width, dimensions.height, prefsInt(prefs, "inSampleLevel"));
+                Bitmap bitmap = decodeSampledBitmap(currentPath, dimensions.width, dimensions.height, prefsInt(prefs, "imageQualityLevel"));
                 runOnUiThread(() -> {
                     if (upperImgVisible) {//points lower layer
                         bgLower.setImageBitmap(bitmap);

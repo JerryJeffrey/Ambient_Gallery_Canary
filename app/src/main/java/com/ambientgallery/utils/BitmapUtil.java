@@ -2,23 +2,24 @@ package com.ambientgallery.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class BitmapUtil {
-    public static Bitmap decodeSampledBitmap(String path, int reqWidth, int reqHeight, int qualityLevel) {
+    public static Bitmap decodeSampledBitmap(String path, int reqWidth, int reqHeight, int imageQualityLevel) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
-        options.inSampleSize = getInSampleSize(options, reqWidth, reqHeight, qualityLevel);
+        options.inSampleSize = getInSampleSize(options, reqWidth, reqHeight, imageQualityLevel);
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(path, options);
     }
 
-    private static int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, int qualityLevel) {
+    private static int getInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, int imageQualityLevel) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
-            switch (qualityLevel) {
+            switch (imageQualityLevel) {
                 case -1:
                     break;
                 case 0:

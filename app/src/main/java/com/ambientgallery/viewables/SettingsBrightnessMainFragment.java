@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +124,6 @@ public class SettingsBrightnessMainFragment extends Fragment {
                                 setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
                                 break;
                             case 1://ambient bg
-                                Log.i("asd", progress + "," + calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
                                 setPrefs(prefs, "bgAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
                                 break;
                             default:

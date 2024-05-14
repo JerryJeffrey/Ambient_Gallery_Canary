@@ -36,7 +36,7 @@ public class SharedPrefsUtil {
                 addEdit(prefs, editor, "dragStartSensitivity", 12);
                 addEdit(prefs, editor, "dragEndSensitivity", 96);
                 //others
-                addEdit(prefs, editor, "inSampleLevel", 1);
+                addEdit(prefs, editor, "imageQualityLevel", 1);
                 break;
             default:
                 break;
