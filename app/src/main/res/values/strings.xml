@@ -11,26 +11,32 @@
     <string name="button_back">Back</string>
     <string name="button_settings">Settings</string>
     <string name="button_ambient_mode">Turn on ambient mode</string>
-    <string name="am" translatable="false">AM</string>
-    <string name="pm" translatable="false">PM</string>
+    <string name="time_am" translatable="false">AM</string>
+    <string name="time_pm" translatable="false">PM</string>
     <string name="hint_storage_permission_explanation_1">"We need storage permission to read pictures in "</string>
     <string name="hint_storage_permission_explanation_2">.</string>
     <string name="hint_directory_name_occupied_1">Directory path</string>
     <string name="hint_directory_name_occupied_2">is occupied by a file with the same name. Please check manually in file manager.</string>
     <string name="hint_failed_to_create_directory_1">"Cannot create directory "</string>
     <string name="hint_failed_to_create_directory_2">.</string>
-    <string name="hint_cannot_clear_nomedia_1">""</string>
-    <string name="hint_cannot_clear_nomedia_2">contains .nomedia file. Please backup files and delete the folder.</string>
+    <string name="hint_cannot_clear_nomedia_1">There is .nomeida file in</string>
+    <string name="hint_cannot_clear_nomedia_2">. Please backup files and delete the folder.</string>
     <string name="hint_no_available_files_1">"No available photos found in "</string>
     <string name="hint_no_available_files_2">.</string>
-    <string name="menu_sensitivity">Operating Sensitivity</string>
-    <string name="desc_sensitivity">Sensitivity of pull down refreshing etc.</string>
-    <string name="menu_performance">Performance and stability</string>
-    <string name="desc_performance">Image quality</string>
-    <string name="menu_timeout">Timeout</string>
-    <string name="desc_timeout">When to go ambient, switch image, etc.</string>
-    <string name="menu_night">Night behavior</string>
-    <string name="desc_night">When to stop from keeping on</string>
-    <string name="menu_brightness">Brightness</string>
-    <string name="desc_brightness">Brightness of main interface components</string>
+    <string name="settings_sensitivity">Operating Sensitivity</string>
+    <string name="settings_sensitivity_desc">Sensitivity of pull down refreshing etc.</string>
+    <string name="settings_performance">Performance and stability</string>
+    <string name="settings_performance_desc">Image quality</string>
+    <string name="settings_timeout">Timeout</string>
+    <string name="settings_timeout_desc">When to go ambient, switch image, etc.</string>
+    <string name="settings_night">Night behavior</string>
+    <string name="settings_night_desc">When to stop from keeping on</string>
+    <string name="settings_brightness">Brightness</string>
+    <string name="settings_brightness_desc">Brightness of main interface components</string>
+    <string name="settings_brightness_tab_normal">Normal</string>
+    <string name="settings_brightness_tab_ambient">Ambient</string>
+    <string name="settings_brightness_text_brightness">Text brightness</string>
+    <string name="settings_brightness_bg_brightness">Background brightness</string>
+    <string name="settings_brightness_min_desc">Min Brightness of ambient mode</string>
+    <string name="settings_brightness_max_desc">Max Brightness of normal mode</string>
 </resources>

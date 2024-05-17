@@ -38,7 +38,7 @@
         android:layout_marginEnd="48dp"
         android:layout_marginRight="48dp"
         android:gravity="center"
-        android:text="@string/menu_brightness"
+        android:text="@string/settings_brightness"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/settings_brightness_ambient_card_top_shader"

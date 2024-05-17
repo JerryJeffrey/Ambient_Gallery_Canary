@@ -27,13 +27,13 @@
             android:id="@+id/settings_brightness_main_tab_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="normal" />
+            android:text="@string/settings_brightness_tab_normal" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_brightness_main_tab_ambient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ambient" />
+            android:text="@string/settings_brightness_tab_ambient" />
 
     </com.google.android.material.tabs.TabLayout>
 
@@ -49,7 +49,7 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_brightness_main_text_opacity_container"
+                android:id="@+id/settings_brightness_main_text_brightness_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
@@ -59,64 +59,64 @@
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_text_opacity_title"
+                    android:id="@+id/settings_brightness_main_text_brightness_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
-                    android:text="Text Opacity"
+                    android:text="@string/settings_brightness_text_brightness"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_opacity_seekbar"
-                    app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_text_opacity_value"
+                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_brightness_seekbar"
+                    app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_text_brightness_value"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_text_opacity_value"
+                    android:id="@+id/settings_brightness_main_text_brightness_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     android:text="0 %"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_opacity_seekbar"
+                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_brightness_seekbar"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/settings_brightness_main_text_opacity_title"
+                    app:layout_constraintStart_toEndOf="@+id/settings_brightness_main_text_brightness_title"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/settings_brightness_main_text_opacity_seekbar"
+                    android:id="@+id/settings_brightness_main_text_brightness_seekbar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_opacity_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_brightness_title" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_text_opacity_desc_min"
+                    android:id="@+id/settings_brightness_main_text_brightness_desc_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_opacity_seekbar" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_brightness_seekbar" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_text_opacity_desc_max"
+                    android:id="@+id/settings_brightness_main_text_brightness_desc_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_opacity_seekbar" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_brightness_seekbar" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/settings_brightness_main_bg_opacity_container"
+                android:id="@+id/settings_brightness_main_bg_brightness_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
@@ -127,60 +127,60 @@
                 app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_bg_opacity_title"
+                    android:id="@+id/settings_brightness_main_bg_brightness_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
-                    android:text="Background Opacity"
+                    android:text="@string/settings_brightness_bg_brightness"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_opacity_seekbar"
-                    app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_bg_opacity_value"
+                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_brightness_seekbar"
+                    app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_bg_brightness_value"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_bg_opacity_value"
+                    android:id="@+id/settings_brightness_main_bg_brightness_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     android:text="0 %"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_opacity_seekbar"
+                    app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_brightness_seekbar"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/settings_brightness_main_bg_opacity_title"
+                    app:layout_constraintStart_toEndOf="@+id/settings_brightness_main_bg_brightness_title"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/settings_brightness_main_bg_opacity_seekbar"
+                    android:id="@+id/settings_brightness_main_bg_brightness_seekbar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_opacity_title" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_brightness_title" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_bg_opacity_desc_min"
+                    android:id="@+id/settings_brightness_main_bg_brightness_desc_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_opacity_seekbar" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_brightness_seekbar" />
 
                 <TextView
-                    android:id="@+id/settings_brightness_main_bg_opacity_desc_max"
+                    android:id="@+id/settings_brightness_main_bg_brightness_desc_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_opacity_seekbar" />
+                    app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_brightness_seekbar" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

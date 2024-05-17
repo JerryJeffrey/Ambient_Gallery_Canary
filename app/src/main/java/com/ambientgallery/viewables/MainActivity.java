@@ -42,7 +42,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.DisplayCutout;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -205,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 super.onAnimationEnd(animation);
                                 viewPosition(refreshContainer, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
                                 viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                                viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, "animationDuration_instant"));
+                                viewRotation(refreshIcon, 315, 1, 1, prefsInt(prefs, "animationDuration_instant"));
                             }
                         });
                         //play refresh animation
@@ -381,9 +380,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if (timeFormat != null && timeFormat.equals("12")) {//null: default time format
                 hour = message.getData().getInt("hour12");
                 if (dayPeriod == 1) {//PM
-                    dayPeriodText = getString(R.string.pm);
+                    dayPeriodText = getString(R.string.time_pm);
                 } else {//AM
-                    dayPeriodText = getString(R.string.am);
+                    dayPeriodText = getString(R.string.time_am);
                 }
             } else {
                 hour = hour24;

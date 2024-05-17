@@ -40,14 +40,14 @@ public class SettingsBrightnessMainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (getActivity() != null) {
             tabBar = getActivity().findViewById(R.id.settings_brightness_main_tab_container);
-            textSeek = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_seekbar);
-            bgSeek = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_seekbar);
-            textValue = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_value);
-            bgValue = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_value);
-            textMinDesc = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_desc_min);
-            textMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_text_opacity_desc_max);
-            bgMinDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_desc_min);
-            bgMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_opacity_desc_max);
+            textSeek = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_seekbar);
+            bgSeek = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_seekbar);
+            textValue = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_value);
+            bgValue = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_value);
+            textMinDesc = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_min);
+            textMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_max);
+            bgMinDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_min);
+            bgMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_max);
             currentTab = tabBar.getSelectedTabPosition();
 
             tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -74,7 +74,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
                     if (fromUser) {
                         int actualProgress = -1, currentView = -1;
                         Bundle resultBundle = new Bundle();
-                        if (seekBar.getId() == R.id.settings_brightness_main_bg_opacity_seekbar) {//refers to 0
+                        if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {//refers to 0
                             switch (currentTab) {
                                 case 0://normal bg
                                     actualProgress = calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress);
@@ -87,7 +87,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
                             }
                             currentView = 0;
                             setPercentage(bgValue, actualProgress);
-                        } else if (seekBar.getId() == R.id.settings_brightness_main_text_opacity_seekbar) {//refers to 2
+                        } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {//refers to 2
                             switch (currentTab) {
                                 case 0://normal text
                                     actualProgress = calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress);
@@ -118,7 +118,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     int actualProgress = -1;
                     int progress = seekBar.getProgress();
-                    if (seekBar.getId() == R.id.settings_brightness_main_bg_opacity_seekbar) {
+                    if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {
                         switch (currentTab) {
                             case 0://normal bg
                                 setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
@@ -129,7 +129,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
                             default:
                                 break;
                         }
-                    } else if (seekBar.getId() == R.id.settings_brightness_main_text_opacity_seekbar) {
+                    } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {
                         switch (currentTab) {
                             case 0://normal text
                                 setPrefs(prefs, "textNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress) / 100f);
@@ -161,6 +161,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
         getParentFragmentManager().setFragmentResult("displayMode", resultBundle);
     }
 
+    //note: setMin() & setMax() requires API 26, while this project has to support API 14
     //when minimum is 50% and maximum is 100%, this turns 50% on seekbar to 75% data
     private int calculateDisplayProgress(float min, float max, int actualProgress) {
         return (int) (min * 100 + (actualProgress * (max - min)));
@@ -172,15 +173,16 @@ public class SettingsBrightnessMainFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void setPercentage(TextView textView, float value) {
-        textView.setText((int) (value * 100) + " %");
+    private void setPercentage(TextView textView, float percentage) {
+        textView.setText((int) (percentage * 100) + " %");
     }
 
     @SuppressLint("SetTextI18n")
-    private void setPercentage(TextView textView, int percent) {
-        textView.setText(percent + " %");
+    private void setPercentage(TextView textView, int progress) {
+        textView.setText(progress + " %");
     }
 
+    @SuppressLint("SetTextI18n")
     private void refreshSeekAndText(boolean animated) {
         switch (currentTab) {
             case 0://normal
@@ -188,9 +190,9 @@ public class SettingsBrightnessMainFragment extends Fragment {
                 setPercentage(bgValue, prefsFloat(prefs, "bgNormalOpacity"));
                 bgSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1, (int) (prefsFloat(prefs, "bgNormalOpacity") * 100)));
                 textSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "textAmbientOpacity"), 1, (int) (prefsFloat(prefs, "textNormalOpacity") * 100)));
-                textMinDesc.setText((int) (prefsFloat(prefs, "textAmbientOpacity") * 100) + " / Opacity of ambient mode");
+                textMinDesc.setText((int) (prefsFloat(prefs, "textAmbientOpacity") * 100) + " / " + getString(R.string.settings_brightness_min_desc));
                 textMaxDesc.setText("100");
-                bgMinDesc.setText((int) (prefsFloat(prefs, "bgAmbientOpacity") * 100) + " / Opacity of ambient mode");
+                bgMinDesc.setText((int) (prefsFloat(prefs, "bgAmbientOpacity") * 100) + " / " + getString(R.string.settings_brightness_min_desc));
                 bgMaxDesc.setText("100");
                 break;
             case 1://ambient
@@ -199,9 +201,9 @@ public class SettingsBrightnessMainFragment extends Fragment {
                 bgSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "bgNormalOpacity"), (int) (prefsFloat(prefs, "bgAmbientOpacity") * 100)));
                 textSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "textNormalOpacity"), (int) (prefsFloat(prefs, "textAmbientOpacity") * 100)));
                 textMinDesc.setText("0");
-                textMaxDesc.setText("Opacity of normal mode / " + (int) (prefsFloat(prefs, "textNormalOpacity") * 100));
+                textMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, "textNormalOpacity") * 100));
                 bgMinDesc.setText("0");
-                bgMaxDesc.setText("Opacity of normal mode / " + (int) (prefsFloat(prefs, "bgNormalOpacity") * 100));
+                bgMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, "bgNormalOpacity") * 100));
                 break;
             default:
                 break;
