@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +22,15 @@ import androidx.fragment.app.Fragment;
 import com.ambientgallery.R;
 import com.google.android.material.tabs.TabLayout;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 public class SettingsTimeoutMainFragment extends Fragment {
     NumberPicker hourPicker, minutePicker, secondPicker;
     SharedPreferences prefs;
     TabLayout tabBar;
-    int currentTab = 0;
+    int currentTab;
 
     @Nullable
     @Override
@@ -44,6 +49,7 @@ public class SettingsTimeoutMainFragment extends Fragment {
             secondPicker = getActivity().findViewById(R.id.settings_timeout_main_picker_second);
             tabBar = getActivity().findViewById(R.id.settings_timeout_main_tab_container);
         }
+        currentTab = tabBar.getSelectedTabPosition();
         setPickerByTab(true);
         tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -136,10 +142,6 @@ public class SettingsTimeoutMainFragment extends Fragment {
         int maxSecond = max - maxHour * 3600 - maxMinute * 60;
         int currentHour = current / 3600;
         int currentMinute = (current - currentHour * 3600) / 60;
-        int currentSecond = current - currentHour * 3600 - currentMinute * 60;
-        Log.i("asd",minHour+":"+minMinute+":"+minSecond);
-        Log.i("asd",maxHour+":"+maxMinute+":"+maxSecond);
-        Log.i("asd",currentHour+":"+currentMinute+":"+currentSecond);
         hourPicker.setMinValue(minHour);
         hourPicker.setMaxValue(maxHour);
         if (currentHour <= minHour) {
@@ -163,6 +165,33 @@ public class SettingsTimeoutMainFragment extends Fragment {
         } else {
             minutePicker.setMaxValue(59);
             secondPicker.setMaxValue(59);
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void setPickerDisplayedValue(NumberPicker picker, int min, int max) {
+        ArrayList<String> valuesList = new ArrayList<>();
+        for (int n = min; n <= max; n++) {
+            valuesList.add(String.format("%02d", n));
+        }
+        String[] values = valuesList.toArray(new String[0]);
+        Log.i("asd",""+values.length);
+        picker.setDisplayedValues(values);
+    }
+
+    private void fixPicker(NumberPicker picker) {
+        try {
+            @SuppressLint("DiscouragedPrivateApi") Method method = picker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
+            method.setAccessible(true);
+            method.invoke(picker, true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 }
