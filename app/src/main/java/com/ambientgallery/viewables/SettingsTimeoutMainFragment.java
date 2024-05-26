@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
@@ -49,6 +50,9 @@ public class SettingsTimeoutMainFragment extends Fragment {
             secondPicker = getActivity().findViewById(R.id.settings_timeout_main_picker_second);
             tabBar = getActivity().findViewById(R.id.settings_timeout_main_tab_container);
         }
+        fixPicker(hourPicker);
+        fixPicker(minutePicker);
+        fixPicker(secondPicker);
         currentTab = tabBar.getSelectedTabPosition();
         setPickerByTab(true);
         tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -75,9 +79,20 @@ public class SettingsTimeoutMainFragment extends Fragment {
             updatePrefsByTab();
 
         };
+        View.OnClickListener onClickListener= v -> fixPicker((NumberPicker) v);
+        View.OnLongClickListener onLongClickListener= v -> {
+            fixPicker((NumberPicker) v);
+            return true;
+        };
         hourPicker.setOnValueChangedListener(onValueChangeListener);
         minutePicker.setOnValueChangedListener(onValueChangeListener);
         secondPicker.setOnValueChangedListener(onValueChangeListener);
+        hourPicker.setOnClickListener(onClickListener);
+        minutePicker.setOnClickListener(onClickListener);
+        secondPicker.setOnClickListener(onClickListener);
+        hourPicker.setOnLongClickListener(onLongClickListener);
+        minutePicker.setOnLongClickListener(onLongClickListener);
+        secondPicker.setOnLongClickListener(onLongClickListener);
     }
 
     private int getPickerCurrent() {
@@ -94,7 +109,7 @@ public class SettingsTimeoutMainFragment extends Fragment {
     }
 
     private void setPickerByTab(boolean setCurrent) {
-        int min = 1, max = 86400, current = 1;
+        int min = 3, max = 86400, current = 1;
         switch (currentTab) {
             case 0://hide buttons
                 max = prefsInt(prefs, "ambientTimeout");
@@ -166,17 +181,6 @@ public class SettingsTimeoutMainFragment extends Fragment {
             minutePicker.setMaxValue(59);
             secondPicker.setMaxValue(59);
         }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void setPickerDisplayedValue(NumberPicker picker, int min, int max) {
-        ArrayList<String> valuesList = new ArrayList<>();
-        for (int n = min; n <= max; n++) {
-            valuesList.add(String.format("%02d", n));
-        }
-        String[] values = valuesList.toArray(new String[0]);
-        Log.i("asd",""+values.length);
-        picker.setDisplayedValues(values);
     }
 
     private void fixPicker(NumberPicker picker) {
