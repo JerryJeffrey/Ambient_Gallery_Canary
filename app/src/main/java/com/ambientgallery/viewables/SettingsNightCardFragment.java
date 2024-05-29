@@ -1,11 +1,13 @@
 package com.ambientgallery.viewables;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +25,12 @@ public class SettingsNightCardFragment extends Fragment implements SensorEventLi
     ProgressBar progressBar;
     Sensor lightSensor;
     SensorManager sensorManager;
+    SharedPreferences prefs;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         return inflater.inflate(R.layout.fragment_settings_night_card, container, false);
@@ -35,19 +39,29 @@ public class SettingsNightCardFragment extends Fragment implements SensorEventLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            progressBar = requireActivity().findViewById(R.id.progressBar);
+        progressBar = requireActivity().findViewById(R.id.progressBar);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (lightSensor != null) {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_UI);
+        }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //cancel sensor listeners created in onResume()
+        sensorManager.unregisterListener(this);
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-
+            progressBar.setProgress((int) event.values[0] / 10);
         }
     }
 

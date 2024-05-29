@@ -1,5 +1,6 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.WindowFeatureUtil.allowCutoutDisplay;
 import static com.ambientgallery.utils.WindowFeatureUtil.goImmersive;
 import static com.ambientgallery.utils.DimensUtil.*;
 
@@ -42,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
         getDisplayMetrics(windowManager);
         settingsFragment = new SettingsFragment();
         fragmentManager = getSupportFragmentManager();
+        allowCutoutDisplay(window);
         //actions on back button
         backButton.setOnClickListener(view -> finish());
         backButton.setOnLongClickListener(view -> {

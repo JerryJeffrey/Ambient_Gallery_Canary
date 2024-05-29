@@ -3,6 +3,7 @@ package com.ambientgallery.viewables;
 import static com.ambientgallery.R.*;
 import static com.ambientgallery.R.id.*;
 import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
+import static com.ambientgallery.utils.WindowFeatureUtil.allowCutoutDisplay;
 import static com.ambientgallery.utils.WindowFeatureUtil.goImmersive;
 
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class SettingsDetailActivity extends AppCompatActivity {
         card = findViewById(settings_detail_card_attach_point);
         backButton = findViewById(settings_detail_button_back_icon);
         getDisplayMetrics(windowManager);
+        allowCutoutDisplay(window);
         fragmentManager = getSupportFragmentManager();
 
         backButton.setOnClickListener(view -> {
