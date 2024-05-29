@@ -31,8 +31,7 @@ public class SettingsBrightnessCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null)
-            prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         getParentFragmentManager().setFragmentResultListener("displayMode", this, (requestKey, bundle) -> {
             switch (bundle.getInt("tabNumber")) {
                 case 0://normal
@@ -63,23 +62,23 @@ public class SettingsBrightnessCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getActivity() != null) {
-            imageView = getActivity().findViewById(R.id.settings_brightness_card_image);
-            topShader = getActivity().findViewById(R.id.settings_brightness_ambient_card_top_shader);
-            bottomShader = getActivity().findViewById(R.id.settings_brightness_ambient_card_bottom_shader);
-            mainText = getActivity().findViewById(R.id.settings_brightness_ambient_card_text_main);
-            imageView.setAlpha(prefsFloat(prefs, "bgNormalOpacity"));
-            path = getActivity().getIntent().getStringExtra("currentPath");
-            new Thread(() -> {
-                Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(getActivity().getWindowManager()).width, getDisplayMetrics(getActivity().getWindowManager()).height, prefsInt(prefs, "imageQualityLevel"));
-                if (bitmap != null) getActivity().runOnUiThread(() -> {
-                    imageView.setImageBitmap(bitmap);
-                    float scale = getHalfScreenScale(getDisplayMetrics(getActivity().getWindowManager()).width, getDisplayMetrics(getActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
-                    imageView.setScaleX(scale);
-                    imageView.setScaleY(scale);
-                });
-            }).start();
-        }
+
+        imageView = requireActivity().findViewById(R.id.settings_brightness_card_image);
+        topShader = requireActivity().findViewById(R.id.settings_brightness_card_top_shader);
+        bottomShader = requireActivity().findViewById(R.id.settings_brightness_card_bottom_shader);
+        mainText = requireActivity().findViewById(R.id.settings_brightness_card_text_main);
+        imageView.setAlpha(prefsFloat(prefs, "bgNormalOpacity"));
+        path = requireActivity().getIntent().getStringExtra("currentPath");
+        new Thread(() -> {
+            Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, prefsInt(prefs, "imageQualityLevel"));
+            if (bitmap != null) requireActivity().runOnUiThread(() -> {
+                imageView.setImageBitmap(bitmap);
+                float scale = getHalfScreenScale(getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
+                imageView.setScaleX(scale);
+                imageView.setScaleY(scale);
+            });
+        }).start();
+
     }
 
 

@@ -27,7 +27,7 @@
     <string name="settings_performance_desc">图像质量</string>
     <string name="settings_timeout">时长</string>
     <string name="settings_timeout_desc">何时待机、切换图片等</string>
-    <string name="settings_night">夜间行为</string>
+    <string name="settings_night">夜间模式</string>
     <string name="settings_night_desc">低亮度环境下的行为</string>
     <string name="settings_brightness">亮度</string>
     <string name="settings_brightness_desc">主界面各组件的亮度</string>
@@ -45,4 +45,7 @@
     <string name="settings_timeout_picker_hour">小时</string>
     <string name="settings_timeout_picker_minute">分钟</string>
     <string name="settings_timeout_picker_second">秒</string>
+    <string name="settings_timeout_tab_hide_buttons">隐藏按钮</string>
+    <string name="settings_timeout_tab_go_ambient">进入待机模式</string>
+    <string name="settings_timeout_tab_switch_background">切换背景图片</string>
 </resources>

@@ -18,8 +18,7 @@ public class SettingsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
@@ -33,10 +32,8 @@ public class SettingsFragment extends Fragment {
         nightMode = view.findViewById(R.id.settings_frag_night);
         View.OnClickListener onClickListener = v -> {
             Intent intent = new Intent(getContext(), SettingsDetailActivity.class);
-            if (getActivity() != null) {
-                intent.putExtra("currentPath",
-                        getActivity().getIntent().getStringExtra("currentPath"));
-            }
+            intent.putExtra("currentPath", requireActivity().getIntent().getStringExtra("currentPath"));
+
             intent.putExtra("viewId", v.getId());
             startActivity(intent);
         };

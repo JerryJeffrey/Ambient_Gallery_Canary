@@ -15,18 +15,16 @@ import com.ambientgallery.R;
 
 public class SettingsSensitivityMainFragment extends Fragment {
     SharedPreferences prefs;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_sensitivity_main, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getActivity() != null) {
-
-        }
     }
 }

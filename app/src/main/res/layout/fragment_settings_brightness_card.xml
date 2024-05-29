@@ -18,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_brightness_ambient_card_top_shader"
+        android:id="@+id/settings_brightness_card_top_shader"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/bg_top_gradient"
-        app:layout_constraintBottom_toBottomOf="@+id/settings_brightness_ambient_card_title"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_brightness_card_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,7 +30,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/settings_brightness_ambient_card_title"
+        android:id="@+id/settings_brightness_card_title"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="48dp"
@@ -41,24 +41,24 @@
         android:text="@string/settings_brightness"
         android:textColor="@color/white"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/settings_brightness_ambient_card_top_shader"
+        app:layout_constraintEnd_toEndOf="@+id/settings_brightness_card_top_shader"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_brightness_ambient_card_bottom_shader"
+        android:id="@+id/settings_brightness_card_bottom_shader"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bg_bottom_gradient"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/settings_brightness_ambient_card_bottom_container"
-        app:layout_constraintStart_toStartOf="@+id/settings_brightness_ambient_card_bottom_container"
-        app:layout_constraintTop_toTopOf="@+id/settings_brightness_ambient_card_bottom_container">
+        app:layout_constraintEnd_toEndOf="@+id/settings_brightness_card_bottom_container"
+        app:layout_constraintStart_toStartOf="@+id/settings_brightness_card_bottom_container"
+        app:layout_constraintTop_toTopOf="@+id/settings_brightness_card_bottom_container">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settings_brightness_ambient_card_bottom_container"
+        android:id="@+id/settings_brightness_card_bottom_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/settings_brightness_ambient_card_text_main"
+            android:id="@+id/settings_brightness_card_text_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"

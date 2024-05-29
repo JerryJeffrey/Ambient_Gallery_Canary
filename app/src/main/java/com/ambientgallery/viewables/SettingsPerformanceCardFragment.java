@@ -34,12 +34,8 @@ public class SettingsPerformanceCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null) {
-            prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
-            getParentFragmentManager().setFragmentResultListener("imageQualityLevel", this, (requestKey, bundle) -> {
-                loadImage();
-            });
-        }
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        getParentFragmentManager().setFragmentResultListener("imageQualityLevel", this, (requestKey, bundle) -> loadImage());
 
         return inflater.inflate(R.layout.fragment_settings_performance_card, container, false);
     }
@@ -47,37 +43,32 @@ public class SettingsPerformanceCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getActivity() != null) {
-            imageView = getActivity().findViewById(R.id.settings_performance_card_image);
-            textInfo=getActivity().findViewById(R.id.settings_performance_card_info);
-        }
-        path = getActivity().getIntent().getStringExtra("currentPath");
+        imageView = requireActivity().findViewById(R.id.settings_performance_card_image);
+        textInfo = requireActivity().findViewById(R.id.settings_performance_card_info);
+
+        path = requireActivity().getIntent().getStringExtra("currentPath");
         loadImage();
     }
 
     private void loadImage() {
-        if (getActivity() != null) {
-            new Thread(() -> {
-                Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(getActivity().getWindowManager()).width, getDisplayMetrics(getActivity().getWindowManager()).height, prefsInt(prefs, "imageQualityLevel"));
-                if (bitmap != null) getActivity().runOnUiThread(() -> {
-                    setInfo(bitmap.getWidth(),bitmap.getHeight());
-                    imageView.setImageBitmap(bitmap);
-                    float scale = getHalfScreenScale(getDisplayMetrics(getActivity().getWindowManager()).width, getDisplayMetrics(getActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
-                    imageView.setScaleX(scale);
-                    imageView.setScaleY(scale);
-                });
-            }).start();
-        }
+
+        new Thread(() -> {
+            Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, prefsInt(prefs, "imageQualityLevel"));
+            if (bitmap != null) requireActivity().runOnUiThread(() -> {
+                setInfo(bitmap.getWidth(), bitmap.getHeight());
+                imageView.setImageBitmap(bitmap);
+                float scale = getHalfScreenScale(getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
+                imageView.setScaleX(scale);
+                imageView.setScaleY(scale);
+            });
+        }).start();
+
     }
 
     @SuppressLint("SetTextI18n")
     private void setInfo(int imageWidth, int imageHeight) {
-        if (getActivity() != null) {
-            DisplayDimensions dimensions = getDisplayMetrics(getActivity().getWindowManager());
-            String displayInfo = dimensions.width + " × " + dimensions.height,
-                    bitmapInfo = imageWidth + " × " + imageHeight;
-            textInfo.setText(getString(R.string.settings_performance_display_resolution)+": "+displayInfo+"\n"+getString(R.string.settings_performance_image_resolution)+": "+bitmapInfo);
-
-        }
+        DisplayDimensions dimensions = getDisplayMetrics(requireActivity().getWindowManager());
+        String displayInfo = dimensions.width + " × " + dimensions.height, bitmapInfo = imageWidth + " × " + imageHeight;
+        textInfo.setText(getString(R.string.settings_performance_display_resolution) + ": " + displayInfo + "\n" + getString(R.string.settings_performance_image_resolution) + ": " + bitmapInfo);
     }
 }

@@ -30,122 +30,119 @@ public class SettingsBrightnessMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null)
-            prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_brightness_main, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getActivity() != null) {
-            tabBar = getActivity().findViewById(R.id.settings_brightness_main_tab_container);
-            textSeek = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_seekbar);
-            bgSeek = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_seekbar);
-            textValue = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_value);
-            bgValue = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_value);
-            textMinDesc = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_min);
-            textMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_max);
-            bgMinDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_min);
-            bgMaxDesc = getActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_max);
-            currentTab = tabBar.getSelectedTabPosition();
+        tabBar = requireActivity().findViewById(R.id.settings_brightness_main_tab_container);
+        textSeek = requireActivity().findViewById(R.id.settings_brightness_main_text_brightness_seekbar);
+        bgSeek = requireActivity().findViewById(R.id.settings_brightness_main_bg_brightness_seekbar);
+        textValue = requireActivity().findViewById(R.id.settings_brightness_main_text_brightness_value);
+        bgValue = requireActivity().findViewById(R.id.settings_brightness_main_bg_brightness_value);
+        textMinDesc = requireActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_min);
+        textMaxDesc = requireActivity().findViewById(R.id.settings_brightness_main_text_brightness_desc_max);
+        bgMinDesc = requireActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_min);
+        bgMaxDesc = requireActivity().findViewById(R.id.settings_brightness_main_bg_brightness_desc_max);
+        currentTab = tabBar.getSelectedTabPosition();
 
-            tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    currentTab = tab.getPosition();
-                    refreshSeekAndText(true);
-                    setCardDisplayMode(currentTab);
-                }
+        tabBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                currentTab = tab.getPosition();
+                refreshSeekAndText(true);
+                setCardDisplayMode(currentTab);
+            }
 
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                }
+            }
 
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-                }
-            });
-            SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
-                        int actualProgress = -1, currentView = -1;
-                        Bundle resultBundle = new Bundle();
-                        if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {//refers to 0
-                            switch (currentTab) {
-                                case 0://normal bg
-                                    actualProgress = calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress);
-                                    break;
-                                case 1://ambient bg
-                                    actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            currentView = 0;
-                            setPercentage(bgValue, actualProgress);
-                        } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {//refers to 2
-                            switch (currentTab) {
-                                case 0://normal text
-                                    actualProgress = calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress);
-                                    break;
-                                case 1://ambient text
-                                    actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            currentView = 1;
-                            setPercentage(textValue, actualProgress);
-                        }
-                        if (currentView < 0) throw new RuntimeException();
-                        if (actualProgress < 0) throw new RuntimeException();
-                        //give info to card
-                        resultBundle.putInt("currentView", currentView);
-                        resultBundle.putFloat("percentage", actualProgress / 100f);
-                        getParentFragmentManager().setFragmentResult("viewOpacity", resultBundle);
-                    }
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    int actualProgress = -1;
-                    int progress = seekBar.getProgress();
-                    if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {
+            }
+        });
+        SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    int actualProgress = -1, currentView = -1;
+                    Bundle resultBundle = new Bundle();
+                    if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {//refers to 0
                         switch (currentTab) {
                             case 0://normal bg
-                                setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
+                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress);
                                 break;
                             case 1://ambient bg
-                                setPrefs(prefs, "bgAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
+                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress);
                                 break;
                             default:
                                 break;
                         }
-                    } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {
+                        currentView = 0;
+                        setPercentage(bgValue, actualProgress);
+                    } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {//refers to 2
                         switch (currentTab) {
                             case 0://normal text
-                                setPrefs(prefs, "textNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress) / 100f);
+                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress);
                                 break;
                             case 1://ambient text
-                                setPrefs(prefs, "textAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress) / 100f);
+                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress);
                                 break;
                             default:
                                 break;
                         }
+                        currentView = 1;
+                        setPercentage(textValue, actualProgress);
+                    }
+                    if (currentView < 0) throw new RuntimeException();
+                    if (actualProgress < 0) throw new RuntimeException();
+                    //give info to card
+                    resultBundle.putInt("currentView", currentView);
+                    resultBundle.putFloat("percentage", actualProgress / 100f);
+                    getParentFragmentManager().setFragmentResult("viewOpacity", resultBundle);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int actualProgress = -1;
+                int progress = seekBar.getProgress();
+                if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {
+                    switch (currentTab) {
+                        case 0://normal bg
+                            setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
+                            break;
+                        case 1://ambient bg
+                            setPrefs(prefs, "bgAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {
+                    switch (currentTab) {
+                        case 0://normal text
+                            setPrefs(prefs, "textNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress) / 100f);
+                            break;
+                        case 1://ambient text
+                            setPrefs(prefs, "textAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress) / 100f);
+                            break;
+                        default:
+                            break;
                     }
                 }
-            };
-            textSeek.setOnSeekBarChangeListener(seekBarChangeListener);
-            bgSeek.setOnSeekBarChangeListener(seekBarChangeListener);
-        }
+            }
+        };
+        textSeek.setOnSeekBarChangeListener(seekBarChangeListener);
+        bgSeek.setOnSeekBarChangeListener(seekBarChangeListener);
     }
 
     @Override

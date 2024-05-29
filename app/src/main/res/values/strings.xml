@@ -29,7 +29,7 @@
     <string name="settings_performance_desc">Image quality</string>
     <string name="settings_timeout">Timeout</string>
     <string name="settings_timeout_desc">When to go ambient, switch image, etc.</string>
-    <string name="settings_night">Night behavior</string>
+    <string name="settings_night">Night mode</string>
     <string name="settings_night_desc">Behavior when in low light condition</string>
     <string name="settings_brightness">Brightness</string>
     <string name="settings_brightness_desc">Brightness of main interface components</string>
@@ -47,4 +47,7 @@
     <string name="settings_timeout_picker_hour">h</string>
     <string name="settings_timeout_picker_minute">m</string>
     <string name="settings_timeout_picker_second">s</string>
+    <string name="settings_timeout_tab_hide_buttons">Hide buttons</string>
+    <string name="settings_timeout_tab_go_ambient">Go ambient</string>
+    <string name="settings_timeout_tab_switch_background">Switch background</string>
 </resources>

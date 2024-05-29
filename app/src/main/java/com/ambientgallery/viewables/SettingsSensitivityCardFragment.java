@@ -30,8 +30,6 @@ public class SettingsSensitivityCardFragment extends Fragment {
     View rootView, refreshContainer, refreshIcon;
     TextView startIndicatorValue, endIndicatorValue;
     ProgressBar startIndicatorProgress, endIndicatorProgress;
-    Activity activity;
-    Context context;
     SharedPreferences prefs;
     float touchStartY;
     boolean dragStarted = false, dragEnded = false;
@@ -45,8 +43,6 @@ public class SettingsSensitivityCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activity = getActivity();
-        context = getContext();
         View.OnTouchListener onTouchListener = (v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -58,7 +54,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
                     if (!ongoingAnimators.containsKey(refreshContainer.getId() + "opacity")) {
                         //get touch position
                         float currentY = event.getRawY();
-                        float y = px2dp(context, currentY - touchStartY);
+                        float y = px2dp(requireContext(), currentY - touchStartY);
                         //update start position to minimum value of single touch
                         if (touchStartY > currentY) touchStartY = currentY;
                         //calculate drag percentages
@@ -77,14 +73,14 @@ public class SettingsSensitivityCardFragment extends Fragment {
                             refreshIcon.setRotation(15 * (endPercent - 1));
                             refreshContainer.setAlpha(1f);
                             refreshIcon.setAlpha(1f);
-                            refreshContainer.setTranslationY(dp2px(context, 6 * (endPercent - 1)));
+                            refreshContainer.setTranslationY(dp2px(requireContext(), 6 * (endPercent - 1)));
                         } else if (startPercent >= 1) {
                             dragStarted = true;
                             dragEnded = false;
                             refreshIcon.setRotation(45 * (endPercent - 1));
                             refreshContainer.setAlpha(endPercent);
                             refreshIcon.setAlpha(0.5f);
-                            refreshContainer.setTranslationY(dp2px(context, 12 * (endPercent - 1)));
+                            refreshContainer.setTranslationY(dp2px(requireContext(), 12 * (endPercent - 1)));
                         } else {
                             refreshIcon.setRotation(0);
                             refreshContainer.setAlpha(0);
@@ -97,7 +93,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
                         //play reset refresh button animation
                         viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, "animationDuration_instant"));
                         viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                        viewPosition(refreshContainer, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
+                        viewPosition(refreshContainer, 0, dp2px(requireContext(), -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
                     } else {
                         v.performClick();
                     }
@@ -108,23 +104,20 @@ public class SettingsSensitivityCardFragment extends Fragment {
             //whether the touch event is consumed
             return true;
         };
-        if (context != null) {
-            prefs = context.getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
-        }
-        if (activity != null) {
-            rootView = activity.findViewById(R.id.settings_sensitivity_card_root);
-            refreshContainer = activity.findViewById(R.id.settings_sensitivity_card_refresh_container);
-            refreshIcon = activity.findViewById(R.id.settings_sensitivity_card_refresh_icon);
-            startIndicatorProgress = activity.findViewById(R.id.settings_sensitivity_card_start_indicator_progress);
-            endIndicatorProgress = activity.findViewById(R.id.settings_sensitivity_card_end_indicator_progress);
-            startIndicatorValue = activity.findViewById(R.id.settings_sensitivity_card_start_indicator_value);
-            endIndicatorValue = activity.findViewById(R.id.settings_sensitivity_card_end_indicator_value);
-            refreshContainer.setTranslationY(dp2px(context, -12));
-            refreshContainer.setAlpha(0);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            rootView.setOnTouchListener(onTouchListener);
-        }
+        prefs = requireContext().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        rootView = requireActivity().findViewById(R.id.settings_sensitivity_card_root);
+        refreshContainer = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_container);
+        refreshIcon = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_icon);
+        startIndicatorProgress = requireActivity().findViewById(R.id.settings_sensitivity_card_start_indicator_progress);
+        endIndicatorProgress = requireActivity().findViewById(R.id.settings_sensitivity_card_end_indicator_progress);
+        startIndicatorValue = requireActivity().findViewById(R.id.settings_sensitivity_card_start_indicator_value);
+        endIndicatorValue = requireActivity().findViewById(R.id.settings_sensitivity_card_end_indicator_value);
+        refreshContainer.setTranslationY(dp2px(requireContext(), -12));
+        refreshContainer.setAlpha(0);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        rootView.setOnTouchListener(onTouchListener);
+
     }
 
     private static float fixPercentRange(float percent) {

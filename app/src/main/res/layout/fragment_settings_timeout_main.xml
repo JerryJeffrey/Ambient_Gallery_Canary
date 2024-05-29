@@ -19,19 +19,19 @@
             android:id="@+id/settings_timeout_main_tab_hide_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hide buttons" />
+            android:text="@string/settings_timeout_tab_hide_buttons" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_timeout_main_tab_go_ambient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Go ambient" />
+            android:text="@string/settings_timeout_tab_go_ambient" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_timeout_main_switch_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Switch Background" />
+            android:text="@string/settings_timeout_tab_switch_background" />
     </com.google.android.material.tabs.TabLayout>
 
     <ScrollView

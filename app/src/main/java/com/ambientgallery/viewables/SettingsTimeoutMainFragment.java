@@ -36,20 +36,19 @@ public class SettingsTimeoutMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null)
-            prefs = getActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_timeout_main, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() != null) {
-            hourPicker = getActivity().findViewById(R.id.settings_timeout_main_picker_hour);
-            minutePicker = getActivity().findViewById(R.id.settings_timeout_main_picker_minute);
-            secondPicker = getActivity().findViewById(R.id.settings_timeout_main_picker_second);
-            tabBar = getActivity().findViewById(R.id.settings_timeout_main_tab_container);
-        }
+
+        hourPicker = requireActivity().findViewById(R.id.settings_timeout_main_picker_hour);
+        minutePicker = requireActivity().findViewById(R.id.settings_timeout_main_picker_minute);
+        secondPicker = requireActivity().findViewById(R.id.settings_timeout_main_picker_second);
+        tabBar = requireActivity().findViewById(R.id.settings_timeout_main_tab_container);
+
         fixPicker(hourPicker);
         fixPicker(minutePicker);
         fixPicker(secondPicker);
@@ -74,13 +73,13 @@ public class SettingsTimeoutMainFragment extends Fragment {
         });
 
         NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-            if (getView() != null) getView().performHapticFeedback(1);
+            requireView().performHapticFeedback(1);
             setPickerByTab(false);
             updatePrefsByTab();
 
         };
-        View.OnClickListener onClickListener= v -> fixPicker((NumberPicker) v);
-        View.OnLongClickListener onLongClickListener= v -> {
+        View.OnClickListener onClickListener = v -> fixPicker((NumberPicker) v);
+        View.OnLongClickListener onLongClickListener = v -> {
             v.performClick();
             return true;
         };
