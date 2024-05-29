@@ -3,7 +3,9 @@ package com.ambientgallery.utils;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.view.View;
 
 import com.ambientgallery.components.BezierInterpolator;
@@ -131,7 +133,7 @@ public class AnimateUtil {
 
     public static void viewScale(View[] views, float x, float y, float c1, float c2,
                                  int duration, AnimatorListenerAdapter... listener) {
-        String prop="scale";
+        String prop = "scale";
         List<Animator> sets = new ArrayList<>();
         for (View view : views) clearPreviousAnimator(view, prop);
         for (View view : views) {
@@ -150,6 +152,14 @@ public class AnimateUtil {
         addCustomListener(sequence, listener);
         sequence.start();
 
+    }
+
+    public static void viewColor(int startColor, int endColor, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+        ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
+        animator.setDuration(duration);
+        animator.setInterpolator(new BezierInterpolator(c1, c2));
+        animator.addUpdateListener(updateListener);
+        animator.start();
     }
 
     private static void clearPreviousAnimator(View view, String prop) {

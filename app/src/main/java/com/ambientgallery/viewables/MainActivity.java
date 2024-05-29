@@ -1,6 +1,7 @@
 package com.ambientgallery.viewables;
 
 import static com.ambientgallery.utils.AnimateUtil.ongoingAnimators;
+import static com.ambientgallery.utils.AnimateUtil.viewColor;
 import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
 import static com.ambientgallery.utils.AnimateUtil.viewPosition;
 import static com.ambientgallery.utils.AnimateUtil.viewRotation;
@@ -25,6 +26,8 @@ import static com.ambientgallery.utils.WindowFeatureUtil.preventSleeping;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -236,6 +239,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 showActionButtons();
             }
         });
+        //set listeners
+        View.OnLongClickListener buttonLongClickListener = v -> {
+            String text = null;
+            if (v.getId() == settingsButton.getId()) text = getString(R.string.button_settings);
+            else if (v.getId() == ambientButton.getId())
+                text = getString(R.string.button_ambient_mode);
+            if (text != null) Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            currentTime = 0;
+            return true;
+        };
+        settingsButton.setOnLongClickListener(buttonLongClickListener);
+        ambientButton.setOnLongClickListener(buttonLongClickListener);
+        textMain.setOnHoverListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_HOVER_ENTER:
+                    viewColor(0xFFFFFFFF, 0xFFFF0000, 1, 1, prefsInt(prefs, "animationDuration_short"), new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                            textMain.setTextColor((int) animation.getAnimatedValue());
+                        }
+                    });
+                    break;
+                case MotionEvent.ACTION_HOVER_EXIT:
+                    viewColor(0xFFFF0000, 0xFFFFFFFF, 1, 1, prefsInt(prefs, "animationDuration_short"), new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                            textMain.setTextColor((int) animation.getAnimatedValue());
+                        }
+                    });
+                    break;
+            }
+            return true;
+        });
         settingsButton.setOnClickListener(v -> {
             if (!buttonsInvisible) {
                 currentTime = 0;
@@ -244,16 +280,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 intent.putExtra("currentPath", currentPath);
                 startActivity(intent);
             }
-        });
-        settingsButton.setOnLongClickListener(v -> {
-            Toast.makeText(MainActivity.this, getText(R.string.button_settings), Toast.LENGTH_SHORT).show();
-            currentTime = 0;
-            return true;
-        });
-        ambientButton.setOnLongClickListener(v -> {
-            Toast.makeText(MainActivity.this, getText(R.string.button_ambient_mode), Toast.LENGTH_SHORT).show();
-            currentTime = 0;
-            return true;
         });
         ambientButton.setOnClickListener(v -> {
             if (!buttonsInvisible) {

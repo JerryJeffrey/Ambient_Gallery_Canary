@@ -81,7 +81,7 @@ public class SettingsTimeoutMainFragment extends Fragment {
         };
         View.OnClickListener onClickListener= v -> fixPicker((NumberPicker) v);
         View.OnLongClickListener onLongClickListener= v -> {
-            fixPicker((NumberPicker) v);
+            v.performClick();
             return true;
         };
         hourPicker.setOnValueChangedListener(onValueChangeListener);

@@ -24,11 +24,11 @@
     <string name="settings_sensitivity">操作灵敏度</string>
     <string name="settings_sensitivity_desc">下拉刷新等操作的灵敏度</string>
     <string name="settings_performance">性能与稳定性</string>
-    <string name="settings_performance_desc">图片质量</string>
+    <string name="settings_performance_desc">图像质量</string>
     <string name="settings_timeout">时长</string>
     <string name="settings_timeout_desc">何时待机、切换图片等</string>
     <string name="settings_night">夜间行为</string>
-    <string name="settings_night_desc">何时不再保持屏幕开启</string>
+    <string name="settings_night_desc">低亮度环境下的行为</string>
     <string name="settings_brightness">亮度</string>
     <string name="settings_brightness_desc">主界面各组件的亮度</string>
     <string name="settings_brightness_tab_normal">常规</string>
@@ -37,4 +37,12 @@
     <string name="settings_brightness_bg_brightness">背景亮度</string>
     <string name="settings_brightness_min_desc">待机状态的最大亮度</string>
     <string name="settings_brightness_max_desc">常规状态的最小亮度</string>
+    <string name="settings_performance_image_quality">图像质量</string>
+    <string name="settings_performance_quality_level">质量等级</string>
+    <string name="settings_performance_image_quality_level_hint">调整该等级并在卡片中预览。\n调高以获得更高质量，或调低以获得更强的稳定性。\n稳定性可能因设备不同而异。</string>
+    <string name="settings_performance_display_resolution">屏幕分辨率</string>
+    <string name="settings_performance_image_resolution">图片分辨率</string>
+    <string name="settings_timeout_picker_hour">小时</string>
+    <string name="settings_timeout_picker_minute">分钟</string>
+    <string name="settings_timeout_picker_second">秒</string>
 </resources>

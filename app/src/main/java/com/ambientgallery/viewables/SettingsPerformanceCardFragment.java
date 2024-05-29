@@ -5,6 +5,7 @@ import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
 import static com.ambientgallery.utils.DimensUtil.getHalfScreenScale;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -69,12 +70,13 @@ public class SettingsPerformanceCardFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void setInfo(int imageWidth, int imageHeight) {
         if (getActivity() != null) {
             DisplayDimensions dimensions = getDisplayMetrics(getActivity().getWindowManager());
             String displayInfo = dimensions.width + " × " + dimensions.height,
                     bitmapInfo = imageWidth + " × " + imageHeight;
-            textInfo.setText("Display: "+displayInfo+"\nImage: "+bitmapInfo);
+            textInfo.setText(getString(R.string.settings_performance_display_resolution)+": "+displayInfo+"\n"+getString(R.string.settings_performance_image_resolution)+": "+bitmapInfo);
 
         }
     }
