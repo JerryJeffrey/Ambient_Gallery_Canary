@@ -59,15 +59,7 @@
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_top_container">
-
-        <TextView
-            android:id="@+id/settings_sensitivity_card_hint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Try to perform actions in this area\n and see top area for the effect." />
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/settings_sensitivity_card_start_indicator_container"
@@ -76,45 +68,30 @@
             android:padding="6dp">
 
             <TextView
-                android:id="@+id/settings_sensitivity_card_start_indicator_title"
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start activation percent"
+                android:text="Detect action"
                 app:layout_constraintBottom_toTopOf="@+id/settings_sensitivity_card_start_indicator_progress"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activate action"
+                app:layout_constraintBottom_toTopOf="@+id/settings_sensitivity_card_start_indicator_progress"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ProgressBar
                 android:id="@+id/settings_sensitivity_card_start_indicator_progress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_start_indicator_title" />
-
-            <TextView
-                android:id="@+id/settings_sensitivity_card_start_indicator_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/settings_sensitivity_card_start_indicator_progress"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settings_sensitivity_card_end_indicator_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp">
-
-            <TextView
-                android:id="@+id/settings_sensitivity_card_end_indicator_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End activation percent"
-                app:layout_constraintBottom_toTopOf="@+id/settings_sensitivity_card_end_indicator_progress"
+                app:layout_constraintEnd_toStartOf="@+id/settings_sensitivity_card_end_indicator_progress"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -123,19 +100,25 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginLeft="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/settings_sensitivity_card_start_indicator_progress"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_end_indicator_title" />
+                app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_start_indicator_progress" />
 
-            <TextView
-                android:id="@+id/settings_sensitivity_card_end_indicator_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/settings_sensitivity_card_end_indicator_progress"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

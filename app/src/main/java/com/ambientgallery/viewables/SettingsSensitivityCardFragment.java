@@ -28,7 +28,6 @@ import com.ambientgallery.R;
 
 public class SettingsSensitivityCardFragment extends Fragment {
     View rootView, refreshContainer, refreshIcon;
-    TextView startIndicatorValue, endIndicatorValue;
     ProgressBar startIndicatorProgress, endIndicatorProgress;
     SharedPreferences prefs;
     float touchStartY;
@@ -62,8 +61,6 @@ public class SettingsSensitivityCardFragment extends Fragment {
                         float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) / prefsInt(prefs, "dragEndSensitivity");
                         int startProgress = (int) (fixPercentRange(startPercent) * 100);
                         int endProgress = (int) (fixPercentRange(endPercent) * 100);
-                        startIndicatorValue.setText(startProgress + "%");
-                        endIndicatorValue.setText(endProgress + "%");
                         startIndicatorProgress.setProgress(startProgress);
                         endIndicatorProgress.setProgress(endProgress);
 
@@ -110,8 +107,6 @@ public class SettingsSensitivityCardFragment extends Fragment {
         refreshIcon = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_icon);
         startIndicatorProgress = requireActivity().findViewById(R.id.settings_sensitivity_card_start_indicator_progress);
         endIndicatorProgress = requireActivity().findViewById(R.id.settings_sensitivity_card_end_indicator_progress);
-        startIndicatorValue = requireActivity().findViewById(R.id.settings_sensitivity_card_start_indicator_value);
-        endIndicatorValue = requireActivity().findViewById(R.id.settings_sensitivity_card_end_indicator_value);
         refreshContainer.setTranslationY(dp2px(requireContext(), -12));
         refreshContainer.setAlpha(0);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
