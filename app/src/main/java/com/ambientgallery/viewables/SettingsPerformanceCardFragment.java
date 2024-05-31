@@ -3,7 +3,10 @@ package com.ambientgallery.viewables;
 import static com.ambientgallery.utils.BitmapUtil.decodeSampledBitmap;
 import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
 import static com.ambientgallery.utils.DimensUtil.getHalfScreenScale;
+import static com.ambientgallery.utils.SharedPrefsUtil.IMAGE_QUALITY_LEVEL;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
+import static com.ambientgallery.viewables.MainActivity.MAIN_IMAGE_PATH;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -34,8 +37,8 @@ public class SettingsPerformanceCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
-        getParentFragmentManager().setFragmentResultListener("imageQualityLevel", this, (requestKey, bundle) -> loadImage());
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
+        getParentFragmentManager().setFragmentResultListener(IMAGE_QUALITY_LEVEL, this, (requestKey, bundle) -> loadImage());
 
         return inflater.inflate(R.layout.fragment_settings_performance_card, container, false);
     }
@@ -46,14 +49,14 @@ public class SettingsPerformanceCardFragment extends Fragment {
         imageView = requireActivity().findViewById(R.id.settings_performance_card_image);
         textInfo = requireActivity().findViewById(R.id.settings_performance_card_info);
 
-        path = requireActivity().getIntent().getStringExtra("currentPath");
+        path = requireActivity().getIntent().getStringExtra(MAIN_IMAGE_PATH);
         loadImage();
     }
 
     private void loadImage() {
 
         new Thread(() -> {
-            Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, prefsInt(prefs, "imageQualityLevel"));
+            Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, prefsInt(prefs, IMAGE_QUALITY_LEVEL));
             if (bitmap != null) requireActivity().runOnUiThread(() -> {
                 setInfo(bitmap.getWidth(), bitmap.getHeight());
                 imageView.setImageBitmap(bitmap);

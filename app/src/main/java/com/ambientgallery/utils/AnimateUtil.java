@@ -15,25 +15,28 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AnimateUtil {
+    public static final String ANIM_TYPE_OPACITY="opacity";
+    public static final String ANIM_TYPE_ROTATION="rotation";
+    public static final String ANIM_TYPE_POSITION="position";
+    public static final String ANIM_TYPE_SCALE="scale";
+
     public static final HashMap<String, Animator> ongoingAnimators = new HashMap<>();
 
     public static void viewOpacity(View view, float alpha, float c1, float c2, int duration,
                                    AnimatorListenerAdapter... listener) {
-        String prop = "opacity";
-        clearPreviousAnimator(view, prop);
+        clearPreviousAnimator(view, ANIM_TYPE_OPACITY);
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", alpha)
                 .setDuration(duration);
         animator.setInterpolator(new BezierInterpolator(c1, c2));
-        addDefaultListener(animator, view, prop);
+        addDefaultListener(animator, view, ANIM_TYPE_OPACITY);
         addCustomListener(animator, listener);
         animator.start();
     }
 
     public static void viewOpacity(View[] views, float alpha, float c1, float c2, int duration,
                                    AnimatorListenerAdapter... listener) {
-        String prop = "opacity";
         List<Animator> sets = new ArrayList<>();
-        for (View view : views) clearPreviousAnimator(view, prop);
+        for (View view : views) clearPreviousAnimator(view, ANIM_TYPE_OPACITY);
         for (View view : views) {
             ObjectAnimator animator = ObjectAnimator.ofFloat(view, "alpha", alpha)
                     .setDuration(duration);
@@ -49,12 +52,11 @@ public class AnimateUtil {
 
     public static void viewRotation(View view, float deg, float c1, float c2, int duration,
                                     AnimatorListenerAdapter... listener) {
-        String prop = "rotation";
-        clearPreviousAnimator(view, prop);
+        clearPreviousAnimator(view, ANIM_TYPE_ROTATION);
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "rotation", deg)
                 .setDuration(duration);
         animator.setInterpolator(new BezierInterpolator(c1, c2));
-        addDefaultListener(animator, view, prop);
+        addDefaultListener(animator, view, ANIM_TYPE_ROTATION);
         addCustomListener(animator, listener);
         animator.start();
 
@@ -62,9 +64,8 @@ public class AnimateUtil {
 
     public static void viewRotation(View[] views, float deg, float c1, float c2, int duration,
                                     AnimatorListenerAdapter... listener) {
-        String prop = "rotation";
         List<Animator> sets = new ArrayList<>();
-        for (View view : views) clearPreviousAnimator(view, prop);
+        for (View view : views) clearPreviousAnimator(view, ANIM_TYPE_ROTATION);
         for (View view : views) {
             ObjectAnimator animator = ObjectAnimator.ofFloat(view, "rotation", deg)
                     .setDuration(duration);
@@ -79,8 +80,7 @@ public class AnimateUtil {
 
     public static void viewPosition(View view, float x, float y, float c1, float c2, int duration,
                                     AnimatorListenerAdapter... listener) {
-        String prop = "position";
-        clearPreviousAnimator(view, prop);
+        clearPreviousAnimator(view, ANIM_TYPE_POSITION);
         ObjectAnimator mainX = ObjectAnimator.ofFloat(view, "translationX", x)
                 .setDuration(duration);
         ObjectAnimator mainY = ObjectAnimator.ofFloat(view, "translationY", y)
@@ -88,16 +88,15 @@ public class AnimateUtil {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(mainX, mainY);
         set.setInterpolator(new BezierInterpolator(c1, c2));
-        addDefaultListener(set, view, prop);
+        addDefaultListener(set, view, ANIM_TYPE_POSITION);
         addCustomListener(set, listener);
         set.start();
     }
 
     public static void viewPosition(View[] views, float x, float y, float c1, float c2, int duration,
                                     AnimatorListenerAdapter... listener) {
-        String prop = "position";
         List<Animator> sets = new ArrayList<>();
-        for (View view : views) clearPreviousAnimator(view, prop);
+        for (View view : views) clearPreviousAnimator(view, ANIM_TYPE_POSITION);
         for (View view : views) {
             ObjectAnimator mainX = ObjectAnimator.ofFloat(view, "translationX", x)
                     .setDuration(duration);
@@ -105,7 +104,7 @@ public class AnimateUtil {
                     .setDuration(duration);
             AnimatorSet singleSet = new AnimatorSet();
             singleSet.playTogether(mainX, mainY);
-            addDefaultListener(singleSet, view, prop);
+            addDefaultListener(singleSet, view, ANIM_TYPE_POSITION);
             sets.add(singleSet);
         }
         AnimatorSet sequence = new AnimatorSet();
@@ -117,8 +116,7 @@ public class AnimateUtil {
 
     public static void viewScale(View view, float x, float y, float c1, float c2, int duration,
                                  AnimatorListenerAdapter... listener) {
-        String prop = "scale";
-        clearPreviousAnimator(view, prop);
+        clearPreviousAnimator(view, ANIM_TYPE_SCALE);
         ObjectAnimator mainX = ObjectAnimator.ofFloat(view, "scaleX", x)
                 .setDuration(duration);
         ObjectAnimator mainY = ObjectAnimator.ofFloat(view, "scaleY", y)
@@ -126,16 +124,15 @@ public class AnimateUtil {
         AnimatorSet set = new AnimatorSet();
         set.playTogether(mainX, mainY);
         set.setInterpolator(new BezierInterpolator(c1, c2));
-        addDefaultListener(set, view, prop);
+        addDefaultListener(set, view, ANIM_TYPE_SCALE);
         addCustomListener(set, listener);
         set.start();
     }
 
     public static void viewScale(View[] views, float x, float y, float c1, float c2,
                                  int duration, AnimatorListenerAdapter... listener) {
-        String prop = "scale";
         List<Animator> sets = new ArrayList<>();
-        for (View view : views) clearPreviousAnimator(view, prop);
+        for (View view : views) clearPreviousAnimator(view, ANIM_TYPE_SCALE);
         for (View view : views) {
             ObjectAnimator mainX = ObjectAnimator.ofFloat(view, "scaleX", x)
                     .setDuration(duration);
@@ -143,7 +140,7 @@ public class AnimateUtil {
                     .setDuration(duration);
             AnimatorSet singleSet = new AnimatorSet();
             singleSet.playTogether(mainX, mainY);
-            addDefaultListener(singleSet, view, prop);
+            addDefaultListener(singleSet, view, ANIM_TYPE_SCALE);
             sets.add(singleSet);
         }
         AnimatorSet sequence = new AnimatorSet();

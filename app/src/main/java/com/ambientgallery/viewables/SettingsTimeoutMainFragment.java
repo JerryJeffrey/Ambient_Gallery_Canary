@@ -1,5 +1,9 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.SharedPrefsUtil.GO_AMBIENT_TIMEOUT;
+import static com.ambientgallery.utils.SharedPrefsUtil.HIDE_BUTTON_TIMEOUT;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
+import static com.ambientgallery.utils.SharedPrefsUtil.SWITCH_IMAGE_TIMEOUT;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 import static com.ambientgallery.utils.SharedPrefsUtil.setPrefs;
 
@@ -36,7 +40,7 @@ public class SettingsTimeoutMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_timeout_main, container, false);
     }
 
@@ -111,17 +115,17 @@ public class SettingsTimeoutMainFragment extends Fragment {
         int min = 3, max = 86400, current = 1;
         switch (currentTab) {
             case 0://hide buttons
-                max = prefsInt(prefs, "ambientTimeout");
-                current = prefsInt(prefs, "hideButtonTimeout");
+                max = prefsInt(prefs, GO_AMBIENT_TIMEOUT);
+                current = prefsInt(prefs, HIDE_BUTTON_TIMEOUT);
                 break;
             case 1://go ambient
-                min = prefsInt(prefs, "hideButtonTimeout");
-                max = prefsInt(prefs, "switchImageTimeout");
-                current = prefsInt(prefs, "ambientTimeout");
+                min = prefsInt(prefs, HIDE_BUTTON_TIMEOUT);
+                max = prefsInt(prefs, SWITCH_IMAGE_TIMEOUT);
+                current = prefsInt(prefs, GO_AMBIENT_TIMEOUT);
                 break;
             case 2://switch background
-                min = prefsInt(prefs, "ambientTimeout");
-                current = prefsInt(prefs, "switchImageTimeout");
+                min = prefsInt(prefs, GO_AMBIENT_TIMEOUT);
+                current = prefsInt(prefs, SWITCH_IMAGE_TIMEOUT);
                 break;
         }
         if (setCurrent) {
@@ -136,13 +140,13 @@ public class SettingsTimeoutMainFragment extends Fragment {
     private void updatePrefsByTab() {
         switch (currentTab) {
             case 0://hide buttons
-                setPrefs(prefs, "hideButtonTimeout", getPickerCurrent());
+                setPrefs(prefs, HIDE_BUTTON_TIMEOUT, getPickerCurrent());
                 break;
             case 1://go ambient
-                setPrefs(prefs, "ambientTimeout", getPickerCurrent());
+                setPrefs(prefs, GO_AMBIENT_TIMEOUT, getPickerCurrent());
                 break;
             case 2://switch background
-                setPrefs(prefs, "switchImageTimeout", getPickerCurrent());
+                setPrefs(prefs, SWITCH_IMAGE_TIMEOUT, getPickerCurrent());
                 break;
         }
     }

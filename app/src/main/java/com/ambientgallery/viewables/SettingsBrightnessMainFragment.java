@@ -1,5 +1,10 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.SharedPrefsUtil.BG_AMBIENT_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.BG_NORMAL_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
+import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_AMBIENT_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_NORMAL_OPACITY;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
 import static com.ambientgallery.utils.SharedPrefsUtil.setPrefs;
 
@@ -30,7 +35,7 @@ public class SettingsBrightnessMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_brightness_main, container, false);
     }
 
@@ -75,10 +80,10 @@ public class SettingsBrightnessMainFragment extends Fragment {
                     if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {//refers to 0
                         switch (currentTab) {
                             case 0://normal bg
-                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress);
+                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, BG_AMBIENT_OPACITY), 1f, progress);
                                 break;
                             case 1://ambient bg
-                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress);
+                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, BG_NORMAL_OPACITY), progress);
                                 break;
                             default:
                                 break;
@@ -88,10 +93,10 @@ public class SettingsBrightnessMainFragment extends Fragment {
                     } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {//refers to 2
                         switch (currentTab) {
                             case 0://normal text
-                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress);
+                                actualProgress = calculateDisplayProgress(prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY), 1f, progress);
                                 break;
                             case 1://ambient text
-                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress);
+                                actualProgress = calculateDisplayProgress(0f, prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY), progress);
                                 break;
                             default:
                                 break;
@@ -119,10 +124,10 @@ public class SettingsBrightnessMainFragment extends Fragment {
                 if (seekBar.getId() == R.id.settings_brightness_main_bg_brightness_seekbar) {
                     switch (currentTab) {
                         case 0://normal bg
-                            setPrefs(prefs, "bgNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1f, progress) / 100f);
+                            setPrefs(prefs, BG_NORMAL_OPACITY, calculateDisplayProgress(prefsFloat(prefs, BG_AMBIENT_OPACITY), 1f, progress) / 100f);
                             break;
                         case 1://ambient bg
-                            setPrefs(prefs, "bgAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "bgNormalOpacity"), progress) / 100f);
+                            setPrefs(prefs, BG_AMBIENT_OPACITY, calculateDisplayProgress(0f, prefsFloat(prefs, BG_NORMAL_OPACITY), progress) / 100f);
                             break;
                         default:
                             break;
@@ -130,10 +135,10 @@ public class SettingsBrightnessMainFragment extends Fragment {
                 } else if (seekBar.getId() == R.id.settings_brightness_main_text_brightness_seekbar) {
                     switch (currentTab) {
                         case 0://normal text
-                            setPrefs(prefs, "textNormalOpacity", calculateDisplayProgress(prefsFloat(prefs, "textAmbientOpacity"), 1f, progress) / 100f);
+                            setPrefs(prefs, TEXT_MAIN_NORMAL_OPACITY, calculateDisplayProgress(prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY), 1f, progress) / 100f);
                             break;
                         case 1://ambient text
-                            setPrefs(prefs, "textAmbientOpacity", calculateDisplayProgress(0f, prefsFloat(prefs, "textNormalOpacity"), progress) / 100f);
+                            setPrefs(prefs, TEXT_MAIN_AMBIENT_OPACITY, calculateDisplayProgress(0f, prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY), progress) / 100f);
                             break;
                         default:
                             break;
@@ -183,24 +188,24 @@ public class SettingsBrightnessMainFragment extends Fragment {
     private void refreshSeekAndText(boolean animated) {
         switch (currentTab) {
             case 0://normal
-                setPercentage(textValue, prefsFloat(prefs, "textNormalOpacity"));
-                setPercentage(bgValue, prefsFloat(prefs, "bgNormalOpacity"));
-                bgSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "bgAmbientOpacity"), 1, (int) (prefsFloat(prefs, "bgNormalOpacity") * 100)));
-                textSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, "textAmbientOpacity"), 1, (int) (prefsFloat(prefs, "textNormalOpacity") * 100)));
-                textMinDesc.setText((int) (prefsFloat(prefs, "textAmbientOpacity") * 100) + " / " + getString(R.string.settings_brightness_min_desc));
+                setPercentage(textValue, prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY));
+                setPercentage(bgValue, prefsFloat(prefs, BG_NORMAL_OPACITY));
+                bgSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, BG_AMBIENT_OPACITY), 1, (int) (prefsFloat(prefs, BG_NORMAL_OPACITY) * 100)));
+                textSeek.setProgress(calculateSeekProgress(prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY), 1, (int) (prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY) * 100)));
+                textMinDesc.setText((int) (prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY) * 100) + " / " + getString(R.string.settings_brightness_min_desc));
                 textMaxDesc.setText("100");
-                bgMinDesc.setText((int) (prefsFloat(prefs, "bgAmbientOpacity") * 100) + " / " + getString(R.string.settings_brightness_min_desc));
+                bgMinDesc.setText((int) (prefsFloat(prefs, BG_AMBIENT_OPACITY) * 100) + " / " + getString(R.string.settings_brightness_min_desc));
                 bgMaxDesc.setText("100");
                 break;
             case 1://ambient
-                setPercentage(textValue, prefsFloat(prefs, "textAmbientOpacity"));
-                setPercentage(bgValue, prefsFloat(prefs, "bgAmbientOpacity"));
-                bgSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "bgNormalOpacity"), (int) (prefsFloat(prefs, "bgAmbientOpacity") * 100)));
-                textSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, "textNormalOpacity"), (int) (prefsFloat(prefs, "textAmbientOpacity") * 100)));
+                setPercentage(textValue, prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY));
+                setPercentage(bgValue, prefsFloat(prefs, BG_AMBIENT_OPACITY));
+                bgSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, BG_NORMAL_OPACITY), (int) (prefsFloat(prefs, BG_AMBIENT_OPACITY) * 100)));
+                textSeek.setProgress(calculateSeekProgress(0, prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY), (int) (prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY) * 100)));
                 textMinDesc.setText("0");
-                textMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, "textNormalOpacity") * 100));
+                textMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY) * 100));
                 bgMinDesc.setText("0");
-                bgMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, "bgNormalOpacity") * 100));
+                bgMaxDesc.setText(getString(R.string.settings_brightness_max_desc) + " / " + (int) (prefsFloat(prefs, BG_NORMAL_OPACITY) * 100));
                 break;
             default:
                 break;

@@ -1,5 +1,7 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.SharedPrefsUtil.IMAGE_QUALITY_LEVEL;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 import static com.ambientgallery.utils.SharedPrefsUtil.setPrefs;
@@ -28,7 +30,7 @@ public class SettingsPerformanceMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+            prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_performance_main, container, false);
     }
 
@@ -43,7 +45,7 @@ public class SettingsPerformanceMainFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 imageQualityValue.setText("" + progress);
                 if (fromUser) {
-                    setPrefs(prefs, "imageQualityLevel", progress);
+                    setPrefs(prefs, IMAGE_QUALITY_LEVEL, progress);
                     Bundle resultBundle = new Bundle();
                     resultBundle.putInt("imageQualityLevel", progress);
                     getParentFragmentManager().setFragmentResult("imageQualityLevel", resultBundle);
@@ -60,7 +62,7 @@ public class SettingsPerformanceMainFragment extends Fragment {
 
             }
         });
-        imageQualitySeek.setProgress(prefsInt(prefs, "imageQualityLevel"));
+        imageQualitySeek.setProgress(prefsInt(prefs, IMAGE_QUALITY_LEVEL));
 
 
     }

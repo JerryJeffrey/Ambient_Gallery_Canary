@@ -1,5 +1,7 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,7 +21,7 @@ public class SettingsSensitivityMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_sensitivity_main, container, false);
     }
 

@@ -6,37 +6,62 @@ import android.util.Log;
 
 public class SharedPrefsUtil {
     private static final int PREFS_BOOLEAN = 0, PREFS_INT = 1, PREFS_FLOAT = 2, PREFS_STRING = 3;
+    public static final String MAIN_PREFS="mainPrefs";
+    public static final String BG_AMBIENT_OPACITY="bgAmbientOpacity";
+    public static final String BG_NORMAL_OPACITY="bgNormalOpacity";
+    public static final String TEXT_MAIN_AMBIENT_OPACITY="textMainAmbientOpacity";
+    public static final String TEXT_MAIN_NORMAL_OPACITY="textMainNormalOpacity";
+    public static final String TEXT_SUB_AMBIENT_OPACITY="textSubAmbientOpacity";
+    public static final String TEXT_SUB_NORMAL_OPACITY="textSubNormalOpacity";
+    public static final String HIDE_BUTTON_TIMEOUT="hideButtonTimeout";
+    public static final String GO_AMBIENT_TIMEOUT="goAmbientTimeout";
+    public static final String SWITCH_IMAGE_TIMEOUT="switchImageTimeout";
+    public static final String ANIMATION_DURATION_INSTANT="animationDurationInstant";
+    public static final String ANIMATION_DURATION_SHORT="animationDurationShort";
+    public static final String ANIMATION_DURATION_NORMAL="animationDurationNormal";
+    public static final String ANIMATION_DURATION_LONG="animationDurationLong";
+    public static final String NIGHT_START_BRIGHTNESS="nightStartBrightness";
+    public static final String NIGHT_END_BRIGHTNESS="nightEndBrightness";
+    public static final String DRAG_START_SENSITIVITY="dragStartSensitivity";
+    public static final String DRAG_END_SENSITIVITY="dragEndSensitivity";
+    public static final String SWITCH_IMAGE_SCALE="switchImageScale";
+    public static final String IMAGE_QUALITY_LEVEL="imageQualityLevel";
+
+
+
 
     public static void initPrefs(Context context, String name) {
         SharedPreferences prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         //noinspection SwitchStatementWithTooFewBranches
         switch (name) {
-            case "MainPrefs":
+            case MAIN_PREFS:
                 //opacity
-                addEdit(prefs, editor, "bgAmbientOpacity", 0.5f);
-                addEdit(prefs, editor, "bgNormalOpacity", 1.0f);
-                addEdit(prefs, editor, "textAmbientOpacity", 0.6f);
-                addEdit(prefs, editor, "textNormalOpacity", 1.0f);
+                addEdit(prefs, editor, BG_AMBIENT_OPACITY, 0.5f);
+                addEdit(prefs, editor, BG_NORMAL_OPACITY, 1.0f);
+                addEdit(prefs, editor, TEXT_MAIN_AMBIENT_OPACITY, 0.6f);
+                addEdit(prefs, editor, TEXT_MAIN_NORMAL_OPACITY, 1.0f);
+                addEdit(prefs, editor, TEXT_SUB_AMBIENT_OPACITY, 0.0f);
+                addEdit(prefs, editor, TEXT_SUB_NORMAL_OPACITY, 1.0f);
                 //timeout
-                addEdit(prefs, editor, "hideButtonTimeout", 5);
-                addEdit(prefs, editor, "ambientTimeout", 30);
-                addEdit(prefs, editor, "switchImageTimeout", 300);
+                addEdit(prefs, editor, HIDE_BUTTON_TIMEOUT, 5);
+                addEdit(prefs, editor, GO_AMBIENT_TIMEOUT, 30);
+                addEdit(prefs, editor, SWITCH_IMAGE_TIMEOUT, 300);
                 //night brightness
-                addEdit(prefs, editor, "nightStartBrightness", 0f);
-                addEdit(prefs, editor, "nightEndBrightness", 3f);
+                addEdit(prefs, editor, NIGHT_START_BRIGHTNESS, 0f);
+                addEdit(prefs, editor, NIGHT_END_BRIGHTNESS, 3f);
                 //animation duration
-                addEdit(prefs, editor, "animationDuration_instant", 400);
-                addEdit(prefs, editor, "animationDuration_short", 800);
-                addEdit(prefs, editor, "animationDuration_normal", 1600);
-                addEdit(prefs, editor, "animationDuration_long", 3200);
-                //switch image scale
-                addEdit(prefs, editor, "switchImageScale", 1.1f);
+                addEdit(prefs, editor, ANIMATION_DURATION_INSTANT, 400);
+                addEdit(prefs, editor, ANIMATION_DURATION_SHORT, 800);
+                addEdit(prefs, editor, ANIMATION_DURATION_NORMAL, 1600);
+                addEdit(prefs, editor, ANIMATION_DURATION_LONG, 3200);
                 //touch event sensitivity
-                addEdit(prefs, editor, "dragStartSensitivity", 12);
-                addEdit(prefs, editor, "dragEndSensitivity", 96);
+                addEdit(prefs, editor, DRAG_START_SENSITIVITY, 12);
+                addEdit(prefs, editor, DRAG_END_SENSITIVITY, 96);
+                //switch image scale
+                addEdit(prefs, editor, SWITCH_IMAGE_SCALE, 1.1f);
                 //others
-                addEdit(prefs, editor, "imageQualityLevel", 1);
+                addEdit(prefs, editor, IMAGE_QUALITY_LEVEL, 1);
                 break;
             default:
                 break;

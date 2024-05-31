@@ -1,11 +1,16 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.AnimateUtil.ANIM_TYPE_OPACITY;
 import static com.ambientgallery.utils.AnimateUtil.ongoingAnimators;
 import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
 import static com.ambientgallery.utils.AnimateUtil.viewPosition;
 import static com.ambientgallery.utils.AnimateUtil.viewRotation;
 import static com.ambientgallery.utils.DimensUtil.dp2px;
 import static com.ambientgallery.utils.DimensUtil.px2dp;
+import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_INSTANT;
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_END_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_START_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
 import android.app.Activity;
@@ -36,6 +41,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_sensitivity_card, container, false);
     }
 
@@ -50,15 +56,15 @@ public class SettingsSensitivityCardFragment extends Fragment {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                    if (!ongoingAnimators.containsKey(refreshContainer.getId() + "opacity")) {
+                    if (!ongoingAnimators.containsKey(refreshContainer.getId() + ANIM_TYPE_OPACITY)) {
                         //get touch position
                         float currentY = event.getRawY();
                         float y = px2dp(requireContext(), currentY - touchStartY);
                         //update start position to minimum value of single touch
                         if (touchStartY > currentY) touchStartY = currentY;
                         //calculate drag percentages
-                        float startPercent = y / prefsInt(prefs, "dragStartSensitivity");
-                        float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) / prefsInt(prefs, "dragEndSensitivity");
+                        float startPercent = y / prefsInt(prefs, DRAG_START_SENSITIVITY);
+                        float endPercent = (y - prefsInt(prefs, DRAG_START_SENSITIVITY)) / prefsInt(prefs, DRAG_END_SENSITIVITY);
                         int startProgress = (int) (fixPercentRange(startPercent) * 100);
                         int endProgress = (int) (fixPercentRange(endPercent) * 100);
                         startIndicatorProgress.setProgress(startProgress);
@@ -88,9 +94,9 @@ public class SettingsSensitivityCardFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                     if (dragEnded || dragStarted) {
                         //play reset refresh button animation
-                        viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                        viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                        viewPosition(refreshContainer, 0, dp2px(requireContext(), -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
+                        viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
+                        viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
+                        viewPosition(refreshContainer, 0, dp2px(requireContext(), -12), 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
                     } else {
                         v.performClick();
                     }
@@ -101,7 +107,6 @@ public class SettingsSensitivityCardFragment extends Fragment {
             //whether the touch event is consumed
             return true;
         };
-        prefs = requireContext().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
         rootView = requireActivity().findViewById(R.id.settings_sensitivity_card_root);
         refreshContainer = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_container);
         refreshIcon = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_icon);
@@ -109,6 +114,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
         endIndicatorProgress = requireActivity().findViewById(R.id.settings_sensitivity_card_end_indicator_progress);
         refreshContainer.setTranslationY(dp2px(requireContext(), -12));
         refreshContainer.setAlpha(0);
+        //solve nested view flashing
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             refreshIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         rootView.setOnTouchListener(onTouchListener);
