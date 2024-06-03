@@ -1,5 +1,6 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.AnimateUtil.ANIM_TYPE_OPACITY;
 import static com.ambientgallery.utils.AnimateUtil.animPercentage;
 import static com.ambientgallery.utils.AnimateUtil.ongoingAnimators;
 import static com.ambientgallery.utils.AnimateUtil.animColor;
@@ -9,6 +10,9 @@ import static com.ambientgallery.utils.AnimateUtil.viewRotation;
 import static com.ambientgallery.utils.DimensUtil.dp2px;
 import static com.ambientgallery.utils.DimensUtil.px2dp;
 import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_INSTANT;
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_END_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_START_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
 import android.animation.ValueAnimator;
@@ -56,7 +60,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        prefs = requireContext().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireContext().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         rootView = requireActivity().findViewById(R.id.settings_sensitivity_card_root);
         refreshContainer = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_container);
         refreshIcon = requireActivity().findViewById(R.id.settings_sensitivity_card_refresh_icon);
@@ -79,15 +83,15 @@ public class SettingsSensitivityCardFragment extends Fragment {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     //if not in image switching process
-                    if (!ongoingAnimators.containsKey(refreshContainer.getId() + "opacity")) {
+                    if (!ongoingAnimators.containsKey(refreshContainer.getId() + ANIM_TYPE_OPACITY)) {
                         //get touch position
                         float currentY = event.getRawY();
                         float y = px2dp(requireContext(), currentY - touchStartY);
                         //update start position to minimum value of single touch
                         if (touchStartY > currentY) touchStartY = currentY;
                         //calculate drag percentages
-                        float startPercent = y / prefsInt(prefs, "dragStartSensitivity");
-                        float endPercent = (y - prefsInt(prefs, "dragStartSensitivity")) / prefsInt(prefs, "dragEndSensitivity");
+                        float startPercent = y / prefsInt(prefs, DRAG_START_SENSITIVITY);
+                        float endPercent = (y - prefsInt(prefs, DRAG_START_SENSITIVITY)) / prefsInt(prefs, DRAG_END_SENSITIVITY);
                         int startProgress = (int) (fixPercentRange(startPercent) * 100);
                         int endProgress = (int) (fixPercentRange(endPercent) * 100);
                         startIndicatorProgress.setProgress(startProgress);
@@ -120,7 +124,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                     setRootViewColor(ROOT_STATUS_NORMAL);
                     float remainPercentage = (startIndicatorProgress.getProgress() + endIndicatorProgress.getProgress()) / 100f;
-                    animPercentage(1, 1, prefsInt(prefs, "animationDuration_instant"), new ValueAnimator.AnimatorUpdateListener() {
+                    animPercentage(1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(@NonNull ValueAnimator animation) {
                             float animValue = 1 - ((float) animation.getAnimatedValue());
