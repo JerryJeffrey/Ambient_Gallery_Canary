@@ -1,6 +1,7 @@
 package com.ambientgallery.viewables;
 
-import android.app.Activity;
+import static com.ambientgallery.viewables.MainActivity.MAIN_IMAGE_PATH;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,8 +33,7 @@ public class SettingsFragment extends Fragment {
         nightMode = view.findViewById(R.id.settings_frag_night);
         View.OnClickListener onClickListener = v -> {
             Intent intent = new Intent(getContext(), SettingsDetailActivity.class);
-            intent.putExtra("currentPath", requireActivity().getIntent().getStringExtra("currentPath"));
-
+            intent.putExtra(MAIN_IMAGE_PATH, requireActivity().getIntent().getStringExtra(MAIN_IMAGE_PATH));
             intent.putExtra("viewId", v.getId());
             startActivity(intent);
         };

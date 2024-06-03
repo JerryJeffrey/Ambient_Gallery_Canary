@@ -1,7 +1,15 @@
 package com.ambientgallery.viewables;
 
-import static com.ambientgallery.R.*;
-import static com.ambientgallery.R.id.*;
+import static com.ambientgallery.R.id.settings_detail_button_back_icon;
+import static com.ambientgallery.R.id.settings_detail_card_attach_point;
+import static com.ambientgallery.R.id.settings_detail_main_attach_point;
+import static com.ambientgallery.R.id.settings_detail_subsplit;
+import static com.ambientgallery.R.id.settings_frag_night;
+import static com.ambientgallery.R.id.settings_frag_performance;
+import static com.ambientgallery.R.id.settings_frag_sensitivity;
+import static com.ambientgallery.R.id.settings_frag_timeout;
+import static com.ambientgallery.R.layout;
+import static com.ambientgallery.R.string;
 import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
 import static com.ambientgallery.utils.WindowFeatureUtil.allowCutoutDisplay;
 import static com.ambientgallery.utils.WindowFeatureUtil.goImmersive;

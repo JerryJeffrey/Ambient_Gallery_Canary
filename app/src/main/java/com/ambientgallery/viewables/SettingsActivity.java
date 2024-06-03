@@ -1,21 +1,16 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.DimensUtil.dp2px;
+import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
 import static com.ambientgallery.utils.WindowFeatureUtil.allowCutoutDisplay;
 import static com.ambientgallery.utils.WindowFeatureUtil.goImmersive;
-import static com.ambientgallery.utils.DimensUtil.*;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
