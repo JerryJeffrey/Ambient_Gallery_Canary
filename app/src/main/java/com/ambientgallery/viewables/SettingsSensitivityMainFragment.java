@@ -1,5 +1,8 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_END_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.DRAG_START_SENSITIVITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
 import android.content.Context;
@@ -22,7 +25,7 @@ public class SettingsSensitivityMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        prefs = requireActivity().getSharedPreferences("MainPrefs", Context.MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         return inflater.inflate(R.layout.fragment_settings_sensitivity_main, container, false);
     }
 
@@ -35,7 +38,7 @@ public class SettingsSensitivityMainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateCardValue(0, prefsInt(prefs, "dragStartSensitivity"), prefsInt(prefs, "dragEndSensitivity"));
+        updateCardValue(0, prefsInt(prefs, DRAG_START_SENSITIVITY), prefsInt(prefs, DRAG_END_SENSITIVITY));
     }
 
     private void updateCardValue(int start, int middle, int end) {

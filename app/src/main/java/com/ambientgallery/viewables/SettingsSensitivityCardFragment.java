@@ -164,11 +164,13 @@ public class SettingsSensitivityCardFragment extends Fragment {
             case ROOT_STATUS_NORMAL:
                 if (color != colorNormal) {
                     animColor(color, colorNormal, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    Log.i("asd","111");
                 }
                 break;
             case ROOT_STATUS_ACTIVE:
                 if (color != colorActive) {
                     animColor(color, colorActive, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    Log.i("asd","222");
                 }
                 break;
             default:
