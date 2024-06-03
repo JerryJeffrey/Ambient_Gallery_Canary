@@ -19,9 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@color/transparent"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="@color/grayscale_15"
         app:tabIndicatorGravity="bottom"
-        app:tabSelectedTextColor="@color/white">
+        app:tabSelectedTextColor="@color/grayscale_15">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_brightness_main_tab_normal"

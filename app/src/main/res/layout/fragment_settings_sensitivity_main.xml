@@ -14,8 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@color/white">
+        app:tabIndicatorColor="@color/grayscale_15"
+        app:tabSelectedTextColor="@color/grayscale_15">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_sensitivity_main_tab_pulldown"

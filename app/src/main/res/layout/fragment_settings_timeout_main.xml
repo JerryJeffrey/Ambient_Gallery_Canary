@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
-        app:tabIndicatorColor="@color/white"
-        app:tabTextColor="@color/white">
+        app:tabIndicatorColor="@color/grayscale_15"
+        app:tabTextColor="@color/grayscale_15">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_timeout_main_tab_hide_buttons"

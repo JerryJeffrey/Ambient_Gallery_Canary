@@ -39,7 +39,7 @@
     <string name="settings_brightness_max_desc">常规状态的最小亮度</string>
     <string name="settings_performance_image_quality">图像质量</string>
     <string name="settings_performance_quality_level">质量等级</string>
-    <string name="settings_performance_image_quality_level_hint">调整该等级并在卡片中预览。\n调高以获得更高质量，或调低以获得更强的稳定性。\n稳定性可能因设备不同而异。</string>
+    <string name="settings_performance_image_quality_level_hint">调整滑动条并在此处预览。\n稳定性可能因设备不同而异。</string>
     <string name="settings_performance_display_resolution">屏幕分辨率</string>
     <string name="settings_performance_image_resolution">图片分辨率</string>
     <string name="settings_timeout_picker_hour">小时</string>
@@ -48,4 +48,6 @@
     <string name="settings_timeout_tab_hide_buttons">隐藏按钮</string>
     <string name="settings_timeout_tab_go_ambient">进入待机模式</string>
     <string name="settings_timeout_tab_switch_background">切换背景图片</string>
+    <string name="settings_performance_image_quality_level_low">更强的稳定性</string>
+    <string name="settings_performance_image_quality_level_high">更高的图片质量</string>
 </resources>

@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
-        app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@color/white">
+        app:tabIndicatorColor="@color/grayscale_15"
+        app:tabSelectedTextColor="@color/grayscale_15">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_performance_main_tab_image_quality"
@@ -80,17 +80,23 @@
                     app:layout_constraintTop_toBottomOf="@+id/settings_performance_main_image_quality_title" />
 
                 <TextView
-                    android:id="@+id/settings_performance_main_image_quality_desc"
-                    android:layout_width="0dp"
+                    android:id="@+id/settings_performance_main_image_quality_low"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
+                    android:text="@string/settings_performance_image_quality_level_low"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settings_performance_main_image_quality_seekbar" />
+
+                <TextView
+                    android:id="@+id/settings_performance_main_image_quality_high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
-                    android:text="@string/settings_performance_image_quality_level_hint"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/settings_performance_image_quality_level_high"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings_performance_main_image_quality_seekbar" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

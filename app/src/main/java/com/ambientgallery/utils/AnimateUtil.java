@@ -154,7 +154,15 @@ public class AnimateUtil {
 
     }
 
-    public static void viewColor(int startColor, int endColor, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+    public static void animPercentage(int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+        animator.setDuration(duration);
+        animator.setInterpolator(new BezierInterpolator(c1, c2));
+        animator.addUpdateListener(updateListener);
+        animator.start();
+    }
+
+    public static void animColor(int startColor, int endColor, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
         animator.setDuration(duration);
         animator.setInterpolator(new BezierInterpolator(c1, c2));

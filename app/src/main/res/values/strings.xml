@@ -41,7 +41,7 @@
     <string name="settings_brightness_max_desc">Max brightness of normal mode</string>
     <string name="settings_performance_image_quality">Image quality</string>
     <string name="settings_performance_quality_level">Quality level</string>
-    <string name="settings_performance_image_quality_level_hint">Adjust and check the result in the card. \nTrun higher for more resolution, or lower for more stability. \nStability may differ between devices. </string>
+    <string name="settings_performance_image_quality_level_hint">"Adjust the slider and check the result here. \nStability may differ between devices. "</string>
     <string name="settings_performance_display_resolution">Display resolution</string>
     <string name="settings_performance_image_resolution">Image resolution</string>
     <string name="settings_timeout_picker_hour">h</string>
@@ -50,4 +50,6 @@
     <string name="settings_timeout_tab_hide_buttons">Hide buttons</string>
     <string name="settings_timeout_tab_go_ambient">Go ambient</string>
     <string name="settings_timeout_tab_switch_background">Switch background</string>
+    <string name="settings_performance_image_quality_level_low">More stability</string>
+    <string name="settings_performance_image_quality_level_high">More quality</string>
 </resources>

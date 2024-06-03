@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_2">
+    android:background="@color/grayscale_2">
 
     <TextView
         android:id="@+id/settings_night_card_title"
@@ -16,7 +16,7 @@
         android:layout_marginRight="48dp"
         android:gravity="center"
         android:text="Night mode"
-        android:textColor="@color/white"
+        android:textColor="@color/grayscale_15"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

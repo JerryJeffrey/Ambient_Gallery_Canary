@@ -5,7 +5,7 @@
     android:id="@+id/settings_brightness_card_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/grayscale_0">
 
     <ImageView
         android:id="@+id/settings_brightness_card_image"
@@ -39,7 +39,7 @@
         android:layout_marginRight="48dp"
         android:gravity="center"
         android:text="@string/settings_brightness"
-        android:textColor="@color/white"
+        android:textColor="@color/grayscale_15"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/settings_brightness_card_top_shader"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
             android:layout_marginTop="14dp"
             android:gravity="bottom|start"
             android:text="00:00"
-            android:textColor="@color/white"
+            android:textColor="@color/grayscale_15"
             android:textSize="60sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
