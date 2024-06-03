@@ -8,6 +8,7 @@ import static com.ambientgallery.utils.AnimateUtil.viewPosition;
 import static com.ambientgallery.utils.AnimateUtil.viewRotation;
 import static com.ambientgallery.utils.DimensUtil.dp2px;
 import static com.ambientgallery.utils.DimensUtil.px2dp;
+import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_INSTANT;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
 
 import android.animation.ValueAnimator;
@@ -131,9 +132,9 @@ public class SettingsSensitivityCardFragment extends Fragment {
                     });
                     if (dragEnded || dragStarted) {
                         //play reset refresh button animation
-                        viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                        viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, "animationDuration_instant"));
-                        viewPosition(refreshContainer, 0, dp2px(requireContext(), -12), 1, 1, prefsInt(prefs, "animationDuration_instant"));
+                        viewRotation(refreshIcon, -45, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
+                        viewOpacity(refreshContainer, 0, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
+                        viewPosition(refreshContainer, 0, dp2px(requireContext(), -12), 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
                     } else {
                         v.performClick();
                     }
@@ -158,12 +159,12 @@ public class SettingsSensitivityCardFragment extends Fragment {
         switch (status) {
             case ROOT_STATUS_NORMAL:
                 if (color != colorNormal) {
-                    animColor(color, colorNormal, 1, 1, prefsInt(prefs, "animationDuration_instant"), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    animColor(color, colorNormal, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
                 }
                 break;
             case ROOT_STATUS_ACTIVE:
                 if (color != colorActive) {
-                    animColor(color, colorActive, 1, 1, prefsInt(prefs, "animationDuration_instant"), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    animColor(color, colorActive, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
                 }
                 break;
             default:
