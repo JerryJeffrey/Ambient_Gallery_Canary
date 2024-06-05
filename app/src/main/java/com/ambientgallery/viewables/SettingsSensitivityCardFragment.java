@@ -44,6 +44,7 @@ public class SettingsSensitivityCardFragment extends Fragment {
     float touchStartY;
     boolean dragStarted = false, dragEnded = false;
     static final int ROOT_STATUS_NORMAL = 0, ROOT_STATUS_ACTIVE = 1;
+    int rootViewStatus = ROOT_STATUS_NORMAL;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -124,15 +125,12 @@ public class SettingsSensitivityCardFragment extends Fragment {
                 case MotionEvent.ACTION_UP:
                     setRootViewColor(ROOT_STATUS_NORMAL);
                     float remainPercentage = (startIndicatorProgress.getProgress() + endIndicatorProgress.getProgress()) / 100f;
-                    animPercentage(1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(@NonNull ValueAnimator animation) {
-                            float animValue = 1 - ((float) animation.getAnimatedValue());
-                            float startRemainPercent = fixPercentRange(animValue * remainPercentage);
-                            float endRemainPercent = fixPercentRange(animValue * remainPercentage - 1);
-                            startIndicatorProgress.setProgress((int) (startRemainPercent * 100));
-                            endIndicatorProgress.setProgress((int) (endRemainPercent * 100));
-                        }
+                    animPercentage(startIndicatorProgress, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> {
+                        float animValue = 1 - ((float) animation.getAnimatedValue());
+                        float startRemainPercent = fixPercentRange(animValue * remainPercentage);
+                        float endRemainPercent = fixPercentRange(animValue * remainPercentage - 1);
+                        startIndicatorProgress.setProgress((int) (startRemainPercent * 100));
+                        endIndicatorProgress.setProgress((int) (endRemainPercent * 100));
                     });
                     if (dragEnded || dragStarted) {
                         //play reset refresh button animation
@@ -158,19 +156,21 @@ public class SettingsSensitivityCardFragment extends Fragment {
 
     private void setRootViewColor(int status) {
         int color = ((ColorDrawable) rootView.getBackground()).getColor();
-        int colorNormal = getResources().getColor(R.color.grayscale_2);
+        int colorNormal = getResources().getColor(R.color.grayscale_1);
         int colorActive = getResources().getColor(R.color.blue_main_light);
         switch (status) {
             case ROOT_STATUS_NORMAL:
-                if (color != colorNormal) {
-                    animColor(color, colorNormal, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
-                    Log.i("asd","111");
+                if (rootViewStatus != ROOT_STATUS_NORMAL) {
+                    animColor(rootView, color, colorNormal, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    Log.i("asd", "111");
+                    rootViewStatus = ROOT_STATUS_NORMAL;
                 }
                 break;
             case ROOT_STATUS_ACTIVE:
-                if (color != colorActive) {
-                    animColor(color, colorActive, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
-                    Log.i("asd","222");
+                if (rootViewStatus != ROOT_STATUS_ACTIVE) {
+                    animColor(rootView, color, colorActive, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), animation -> rootView.setBackgroundColor((int) animation.getAnimatedValue()));
+                    Log.i("asd", "222");
+                    rootViewStatus = ROOT_STATUS_ACTIVE;
                 }
                 break;
             default:

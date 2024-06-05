@@ -5,7 +5,7 @@
     android:id="@+id/settings_sensitivity_card_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grayscale_2">
+    android:background="@color/grayscale_1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/settings_sensitivity_card_top_container"
@@ -24,8 +24,8 @@
             android:layout_marginEnd="48dp"
             android:layout_marginRight="48dp"
             android:text="@string/settings_sensitivity"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_size_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +72,8 @@
                 android:id="@+id/settings_sensitivity_card_start_indicator_value_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/sub_color"
+                android:textSize="@dimen/text_size_tiny"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_start_indicator_progress" />
 
@@ -79,6 +81,8 @@
                 android:id="@+id/settings_sensitivity_card_start_indicator_value_middle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/sub_color"
+                android:textSize="@dimen/text_size_tiny"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +92,8 @@
                 android:id="@+id/settings_sensitivity_card_start_indicator_value_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/sub_color"
+                android:textSize="@dimen/text_size_tiny"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/settings_sensitivity_card_start_indicator_progress" />
 

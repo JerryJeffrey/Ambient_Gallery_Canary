@@ -15,10 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AnimateUtil {
-    public static final String ANIM_TYPE_OPACITY="opacity";
-    public static final String ANIM_TYPE_ROTATION="rotation";
-    public static final String ANIM_TYPE_POSITION="position";
-    public static final String ANIM_TYPE_SCALE="scale";
+    public static final String ANIM_TYPE_OPACITY = "opacity";
+    public static final String ANIM_TYPE_ROTATION = "rotation";
+    public static final String ANIM_TYPE_POSITION = "position";
+    public static final String ANIM_TYPE_SCALE = "scale";
+    public static final String ANIM_TYPE_COLOR = "color";
+    public static final String ANIM_TYPE_PERCENTAGE = "percentage";
 
     public static final HashMap<String, Animator> ongoingAnimators = new HashMap<>();
 
@@ -151,18 +153,22 @@ public class AnimateUtil {
 
     }
 
-    public static void animPercentage(int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+    public static void animPercentage(View view, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+        clearPreviousAnimator(view, ANIM_TYPE_PERCENTAGE);
         ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
         animator.setDuration(duration);
         animator.setInterpolator(new BezierInterpolator(c1, c2));
+        addDefaultListener(animator, view, ANIM_TYPE_PERCENTAGE);
         animator.addUpdateListener(updateListener);
         animator.start();
     }
 
-    public static void animColor(int startColor, int endColor, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+    public static void animColor(View view, int startColor, int endColor, int c1, int c2, int duration, ValueAnimator.AnimatorUpdateListener updateListener) {
+        clearPreviousAnimator(view, ANIM_TYPE_COLOR);
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
         animator.setDuration(duration);
         animator.setInterpolator(new BezierInterpolator(c1, c2));
+        addDefaultListener(animator, view, ANIM_TYPE_COLOR);
         animator.addUpdateListener(updateListener);
         animator.start();
     }

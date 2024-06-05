@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SeekBarWithoutDiscrete" parent="Widget.AppCompat.SeekBar.Discrete">
+        <item name="tickMark">@null</item>
+    </style>
+</resources>

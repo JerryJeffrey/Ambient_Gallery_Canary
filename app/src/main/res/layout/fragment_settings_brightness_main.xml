@@ -19,9 +19,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@color/transparent"
-        app:tabIndicatorColor="@color/grayscale_15"
+        app:tabIndicatorColor="@color/highlight_color"
         app:tabIndicatorGravity="bottom"
-        app:tabSelectedTextColor="@color/grayscale_15">
+        app:tabSelectedTextColor="@color/main_color"
+        app:tabTextColor="@color/sub_color">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/settings_brightness_main_tab_normal"
@@ -65,7 +66,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     android:text="@string/settings_brightness_text_brightness"
-                    android:textSize="20sp"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/text_size_normal"
                     app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_brightness_seekbar"
                     app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_text_brightness_value"
                     app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +80,8 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     android:text="0 %"
-                    android:textSize="20sp"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/text_size_normal"
                     app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_text_brightness_seekbar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/settings_brightness_main_text_brightness_title"
@@ -100,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
+                    android:textColor="@color/sub_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_brightness_seekbar" />
@@ -110,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
+                    android:textColor="@color/sub_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_text_brightness_seekbar" />
@@ -133,7 +138,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     android:text="@string/settings_brightness_bg_brightness"
-                    android:textSize="20sp"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/text_size_normal"
                     app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_brightness_seekbar"
                     app:layout_constraintEnd_toStartOf="@+id/settings_brightness_main_bg_brightness_value"
                     app:layout_constraintStart_toStartOf="parent"
@@ -146,6 +152,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     android:text="0 %"
+                    android:textColor="@color/main_color"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/settings_brightness_main_bg_brightness_seekbar"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -168,6 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
+                    android:textColor="@color/sub_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_brightness_seekbar" />
@@ -178,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
+                    android:textColor="@color/sub_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/settings_brightness_main_bg_brightness_seekbar" />

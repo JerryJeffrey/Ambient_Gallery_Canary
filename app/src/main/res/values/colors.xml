@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="grayscale_0">#000000</color>
-    <color name="grayscale_1">#111111</color>
-    <color name="grayscale_2">#222222</color>
-    <color name="grayscale_15">#FFFFFF</color>
-    <color name="transparent">#00000000</color>
-    <color name="blue_main_dark">#090E17</color>
-    <color name="blue_main_light">#293D66</color>
+    <color name="grayscale_0">#000</color>
+    <color name="grayscale_1">#111</color>
+    <color name="grayscale_2">#222</color>
+    <color name="grayscale_10">#AAA</color>
+    <color name="grayscale_15">#FFF</color>
+    <color name="transparent">#0000</color>
+    <!--  color rules: R:G:B=2:3:5  -->
+    <color name="blue_main_dark">#081018</color>
+    <color name="blue_main_light">#283C64</color>
+    <color name="blue_main_highlight">#6699FF</color>
+
+    <color name="main_color">@color/grayscale_15</color>
+    <color name="sub_color">@color/grayscale_10</color>
+    <color name="highlight_color">@color/blue_main_highlight</color>
 </resources>
