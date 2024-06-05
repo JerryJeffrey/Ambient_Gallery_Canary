@@ -27,8 +27,8 @@
     <string name="settings_performance_desc">图像质量</string>
     <string name="settings_timeout">时长</string>
     <string name="settings_timeout_desc">何时待机、切换图片等</string>
-    <string name="settings_night">夜间模式</string>
-    <string name="settings_night_desc">低亮度环境下的行为</string>
+    <string name="settings_behavior">应用行为</string>
+    <string name="settings_behavior_desc">环境变化时的动作</string>
     <string name="settings_brightness">亮度</string>
     <string name="settings_brightness_desc">主界面各组件的亮度</string>
     <string name="settings_brightness_tab_normal">常规</string>
@@ -50,4 +50,8 @@
     <string name="settings_timeout_tab_switch_background">切换背景图片</string>
     <string name="settings_performance_image_quality_level_low">更强的稳定性</string>
     <string name="settings_performance_image_quality_level_high">更高的图片质量</string>
+    <string name="settings_behavior_no_action">无操作</string>
+    <string name="settings_behavior_stop_keeping_on">不再保持亮屏</string>
+    <string name="settings_behavior_low_light_mode">暗光模式</string>
+    <string name="settings_behavior_condition_low_light">光线较暗时：</string>
 </resources>

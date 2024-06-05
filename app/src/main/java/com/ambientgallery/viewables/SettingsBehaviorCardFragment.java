@@ -9,7 +9,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ambientgallery.R;
 
-import java.util.Objects;
-
-public class SettingsNightCardFragment extends Fragment implements SensorEventListener {
+public class SettingsBehaviorCardFragment extends Fragment implements SensorEventListener {
     ProgressBar progressBar;
     Sensor lightSensor;
     SensorManager sensorManager;
@@ -35,7 +32,7 @@ public class SettingsNightCardFragment extends Fragment implements SensorEventLi
         prefs = requireActivity().getSharedPreferences(MAIN_PREFS, Context.MODE_PRIVATE);
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        return inflater.inflate(R.layout.fragment_settings_night_card, container, false);
+        return inflater.inflate(R.layout.fragment_settings_behavior_card, container, false);
     }
 
     @Override

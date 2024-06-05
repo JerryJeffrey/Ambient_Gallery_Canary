@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="night_behaviors">
+        <item>@string/settings_behavior_no_action</item>
+        <item>@string/settings_behavior_stop_keeping_on</item>
+        <item>@string/settings_behavior_low_light_mode</item>
+    </string-array>
+</resources>

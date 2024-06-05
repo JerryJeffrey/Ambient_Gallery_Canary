@@ -77,8 +77,8 @@ public class SettingsDetailActivity extends AppCompatActivity {
             targetMainFragment = new SettingsTimeoutMainFragment();
             targetCardFragment = new SettingsTimeoutCardFragment();
         } else if (viewId == settings_frag_night) {
-            targetMainFragment = new SettingsNightMainFragment();
-            targetCardFragment = new SettingsNightCardFragment();
+            targetMainFragment = new SettingsBehaviorMainFragment();
+            targetCardFragment = new SettingsBehaviorCardFragment();
         }
     }
 

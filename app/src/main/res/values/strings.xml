@@ -29,8 +29,8 @@
     <string name="settings_performance_desc">Image quality</string>
     <string name="settings_timeout">Timeout</string>
     <string name="settings_timeout_desc">When to go ambient, switch image, etc.</string>
-    <string name="settings_night">Night mode</string>
-    <string name="settings_night_desc">Behavior when in low light condition</string>
+    <string name="settings_behavior">App behavior</string>
+    <string name="settings_behavior_desc">Actions when environment changed</string>
     <string name="settings_brightness">Brightness</string>
     <string name="settings_brightness_desc">Brightness of main interface components</string>
     <string name="settings_brightness_tab_normal">Normal</string>
@@ -52,4 +52,8 @@
     <string name="settings_timeout_tab_switch_background">Switch background</string>
     <string name="settings_performance_image_quality_level_low">More stability</string>
     <string name="settings_performance_image_quality_level_high">More quality</string>
+    <string name="settings_behavior_no_action">No action</string>
+    <string name="settings_behavior_stop_keeping_on">Stop keeping on</string>
+    <string name="settings_behavior_low_light_mode">Low light mode</string>
+    <string name="settings_behavior_condition_low_light">When in low light:</string>
 </resources>
