@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         inNormal = false;
         viewOpacity(bgContainer, prefsFloat(prefs, BG_AMBIENT_OPACITY), 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL));
         viewOpacity(textMainContainer, prefsFloat(prefs, TEXT_MAIN_AMBIENT_OPACITY), 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL));
-        viewOpacity(new View[]{textSub, topShader, bottomShader}, 0, 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL));
+        viewOpacity(new View[]{textSub, bottomShader}, 0, 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL));
         viewPosition(textMainContainer, nudgeX, nudgeY, 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL));
         viewPosition(textSub, -nudgeX, nudgeY, 1f / 3, 1f, prefsInt(prefs, ANIMATION_DURATION_NORMAL), new AnimatorListenerAdapter() {
             @Override
@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void leaveAmbient() {
         inAmbient = false;
-        viewOpacity(new View[]{bgContainer, topShader, bottomShader}, prefsFloat(prefs, BG_NORMAL_OPACITY), 1, 1, prefsInt(prefs, ANIMATION_DURATION_SHORT));
+        viewOpacity(new View[]{bgContainer, bottomShader}, prefsFloat(prefs, BG_NORMAL_OPACITY), 1, 1, prefsInt(prefs, ANIMATION_DURATION_SHORT));
         viewOpacity(new View[]{textMainContainer, textSub}, prefsFloat(prefs, TEXT_MAIN_NORMAL_OPACITY), 1, 1, prefsInt(prefs, ANIMATION_DURATION_SHORT));
         viewPosition(new View[]{textMainContainer, textSub}, 0, 0, 1, 1, prefsInt(prefs, ANIMATION_DURATION_SHORT), new AnimatorListenerAdapter() {
             @Override
@@ -515,10 +515,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void showActionButtons() {
         buttonsInvisible = false;
-        settingsButton.setVisibility(View.VISIBLE);
-        ambientButton.setVisibility(View.VISIBLE);
         viewPosition(topContainer, 0, 0, 1, 1f, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
-        viewOpacity(topContainer, 1f, 1, 1f, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new AnimatorListenerAdapter() {
+        viewOpacity(new View[]{topContainer,topShader}, 1f, 1, 1f, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -530,12 +528,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void hideActionButtons() {
         buttonsVisible = false;
         viewPosition(topContainer, 0, dp2px(context, -12), 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
-        viewOpacity(topContainer, 0, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new AnimatorListenerAdapter() {
+        viewOpacity(new View[]{topContainer,topShader}, 0, 1, 1, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                settingsButton.setVisibility(View.INVISIBLE);
-                ambientButton.setVisibility(View.INVISIBLE);
                 buttonsInvisible = true;
             }
         });
