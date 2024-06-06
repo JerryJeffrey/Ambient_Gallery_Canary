@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,7 +23,8 @@ import com.ambientgallery.R;
 import com.ambientgallery.components.DisplayDimensions;
 
 public class SettingsActivity extends AppCompatActivity {
-    View subSplit, backButton;
+    View subSplit;
+    ImageButton backButton;
     Window window;
     WindowManager windowManager;
     Fragment settingsFragment;
@@ -41,10 +44,6 @@ public class SettingsActivity extends AppCompatActivity {
         allowCutoutDisplay(window);
         //actions on back button
         backButton.setOnClickListener(view -> finish());
-        backButton.setOnLongClickListener(view -> {
-            Toast.makeText(SettingsActivity.this, getText(R.string.button_back), Toast.LENGTH_SHORT).show();
-            return true;
-        });
     }
 
 

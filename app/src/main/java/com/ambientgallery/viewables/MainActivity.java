@@ -69,6 +69,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,11 +79,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.ambientgallery.R;
 import com.ambientgallery.components.DisplayDimensions;
+import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,20 +94,20 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     ArrayList<String> imagesList;
-    private View rootView, bgContainer, refreshContainer, refreshIcon, statusNight, textMainContainer, topContainer, bottomContainer, topShader, bottomShader;
-    private TextView textSub, textMain, hint;
-    private ImageView bgLower, bgUpper;
-    private ImageButton settingsButton, ambientButton;
-    private Timer timer;
-    private ContentResolver contentResolver;
-    private Window window;
-    private WindowManager windowManager;
-    private Context context;
-    private Sensor lightSensor;
-    private SensorManager sensorManager;
-    private boolean appInit = false, inNormal = true, inAmbient = false, buttonsVisible = true, buttonsInvisible = false, dragStarted = false, dragEnded = false, upperImgVisible = true;
-    private float nudgeX, nudgeY, touchStartY;
-    private int currentTime, imageListIndex, currentOrientation;
+    View rootView, bgContainer, refreshContainer, refreshIcon, statusNight, textMainContainer, topContainer, bottomContainer, topShader, bottomShader;
+    TextView textSub, textMain, hint;
+    ImageView bgLower, bgUpper;
+    ImageButton settingsButton, ambientButton;
+    Timer timer;
+    ContentResolver contentResolver;
+    Window window;
+    WindowManager windowManager;
+    Context context;
+    Sensor lightSensor;
+    SensorManager sensorManager;
+    boolean appInit = false, inNormal = true, inAmbient = false, buttonsVisible = true, buttonsInvisible = false, dragStarted = false, dragEnded = false, upperImgVisible = true;
+    float nudgeX, nudgeY, touchStartY;
+    int currentTime, imageListIndex, currentOrientation;
     String currentPath;
     public static final String MAIN_IMAGE_PATH ="imagePath";
 
@@ -259,17 +262,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
         //set listeners
-        View.OnLongClickListener buttonLongClickListener = v -> {
-            String text = null;
-            if (v.getId() == settingsButton.getId()) text = getString(R.string.button_settings);
-            else if (v.getId() == ambientButton.getId())
-                text = getString(R.string.button_ambient_mode);
-            if (text != null) Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-            currentTime = 0;
-            return true;
-        };
-        settingsButton.setOnLongClickListener(buttonLongClickListener);
-        ambientButton.setOnLongClickListener(buttonLongClickListener);
         settingsButton.setOnClickListener(v -> {
             if (!buttonsInvisible) {
                 currentTime = 0;
@@ -523,6 +515,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void showActionButtons() {
         buttonsInvisible = false;
+        settingsButton.setVisibility(View.VISIBLE);
+        ambientButton.setVisibility(View.VISIBLE);
         viewPosition(topContainer, 0, 0, 1, 1f, prefsInt(prefs, ANIMATION_DURATION_INSTANT));
         viewOpacity(topContainer, 1f, 1, 1f, prefsInt(prefs, ANIMATION_DURATION_INSTANT), new AnimatorListenerAdapter() {
             @Override
@@ -540,6 +534,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                settingsButton.setVisibility(View.INVISIBLE);
+                ambientButton.setVisibility(View.INVISIBLE);
                 buttonsInvisible = true;
             }
         });
