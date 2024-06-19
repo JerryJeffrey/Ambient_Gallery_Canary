@@ -41,7 +41,7 @@ public class SettingsDetailActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.activity_settings_detail);
+        setContentView(R.layout.activity_settings_detail);
         window = getWindow();
         windowManager = getWindowManager();
         intent = getIntent();

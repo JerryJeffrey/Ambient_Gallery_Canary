@@ -30,7 +30,7 @@
     <string name="settings_timeout">Timeout</string>
     <string name="settings_timeout_desc">When to go ambient, switch image, etc.</string>
     <string name="settings_behavior">App behavior</string>
-    <string name="settings_behavior_desc">Actions when environment changed</string>
+    <string name="settings_behavior_desc">Actions when conditions changed</string>
     <string name="settings_brightness">Brightness</string>
     <string name="settings_brightness_desc">Brightness of main interface components</string>
     <string name="settings_brightness_tab_normal">Normal</string>

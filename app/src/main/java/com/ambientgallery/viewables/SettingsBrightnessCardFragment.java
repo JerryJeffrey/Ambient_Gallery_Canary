@@ -1,5 +1,20 @@
 package com.ambientgallery.viewables;
 
+import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
+import static com.ambientgallery.utils.BitmapUtil.decodeSampledBitmap;
+import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
+import static com.ambientgallery.utils.DimensUtil.getPartialImageScale;
+import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_SHORT;
+import static com.ambientgallery.utils.SharedPrefsUtil.BG_AMBIENT_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.BG_NORMAL_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.IMAGE_QUALITY_LEVEL;
+import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
+import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_AMBIENT_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_NORMAL_OPACITY;
+import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
+import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
+import static com.ambientgallery.viewables.MainActivity.MAIN_IMAGE_PATH;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,23 +30,9 @@ import androidx.fragment.app.Fragment;
 
 import com.ambientgallery.R;
 
-import static com.ambientgallery.utils.AnimateUtil.viewOpacity;
-import static com.ambientgallery.utils.BitmapUtil.decodeSampledBitmap;
-import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
-import static com.ambientgallery.utils.DimensUtil.getHalfScreenScale;
-import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_SHORT;
-import static com.ambientgallery.utils.SharedPrefsUtil.BG_AMBIENT_OPACITY;
-import static com.ambientgallery.utils.SharedPrefsUtil.BG_NORMAL_OPACITY;
-import static com.ambientgallery.utils.SharedPrefsUtil.IMAGE_QUALITY_LEVEL;
-import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
-import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_AMBIENT_OPACITY;
-import static com.ambientgallery.utils.SharedPrefsUtil.TEXT_MAIN_NORMAL_OPACITY;
-import static com.ambientgallery.utils.SharedPrefsUtil.prefsFloat;
-import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
-import static com.ambientgallery.viewables.MainActivity.MAIN_IMAGE_PATH;
-
 public class SettingsBrightnessCardFragment extends Fragment {
     ImageView imageView;
+    View parentCard;
     View topShader, bottomShader, mainText;
     SharedPreferences prefs;
     String path;
@@ -77,11 +78,12 @@ public class SettingsBrightnessCardFragment extends Fragment {
         mainText = requireActivity().findViewById(R.id.settings_brightness_card_text_main);
         imageView.setAlpha(prefsFloat(prefs, BG_NORMAL_OPACITY));
         path = requireActivity().getIntent().getStringExtra(MAIN_IMAGE_PATH);
+        parentCard=requireActivity().findViewById(R.id.settings_detail_card);
         new Thread(() -> {
             Bitmap bitmap = decodeSampledBitmap(path, getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, prefsInt(prefs, IMAGE_QUALITY_LEVEL));
             if (bitmap != null) requireActivity().runOnUiThread(() -> {
                 imageView.setImageBitmap(bitmap);
-                float scale = getHalfScreenScale(getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
+                float scale = getPartialImageScale(getDisplayMetrics(requireActivity().getWindowManager()),bitmap.getWidth(),bitmap.getHeight(),parentCard.getWidth(),parentCard.getHeight());
                 imageView.setScaleX(scale);
                 imageView.setScaleY(scale);
             });

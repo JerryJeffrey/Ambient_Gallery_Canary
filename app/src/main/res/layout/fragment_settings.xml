@@ -234,7 +234,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_bedtime_24" />
+                app:srcCompat="@drawable/baseline_mediation_24" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/settings_frag_timeout_night_container"

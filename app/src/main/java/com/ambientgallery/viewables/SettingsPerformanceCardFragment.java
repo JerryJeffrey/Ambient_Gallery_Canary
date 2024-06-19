@@ -2,7 +2,7 @@ package com.ambientgallery.viewables;
 
 import static com.ambientgallery.utils.BitmapUtil.decodeSampledBitmap;
 import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
-import static com.ambientgallery.utils.DimensUtil.getHalfScreenScale;
+import static com.ambientgallery.utils.DimensUtil.getPartialImageScale;
 import static com.ambientgallery.utils.SharedPrefsUtil.IMAGE_QUALITY_LEVEL;
 import static com.ambientgallery.utils.SharedPrefsUtil.MAIN_PREFS;
 import static com.ambientgallery.utils.SharedPrefsUtil.prefsInt;
@@ -12,14 +12,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +28,7 @@ import com.ambientgallery.components.DisplayDimensions;
 
 public class SettingsPerformanceCardFragment extends Fragment {
     SharedPreferences prefs;
+    View parentCard;
     ImageView imageView;
     TextView textInfo;
     String path;
@@ -48,7 +47,7 @@ public class SettingsPerformanceCardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         imageView = requireActivity().findViewById(R.id.settings_performance_card_image);
         textInfo = requireActivity().findViewById(R.id.settings_performance_card_info);
-
+        parentCard=requireActivity().findViewById(R.id.settings_detail_card);
         path = requireActivity().getIntent().getStringExtra(MAIN_IMAGE_PATH);
         loadImage();
     }
@@ -60,7 +59,7 @@ public class SettingsPerformanceCardFragment extends Fragment {
             if (bitmap != null) requireActivity().runOnUiThread(() -> {
                 setInfo(bitmap.getWidth(), bitmap.getHeight());
                 imageView.setImageBitmap(bitmap);
-                float scale = getHalfScreenScale(getDisplayMetrics(requireActivity().getWindowManager()).width, getDisplayMetrics(requireActivity().getWindowManager()).height, bitmap.getWidth(), bitmap.getHeight());
+                float scale = getPartialImageScale(getDisplayMetrics(requireActivity().getWindowManager()),bitmap.getWidth(),bitmap.getHeight(),parentCard.getWidth(),parentCard.getHeight());
                 imageView.setScaleX(scale);
                 imageView.setScaleY(scale);
             });

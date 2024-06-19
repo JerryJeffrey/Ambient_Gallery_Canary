@@ -3,7 +3,6 @@ package com.ambientgallery.utils;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -11,18 +10,20 @@ import com.ambientgallery.components.DisplayDimensions;
 
 public class DimensUtil {
 
-    public static float dp2px(Context context,float dp) {
+    public static float dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return dp * scale;
     }
-    public static float px2dp(Context context,float px) {
+
+    public static float px2dp(Context context, float px) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return px / scale;
     }
+
     public static DisplayDimensions getDisplayMetrics(WindowManager windowManager) {
         DisplayMetrics metrics = new DisplayMetrics();
         Display display = windowManager.getDefaultDisplay();
-        DisplayDimensions dimensions=new DisplayDimensions();
+        DisplayDimensions dimensions = new DisplayDimensions();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             display.getRealMetrics(metrics);
             dimensions.width = metrics.widthPixels;
@@ -33,22 +34,16 @@ public class DimensUtil {
         }
         return dimensions;
     }
+
     private static float getFillScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
         float widthScale = (float) screenWidth / imageWidth,
                 heightScale = (float) screenHeight / imageHeight;
         return Math.max(widthScale, heightScale);
     }
 
-    public static float getHalfScreenScale(int screenWidth, int screenHeight, int imageWidth, int imageHeight) {
-        int halfWidth, halfHeight;
-        if (screenWidth > screenHeight) {//horizontal
-            halfWidth = screenWidth / 2;
-            halfHeight = screenHeight;
-        } else {//vertical
-            halfWidth = screenWidth;
-            halfHeight = screenHeight / 2;
-        }
+    public static float getPartialImageScale(DisplayDimensions dimensions, int imageWidth, int imageHeight, int layoutWidth, int layoutHeight) {
+        int screenWidth=dimensions.width,screenHeight=dimensions.height;
         return getFillScale(screenWidth, screenHeight, imageWidth, imageHeight) /
-                getFillScale(halfWidth, halfHeight, imageWidth, imageHeight);
+                getFillScale(layoutWidth, layoutHeight, imageWidth, imageHeight);
     }
 }

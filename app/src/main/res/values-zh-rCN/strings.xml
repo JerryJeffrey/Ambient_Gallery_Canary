@@ -28,7 +28,7 @@
     <string name="settings_timeout">时长</string>
     <string name="settings_timeout_desc">何时待机、切换图片等</string>
     <string name="settings_behavior">应用行为</string>
-    <string name="settings_behavior_desc">环境变化时的动作</string>
+    <string name="settings_behavior_desc">条件变化时的动作</string>
     <string name="settings_brightness">亮度</string>
     <string name="settings_brightness_desc">主界面各组件的亮度</string>
     <string name="settings_brightness_tab_normal">常规</string>
