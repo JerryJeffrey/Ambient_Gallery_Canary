@@ -1,3 +1,7 @@
+/**
+ * This class offers:
+ * Activity window features by operating Window object.
+ */
 package com.ambientgallery.utils;
 
 import android.os.Build;

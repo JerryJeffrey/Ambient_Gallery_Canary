@@ -10,7 +10,7 @@ import static com.ambientgallery.utils.BitmapUtil.decodeSampledBitmap;
 import static com.ambientgallery.utils.DimensUtil.dp2px;
 import static com.ambientgallery.utils.DimensUtil.getDisplayMetrics;
 import static com.ambientgallery.utils.DimensUtil.px2dp;
-import static com.ambientgallery.utils.ExeptionUtil.convertExceptionMessage;
+import static com.ambientgallery.utils.ExceptionUtil.convertExceptionMessage;
 import static com.ambientgallery.utils.FileUtil.getFileNameList;
 import static com.ambientgallery.utils.FileUtil.path;
 import static com.ambientgallery.utils.SharedPrefsUtil.ANIMATION_DURATION_INSTANT;
@@ -44,7 +44,6 @@ import static com.ambientgallery.utils.WindowFeatureUtil.preventSleeping;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -69,23 +68,21 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.ambientgallery.R;
 import com.ambientgallery.components.DisplayDimensions;
-import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -110,9 +107,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int currentTime, imageListIndex, currentOrientation;
     String currentPath;
     public static final String MAIN_IMAGE_PATH ="imagePath";
-
     SharedPreferences prefs;
 
+    @SuppressLint("SetTextI18n")
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        if (isGranted) {
+            hint.setText(getString(R.string.empty));
+        } else {
+            hint.setText(getString(R.string.hint_storage_permission_explanation_1) + path + getString(R.string.hint_storage_permission_explanation_2));
+        }
+    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         window = getWindow();
         windowManager = getWindowManager();
         context = getApplicationContext();
-        contentResolver = this.getContentResolver();
+        contentResolver = getContentResolver();
 
         preventSleeping(window);
         allowCutoutDisplay(window);
@@ -543,15 +547,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             currentTime += 1;
         }
     }
-
-    @SuppressLint("SetTextI18n")
-    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-        if (isGranted) {
-            hint.setText(getString(R.string.empty));
-        } else {
-            hint.setText(getString(R.string.hint_storage_permission_explanation_1) + path + getString(R.string.hint_storage_permission_explanation_2));
-        }
-    });
 
     private void setSafeArea() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

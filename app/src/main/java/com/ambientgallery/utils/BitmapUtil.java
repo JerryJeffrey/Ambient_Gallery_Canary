@@ -1,8 +1,11 @@
+/**
+ * This class offers:
+ * Downscaled bitmap by giving path, required size and image quality level.
+ */
 package com.ambientgallery.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 public class BitmapUtil {
     public static Bitmap decodeSampledBitmap(String path, int reqWidth, int reqHeight, int imageQualityLevel) {

@@ -1,3 +1,8 @@
+/**
+ * This class offers:
+ * Methods to apply view animations.
+ * Ability to detect instanced Animators and take actions to implement animations that can be interrupted.
+ */
 package com.ambientgallery.utils;
 
 import android.animation.Animator;

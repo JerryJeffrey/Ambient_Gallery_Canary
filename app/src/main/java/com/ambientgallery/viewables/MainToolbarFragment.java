@@ -60,13 +60,13 @@ public class MainToolbarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(requireContext(),SettingsActivity.class);
-
+                //TODO start activity with path in MainActivity
             }
         });
         ambientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO use go ambient method in MainActivity
             }
         });
     }

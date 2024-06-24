@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.ambientgallery.R;
 
-public class ExeptionUtil {
+public class ExceptionUtil {
     /**
      * @noinspection SpellCheckingInspection
      */

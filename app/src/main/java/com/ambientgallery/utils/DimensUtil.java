@@ -1,3 +1,8 @@
+/**
+* This class offers:
+* Methods that implements conversion between pixel & dip by getting Context and px/dp.
+* A method returns image fill scale to offer unified scaling over app with display, image and view size. A fullscreen ImageView with scale fit is referred as 100%.
+*/
 package com.ambientgallery.utils;
 
 import android.content.Context;
